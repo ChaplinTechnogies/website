@@ -20,13 +20,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'nav.ogera': 'Ogera MVP',
     'nav.blog': 'Blog',
     'nav.contact': 'Contact',
-    
+
     // Hero Section
     'hero.title': 'Transforming Africa Through Innovation',
     'hero.subtitle': 'Pioneering AI-driven digital solutions across education, healthcare, retail, and beyond. Building the future of African technology, one innovation at a time.',
     'hero.exploreEcosystem': 'Explore Our Ecosystem',
     'hero.startJourney': 'Start Your Journey',
-    
+
     // Services
     'services.title': 'Our Comprehensive Ecosystem',
     'services.subtitle': 'Nine integrated platforms working together to transform Africa\'s digital landscape',
@@ -48,13 +48,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.inventory.desc': 'Streamlined inventory management and billing systems for businesses of all sizes.',
     'services.government.title': 'Government & NGO',
     'services.government.desc': 'Digital governance solutions empowering public sector efficiency and transparency.',
-    
+
     // Projects
     'projects.title': 'Introducing Our Projects',
     'projects.ogera.title': 'Ogera Platform Preview',
     'projects.ogera.subtitle': 'Coming Soon',
     'projects.requestAccess': 'Request Early Access',
-    
+
     // Ogera Demo
     'ogera.title': 'Experience Ogera Platform',
     'ogera.subtitle': 'Take a journey through our flagship platform and discover how it can transform your business operations.',
@@ -82,7 +82,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'ogera.transformDesc': 'Join the waitlist for early access to Ogera Platform and be among the first to experience the future of African business technology.',
     'ogera.joinWaitlist': 'Join Waitlist',
     'ogera.scheduleDemo': 'Schedule Demo',
-    
+
     // Journey
     'journey.title': 'Our Journey & Vision',
     'journey.subtitle': 'From our foundation in Kigali to our vision of continental transformation, discover the milestones that define our commitment to African innovation.',
@@ -94,7 +94,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'journey.2026.expansion.desc': 'Expanding operations to Kenya, Uganda, and Tanzania, bringing our solutions to East Africa.',
     'journey.2027.continental.title': '2027 - Continental Reach',
     'journey.2027.continental.desc': 'Scaling across Africa, establishing partnerships and local presence in key markets.',
-    
+
     // Contact
     'contact.title': 'Get in Touch',
     'contact.subtitle': 'Ready to transform your business? Let\'s discuss how Sybella Systems can help you achieve your digital transformation goals.',
@@ -121,7 +121,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'contact.success': 'Thank you for your message! We\'ll get back to you within 24 hours.',
     'contact.error.submit': 'Sorry, there was an error sending your message. Please try again or contact us directly.',
     'contact.sending': 'Sending...',
-    
+
     // Footer
     'footer.description': 'Transforming Africa through innovative software and AI-driven digital solutions.',
     'footer.solutions': 'Solutions',
@@ -143,13 +143,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'nav.ogera': 'Ogera MVP',
     'nav.blog': 'Blog',
     'nav.contact': 'Contact',
-    
+
     // Hero Section
     'hero.title': 'Transformer l\'Afrique par l\'Innovation',
     'hero.subtitle': 'Pionnier des solutions numériques alimentées par l\'IA dans l\'éducation, la santé, le commerce de détail et au-delà. Construire l\'avenir de la technologie africaine, une innovation à la fois.',
     'hero.exploreEcosystem': 'Explorer Notre Écosystème',
     'hero.startJourney': 'Commencer Votre Voyage',
-    
+
     // Services
     'services.title': 'Notre Écosystème Complet',
     'services.subtitle': 'Neuf plateformes intégrées travaillant ensemble pour transformer le paysage numérique de l\'Afrique',
@@ -171,13 +171,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.inventory.desc': 'Systèmes de gestion d\'inventaire et de facturation rationalisés pour les entreprises de toutes tailles.',
     'services.government.title': 'Gouvernement & ONG',
     'services.government.desc': 'Solutions de gouvernance numérique autonomisant l\'efficacité et la transparence du secteur public.',
-    
+
     // Projects
     'projects.title': 'Présentation de Nos Projets',
     'projects.ogera.title': 'Aperçu de la Plateforme Ogera',
     'projects.ogera.subtitle': 'Bientôt Disponible',
     'projects.requestAccess': 'Demander un Accès Anticipé',
-    
+
     // Ogera Demo
     'ogera.title': 'Découvrez la Plateforme Ogera',
     'ogera.subtitle': 'Parcourez notre plateforme phare et découvrez comment elle peut transformer vos opérations commerciales.',
@@ -205,7 +205,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'ogera.transformDesc': 'Rejoignez la liste d\'attente pour un accès anticipé à la Plateforme Ogera et soyez parmi les premiers à découvrir l\'avenir de la technologie commerciale africaine.',
     'ogera.joinWaitlist': 'Rejoindre la Liste d\'Attente',
     'ogera.scheduleDemo': 'Planifier une Démo',
-    
+
     // Journey
     'journey.title': 'Notre Parcours & Vision',
     'journey.subtitle': 'De notre fondation à Kigali à notre vision de transformation continentale, découvrez les jalons qui définissent notre engagement envers l\'innovation africaine.',
@@ -217,7 +217,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'journey.2026.expansion.desc': 'Expansion des opérations au Kenya, en Ouganda et en Tanzanie, apportant nos solutions à l\'Afrique de l\'Est.',
     'journey.2027.continental.title': '2027 - Portée Continentale',
     'journey.2027.continental.desc': 'Mise à l\'échelle à travers l\'Afrique, établissant des partenariats et une présence locale sur les marchés clés.',
-    
+
     // Contact
     'contact.title': 'Entrer en Contact',
     'contact.subtitle': 'Prêt à transformer votre entreprise ? Discutons de la façon dont Sybella Systems peut vous aider à atteindre vos objectifs de transformation numérique.',
@@ -244,7 +244,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'contact.success': 'Merci pour votre message ! Nous vous répondrons dans les 24 heures.',
     'contact.error.submit': 'Désolé, il y a eu une erreur lors de l\'envoi de votre message. Veuillez réessayer ou nous contacter directement.',
     'contact.sending': 'Envoi en cours...',
-    
+
     // Footer
     'footer.description': 'Transformer l\'Afrique grâce à des logiciels innovants et des solutions numériques alimentées par l\'IA.',
     'footer.solutions': 'Solutions',
@@ -266,13 +266,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'nav.ogera': 'Ogera MVP',
     'nav.blog': 'Blogu',
     'nav.contact': 'Mawasiliano',
-    
+
     // Hero Section
     'hero.title': 'Kubadilisha Afrika Kupitia Ubunifu',
     'hero.subtitle': 'Kiongozi wa suluhisho za kidijitali zilizotengenezwa na AI katika elimu, afya, rejareja, na zaidi. Kujenga teknolojia ya Afrika ya baadaye, ubunifu mmoja kwa wakati.',
     'hero.exploreEcosystem': 'Chunguza Mfumo wa Mazingira Wetu',
     'hero.startJourney': 'Anza Safari Yako',
-    
+
     // Services
     'services.title': 'Mfumo wa Mazingira Wetu wa Kikamilifu',
     'services.subtitle': 'Jukwaa tisa zilizounganishwa zinazofanya kazi pamoja kubadilisha mazingira ya kidijitali ya Afrika',
@@ -294,13 +294,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.inventory.desc': 'Mifumo ya usimamizi wa hesabu na utoaji wa bili iliyorahisishwa kwa biashara za ukubwa wowote.',
     'services.government.title': 'Serikali na NGO',
     'services.government.desc': 'Suluhisho za utawala wa kidijitali zinazowezesha ufanisi na uwazi wa sekta ya umma.',
-    
+
     // Projects
     'projects.title': 'Kutangaza Miradi Yetu',
     'projects.ogera.title': 'Kiongozi cha Jukwaa la Ogera',
     'projects.ogera.subtitle': 'Inakuja Hivi Karibuni',
     'projects.requestAccess': 'Omba Ufikiaji wa Mapema',
-    
+
     // Ogera Demo
     'ogera.title': 'Jifunze Jukwaa la Ogera',
     'ogera.subtitle': 'Safiri kupitia jukwaa letu kuu na ugundue jinsi linaweza kubadilisha shughuli za biashara yako.',
@@ -328,7 +328,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'ogera.transformDesc': 'Jiunge na orodha ya kusubiri kwa ufikiaji wa mapema wa Jukwaa la Ogera na uwe miongoni mwa wa kwanza kujifunza teknolojia ya biashara ya Afrika.',
     'ogera.joinWaitlist': 'Jiunge na Orodha ya Kusubiri',
     'ogera.scheduleDemo': 'Panga Onyesho',
-    
+
     // Journey
     'journey.title': 'Safari Yetu na Maono',
     'journey.subtitle': 'Kutoka msingi wetu huko Kigali hadi maono yetu ya mabadiliko ya bara, gundua hatua muhimu zinazofafanua jitihada zetu za ubunifu wa Afrika.',
@@ -340,7 +340,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'journey.2026.expansion.desc': 'Kupanua shughuli za Kenya, Uganda, na Tanzania, kuleta suluhisho zetu Afrika Mashariki.',
     'journey.2027.continental.title': '2027 - Kufikia Bara',
     'journey.2027.continental.desc': 'Kupima kote Afrika, kuanzisha ushirikiano na uwepo wa ndani katika soko muhimu.',
-    
+
     // Contact
     'contact.title': 'Pata Mawasiliano',
     'contact.subtitle': 'Uko tayari kubadilisha biashara yako? Hebu tujadili jinsi Sybella Systems inaweza kukusaidia kufikia malengo yako ya mabadiliko ya kidijitali.',
@@ -367,7 +367,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'contact.success': 'Asante kwa ujumbe wako! Tutakujibu ndani ya masaa 24.',
     'contact.error.submit': 'Samahani, kulikuwa na hitilafu katika kutuma ujumbe wako. Tafadhali jaribu tena au wasiliana nasi moja kwa moja.',
     'contact.sending': 'Inatumwa...',
-    
+
     // Footer
     'footer.description': 'Kubadilisha Afrika kupitia programu za ubunifu na suluhisho za kidijitali za AI.',
     'footer.solutions': 'Suluhisho',
@@ -389,13 +389,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'nav.ogera': 'Ogera MVP',
     'nav.blog': 'Blogu',
     'nav.contact': 'Kwemeza',
-    
+
     // Hero Section
     'hero.title': 'Guhindura Afurika binyuze mu Bwoba',
     'hero.subtitle': 'Guteza imbere ibisubizo bya digital byatezimbere na AI mu buhinzi, ubuzima, ibicuruzwa, n\'ibindi. Gushyiraho isi y\'ikoranabuhanga rya Afurika, ubwoba rumwe ku gihe.',
     'hero.exploreEcosystem': 'Shakisha Sisitemu y\'ibidukikije yacu',
     'hero.startJourney': 'Tangira urugendo rwawe',
-    
+
     // Services
     'services.title': 'Sisitemu y\'ibidukikije yacu yuzuye',
     'services.subtitle': 'Amashami atandatu yashyizwe hamwe akora hamwe guhindura isura ya digital ya Afurika',
@@ -417,13 +417,13 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.inventory.desc': 'Amashami y\'ubwoba n\'ubwoba by\'ubwoba byongera ubwoba ku bwoba.',
     'services.government.title': 'Leta n\'NGO',
     'services.government.desc': 'Ibisubizo by\'ubwoba by\'ubwoba byongera ubwoba ku bwoba.',
-    
+
     // Projects
     'projects.title': 'Gutangaza Amashami yacu',
     'projects.ogera.title': 'Icyerekezo cy\'Urubuga rwa Ogera',
     'projects.ogera.subtitle': 'Riraza vuba',
     'projects.requestAccess': 'Saba ubwoba bwa mbere',
-    
+
     // Ogera Demo
     'ogera.title': 'Gusuzuma Urubuga rwa Ogera',
     'ogera.subtitle': 'Genda mu rubuga rwacu rw\'ibanze kandi ube uzi uko rushobora guhindura imikorere yawe y\'ubucuruzi.',
@@ -451,7 +451,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'ogera.transformDesc': 'Winjire mu rutonde rw\'abategereje ubwoba bwa mbere bwo ku Rubuga rwa Ogera kandi ube umwe mu ba mbere gusuzuma ubwoba bw\'ubucuruzi bwa Afrika.',
     'ogera.joinWaitlist': 'Winjire mu Rutonde rw\'Abategereje',
     'ogera.scheduleDemo': 'Gahunda Demo',
-    
+
     // Journey
     'journey.title': 'Urugendo rwacu n\'Icyerekezo',
     'journey.subtitle': 'Kuva mu bwoba bwawe hano Kigali kugeza ku bwoba bwawe bwo guhindura isi, menya amashami y\'ubwoba yashyizwe mu bwoba bwawe bwo guhindura isi.',
@@ -463,7 +463,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'journey.2026.expansion.desc': 'Kwongera ubwoba bwa Kenya, Uganda, na Tanzania, kuza ibisubizo byacu mu bwoba bwa Afurika.',
     'journey.2027.continental.title': '2027 - Gufata ubwoba',
     'journey.2027.continental.desc': 'Kwongera ubwoba bwa Afurika, gushyiraho ubwoba n\'ubwoba bwa ndani mu bwoba bwa mbere.',
-    
+
     // Contact
     'contact.title': 'Kwemeza',
     'contact.subtitle': 'Uko tayari guhindura ubwoba bwawe? Reka tujadile uko Sybella Systems ishobora gufasha kugera ku bwoba bwawe bwo guhindura isi ya digital.',
@@ -490,7 +490,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'contact.success': 'Murakoze ku butumwa bwawe! Tuzagaruka mu masaha 24.',
     'contact.error.submit': 'Ihangane, habayeho ikosa mu kohereza ubutumwa bwawe. Nyamuneka gerageza nanone cyangwa twandikire moja kwa moja.',
     'contact.sending': 'Birakoherezwa...',
-    
+
     // Footer
     'footer.description': 'Guhindura Afurika binyuze mu bwoba bwa software n\'ibisubizo bya digital byatezimbere na AI.',
     'footer.solutions': 'Ibisubizo',
