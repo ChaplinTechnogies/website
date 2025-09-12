@@ -28,28 +28,28 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
 
         // Validate name
         if (!formData.name.trim()) {
-            newErrors.name = 'Name is required'
+            newErrors.name = t('contact.error.name.required')
         } else if (formData.name.length < 2) {
-            newErrors.name = 'Name must be at least 2 characters'
+            newErrors.name = t('contact.error.name.minLength')
         }
 
         // Validate email
         if (!formData.email.trim()) {
-            newErrors.email = 'Email is required'
+            newErrors.email = t('contact.error.email.required')
         } else if (!SecurityValidator.validateEmail(formData.email)) {
-            newErrors.email = 'Please enter a valid email address'
+            newErrors.email = t('contact.error.email.invalid')
         }
 
         // Validate message
         if (!formData.message.trim()) {
-            newErrors.message = 'Message is required'
+            newErrors.message = t('contact.error.message.required')
         } else if (formData.message.length < 10) {
-            newErrors.message = 'Message must be at least 10 characters'
+            newErrors.message = t('contact.error.message.minLength')
         }
 
         // Validate phone if provided
         if (formData.phone && !SecurityValidator.validatePhone(formData.phone)) {
-            newErrors.phone = 'Please enter a valid phone number'
+            newErrors.phone = t('contact.error.phone.invalid')
         }
 
         setErrors(newErrors)
@@ -147,7 +147,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
                                     onChange={(e) => handleInputChange('name', e.target.value)}
                                     className={`w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text ${errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                                         }`}
-                                    placeholder="Enter your full name"
+                                    placeholder={t('contact.placeholder.name')}
                                 />
                                 {errors.name && (
                                     <p className="mt-1 text-sm text-red-600" role="alert">
@@ -168,7 +168,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
                                     onChange={(e) => handleInputChange('email', e.target.value)}
                                     className={`w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                                         }`}
-                                    placeholder="Enter your email address"
+                                    placeholder={t('contact.placeholder.email')}
                                 />
                                 {errors.email && (
                                     <p className="mt-1 text-sm text-red-600" role="alert">
@@ -189,7 +189,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
                                     value={formData.company}
                                     onChange={(e) => handleInputChange('company', e.target.value)}
                                     className="w-full p-4 border border-gray-300 dark:border-gray-600 dark:bg-dark-surface dark:text-dark-text rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
-                                    placeholder="Enter your company name"
+                                    placeholder={t('contact.placeholder.company')}
                                 />
                             </div>
 
@@ -204,7 +204,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
                                     onChange={(e) => handleInputChange('phone', e.target.value)}
                                     className={`w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text ${errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                                         }`}
-                                    placeholder="Enter your phone number"
+                                    placeholder={t('contact.placeholder.phone')}
                                 />
                                 {errors.phone && (
                                     <p className="mt-1 text-sm text-red-600" role="alert">
@@ -226,7 +226,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
                                 onChange={(e) => handleInputChange('message', e.target.value)}
                                 className={`w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text ${errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                                     }`}
-                                placeholder="Tell us about your project or how we can help you"
+                                placeholder={t('contact.placeholder.message')}
                             />
                             {errors.message && (
                                 <p className="mt-1 text-sm text-red-600" role="alert">
@@ -241,7 +241,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
                                 disabled={isSubmitting}
                                 className="flex-1 px-6 sm:px-8 py-3 sm:py-4 bg-accent text-white font-semibold rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
-                                {isSubmitting ? 'Sending...' : t('contact.sendMessage')}
+                                {isSubmitting ? t('contact.sending') : t('contact.sendMessage')}
                             </button>
 
                             <button
@@ -254,17 +254,17 @@ const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
 
                         {submitStatus === 'success' && (
                             <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg" role="alert">
-                                <p className="text-green-800 dark:text-green-200">
-                                    Thank you for your message! We'll get back to you within 24 hours.
-                                </p>
+                <p className="text-green-800 dark:text-green-200">
+                  {t('contact.success')}
+                </p>
                             </div>
                         )}
 
                         {submitStatus === 'error' && (
                             <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg" role="alert">
-                                <p className="text-red-800 dark:text-red-200">
-                                    Sorry, there was an error sending your message. Please try again or contact us directly.
-                                </p>
+                <p className="text-red-800 dark:text-red-200">
+                  {t('contact.error.submit')}
+                </p>
                             </div>
                         )}
                     </form>
