@@ -129,8 +129,8 @@ export const optimizeImage = (src: string, width?: number, height?: number): str
 }
 
 // Lazy loading utility
-export const lazyLoad = (callback: () => void, options?: IntersectionObserverInit): void => {
-  if (typeof window === 'undefined') return
+export const lazyLoad = (callback: () => void, options?: IntersectionObserverInit): IntersectionObserver | undefined => {
+  if (typeof window === 'undefined') return undefined
   
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
