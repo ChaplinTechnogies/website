@@ -13,6 +13,7 @@ interface DemoStep {
 const OgeraDemo = () => {
     const [currentStep, setCurrentStep] = useState<number>(0)
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
+    const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null)
 
     const demoSteps: DemoStep[] = [
         {
@@ -50,7 +51,14 @@ const OgeraDemo = () => {
             component: 'OgeraDemo',
             stepsCount: demoSteps.length
         })
-    }, [])
+
+        // Cleanup interval on unmount
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId)
+            }
+        }
+    }, [intervalId])
 
     const handleStepClick = (stepIndex: number): void => {
         setCurrentStep(stepIndex)
@@ -83,8 +91,8 @@ const OgeraDemo = () => {
             })
         }, 3000)
 
-        // Cleanup interval if component unmounts or demo stops
-        return () => clearInterval(interval)
+        // Store interval ID for cleanup
+        setIntervalId(interval)
     }
 
     const handleRequestAccess = (): void => {

@@ -120,7 +120,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
         } finally {
             setIsSubmitting(false)
         }
-    }, [formData, validateForm, onSubmit])
+    }, [formData, onSubmit])
 
     return (
         <section id="contact" className="py-12 sm:py-16 bg-white dark:bg-dark-bg">
