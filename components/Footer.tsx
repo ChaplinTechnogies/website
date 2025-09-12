@@ -1,7 +1,7 @@
 'use client'
 import { logger } from '../lib/logger'
 import { useEffect } from 'react'
-import useI18n from '../app/i18n'
+import { useI18n } from '../contexts/I18nContext'
 
 const Footer = (): JSX.Element => {
     const { t } = useI18n()

@@ -1,5 +1,5 @@
 'use client'
-import useI18n from '../app/i18n'
+import { useI18n } from '../contexts/I18nContext'
 
 export default function Hero() {
     const { t } = useI18n()

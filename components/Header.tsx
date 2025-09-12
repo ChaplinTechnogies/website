@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
-import useI18n from '../app/i18n'
+import { useI18n } from '../contexts/I18nContext'
 import ThemeToggle from './ThemeToggle'
 
 export default function Header() {

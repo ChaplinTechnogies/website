@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react'
 import { ContactFormData } from '../types'
 import { logger } from '../lib/logger'
 import { SecurityValidator } from '../lib/security'
-import useI18n from '../app/i18n'
+import { useI18n } from '../contexts/I18nContext'
 
 interface ContactFormProps {
     onSubmit?: (data: ContactFormData) => Promise<void>

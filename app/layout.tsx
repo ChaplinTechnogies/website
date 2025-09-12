@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Metadata } from 'next'
 import Script from 'next/script'
+import { I18nProvider } from '../contexts/I18nContext'
 
 export const metadata: Metadata = {
     title: 'Sybella Systems - Transforming Africa Through Innovation',
@@ -88,10 +89,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <meta name="theme-color" content="#1e3a8a" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </head>
-            <body className="antialiased bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-300">
-                <Header />
-                <main className="min-h-screen">{children}</main>
-                <Footer />
+      <body className="antialiased bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-300">
+        <I18nProvider>
+          <Header />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+        </I18nProvider>
 
                 {/* Analytics and Performance Monitoring */}
                 <Script
