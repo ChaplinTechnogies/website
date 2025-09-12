@@ -9,7 +9,7 @@ interface ContactFormProps {
     onSubmit?: (data: ContactFormData) => Promise<void>
 }
 
-const ContactForm = ({ onSubmit }: ContactFormProps): JSX.Element => {
+const ContactForm = ({ onSubmit }: ContactFormProps) => {
     const { t } = useI18n()
     const [formData, setFormData] = useState<ContactFormData>({
         name: '',

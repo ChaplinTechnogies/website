@@ -4,9 +4,9 @@ import { logger } from '../lib/logger'
 import { useEffect } from 'react'
 import { useI18n } from '../contexts/I18nContext'
 
-const Journey = (): JSX.Element => {
+const Journey = () => {
     const { t } = useI18n()
-    
+
     const milestones: Milestone[] = [
         {
             year: '2025',

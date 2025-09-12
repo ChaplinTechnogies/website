@@ -14,7 +14,7 @@ interface TimeLeft {
     seconds: number
 }
 
-const CountdownTimer = ({ targetDate, onComplete }: CountdownTimerProps): JSX.Element => {
+const CountdownTimer = ({ targetDate, onComplete }: CountdownTimerProps) => {
     const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
     const [isExpired, setIsExpired] = useState<boolean>(false)
 

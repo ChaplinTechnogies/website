@@ -4,7 +4,7 @@ import { logger } from '../lib/logger';
 import { useEffect } from 'react';
 import { useI18n } from '../contexts/I18nContext';
 
-const Services = (): JSX.Element => {
+const Services = () => {
     const { t } = useI18n()
 
     const ecosystemItems: ServiceItem[] = [

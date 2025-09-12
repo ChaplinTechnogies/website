@@ -9,7 +9,7 @@ interface Message {
     timestamp: Date
 }
 
-const Chatbot = (): JSX.Element => {
+const Chatbot = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [messages, setMessages] = useState<Message[]>([
         {

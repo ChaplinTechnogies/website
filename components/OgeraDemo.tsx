@@ -10,7 +10,7 @@ interface DemoStep {
     features: string[]
 }
 
-const OgeraDemo = (): JSX.Element => {
+const OgeraDemo = () => {
     const [currentStep, setCurrentStep] = useState<number>(0)
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
 

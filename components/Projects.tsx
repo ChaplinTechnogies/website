@@ -3,9 +3,9 @@ import { logger } from '../lib/logger'
 import { useEffect } from 'react'
 import { useI18n } from '../contexts/I18nContext'
 
-const Projects = (): JSX.Element => {
+const Projects = () => {
     const { t } = useI18n()
-    
+
     useEffect(() => {
         logger.info('Projects component loaded', {
             component: 'Projects'

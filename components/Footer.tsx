@@ -3,7 +3,7 @@ import { logger } from '../lib/logger'
 import { useEffect } from 'react'
 import { useI18n } from '../contexts/I18nContext'
 
-const Footer = (): JSX.Element => {
+const Footer = () => {
     const { t } = useI18n()
 
     useEffect(() => {
