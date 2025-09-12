@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { logger } from '../lib/logger'
+import { useI18n } from '../contexts/I18nContext'
 
 interface DemoStep {
     id: string
@@ -11,6 +12,7 @@ interface DemoStep {
 }
 
 const OgeraDemo = () => {
+    const { t } = useI18n()
     const [currentStep, setCurrentStep] = useState<number>(0)
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null)
@@ -18,31 +20,31 @@ const OgeraDemo = () => {
     const demoSteps: DemoStep[] = [
         {
             id: '1',
-            title: 'Dashboard Overview',
-            description: 'Get a comprehensive view of all your business operations in one place.',
+            title: t('ogera.dashboard.title'),
+            description: t('ogera.dashboard.desc'),
             image: '/images/ogera/dashboard.jpg',
-            features: ['Real-time Analytics', 'Multi-sector Integration', 'Customizable Widgets']
+            features: t('ogera.dashboard.features').split(',')
         },
         {
             id: '2',
-            title: 'AI-Powered Insights',
-            description: 'Leverage artificial intelligence to make data-driven decisions.',
+            title: t('ogera.ai.title'),
+            description: t('ogera.ai.desc'),
             image: '/images/ogera/ai-insights.jpg',
-            features: ['Predictive Analytics', 'Smart Recommendations', 'Automated Reporting']
+            features: t('ogera.ai.features').split(',')
         },
         {
             id: '3',
-            title: 'Cross-Platform Integration',
-            description: 'Seamlessly connect all your business systems and processes.',
+            title: t('ogera.integration.title'),
+            description: t('ogera.integration.desc'),
             image: '/images/ogera/integration.jpg',
-            features: ['API Integration', 'Data Synchronization', 'Workflow Automation']
+            features: t('ogera.integration.features').split(',')
         },
         {
             id: '4',
-            title: 'Mobile Accessibility',
-            description: 'Access your business data and insights from anywhere, anytime.',
+            title: t('ogera.mobile.title'),
+            description: t('ogera.mobile.desc'),
             image: '/images/ogera/mobile.jpg',
-            features: ['Mobile-First Design', 'Offline Capabilities', 'Push Notifications']
+            features: t('ogera.mobile.features').split(',')
         }
     ]
 
@@ -108,9 +110,9 @@ const OgeraDemo = () => {
         <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-dark-blue mb-4">Experience Ogera Platform</h2>
+                    <h2 className="text-4xl font-bold text-dark-blue mb-4">{t('ogera.title')}</h2>
                     <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                        Take a journey through our flagship platform and discover how it can transform your business operations.
+                        {t('ogera.subtitle')}
                     </p>
                 </div>
 
@@ -128,7 +130,7 @@ const OgeraDemo = () => {
                                         disabled={isPlaying}
                                         className="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
                                     >
-                                        {isPlaying ? 'Playing...' : '▶️ Play Demo'}
+                                        {isPlaying ? 'Playing...' : `▶️ ${t('ogera.playDemo')}`}
                                     </button>
                                 </div>
                             </div>
@@ -173,22 +175,22 @@ const OgeraDemo = () => {
                                 <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <span className="text-4xl">🚀</span>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-2">Ogera Platform</h3>
-                                <p className="opacity-90">Interactive Demo Preview</p>
+                                <h3 className="text-2xl font-bold mb-2">{t('ogera.platformName')}</h3>
+                                <p className="opacity-90">{t('ogera.demoPreview')}</p>
                             </div>
 
                             <div className="space-y-4">
                                 <div className="bg-white/10 rounded-lg p-4">
-                                    <div className="text-sm opacity-80 mb-2">Current Step</div>
+                                    <div className="text-sm opacity-80 mb-2">{t('ogera.currentStep')}</div>
                                     <div className="text-lg font-semibold">
                                         {currentStep + 1} of {demoSteps.length}
                                     </div>
                                 </div>
 
                                 <div className="bg-white/10 rounded-lg p-4">
-                                    <div className="text-sm opacity-80 mb-2">Status</div>
+                                    <div className="text-sm opacity-80 mb-2">{t('ogera.status')}</div>
                                     <div className="text-lg font-semibold">
-                                        {isPlaying ? 'Auto-playing' : 'Ready to explore'}
+                                        {isPlaying ? t('ogera.autoPlaying') : t('ogera.readyToExplore')}
                                     </div>
                                 </div>
                             </div>
@@ -197,7 +199,7 @@ const OgeraDemo = () => {
                                 onClick={handleRequestAccess}
                                 className="mt-8 px-8 py-3 bg-yellow text-dark-blue font-semibold rounded-lg hover:bg-yellow-400 transition-colors"
                             >
-                                Request Early Access
+                                {t('ogera.requestAccess')}
                             </button>
                         </div>
 
@@ -210,20 +212,19 @@ const OgeraDemo = () => {
                 {/* Additional Info */}
                 <div className="mt-16 text-center">
                     <div className="bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
-                        <h3 className="text-2xl font-bold text-dark-blue mb-4">Ready to Transform Your Business?</h3>
+                        <h3 className="text-2xl font-bold text-dark-blue mb-4">{t('ogera.transformTitle')}</h3>
                         <p className="text-gray-600 mb-6">
-                            Join the waitlist for early access to Ogera Platform and be among the first to experience
-                            the future of African business technology.
+                            {t('ogera.transformDesc')}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button
                                 onClick={handleRequestAccess}
                                 className="px-8 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"
                             >
-                                Join Waitlist
+                                {t('ogera.joinWaitlist')}
                             </button>
                             <button className="px-8 py-3 border-2 border-dark-blue text-dark-blue font-semibold rounded-lg hover:bg-dark-blue hover:text-white transition-colors">
-                                Schedule Demo
+                                {t('ogera.scheduleDemo')}
                             </button>
                         </div>
                     </div>
