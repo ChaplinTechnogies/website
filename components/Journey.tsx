@@ -65,19 +65,19 @@ const Journey = () => {
                         {milestones.map((milestone, index) => (
                             <div
                                 key={`milestone-${index}`}
-                                className="relative mb-8 md:mb-12"
+                                className={`relative mb-8 md:mb-12 md:flex md:items-center ${
+                                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                                }`}
                             >
                                 {/* Timeline dot - positioned differently for mobile vs desktop */}
                                 <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 md:w-6 md:h-6 bg-accent rounded-full border-2 md:border-4 border-white shadow-lg z-10"></div>
 
                                 {/* Content card - full width on mobile, alternating on desktop */}
-                                <div className="ml-12 md:ml-0 md:w-5/12 md:absolute md:top-0 md:left-0 md:right-0 md:mx-auto">
+                                <div className={`ml-12 md:ml-0 md:w-5/12 ${
+                                    index % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:pl-8 md:text-left'
+                                }`}>
                                     <div
-                                        className={`bg-white dark:bg-dark-surface p-4 md:p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 cursor-pointer ${
-                                            index % 2 === 0 
-                                                ? 'md:pr-8 md:text-right' 
-                                                : 'md:pl-8 md:text-left md:ml-auto'
-                                        }`}
+                                        className="bg-white dark:bg-dark-surface p-4 md:p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 cursor-pointer"
                                         onClick={() => handleMilestoneClick(milestone)}
                                         role="button"
                                         tabIndex={0}
