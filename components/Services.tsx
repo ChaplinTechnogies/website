@@ -10,51 +10,51 @@ const Services = (): JSX.Element => {
     const ecosystemItems: ServiceItem[] = [
         {
             icon: '🎓',
-            title: 'Education Platform',
-            description: 'Revolutionizing learning with AI-powered educational tools and personalized learning experiences.'
+            title: t('services.education.title'),
+            description: t('services.education.desc')
         },
         {
             icon: '🏥',
-            title: 'Healthcare Solutions',
-            description: 'Digital health platforms connecting patients, providers, and systems for better healthcare outcomes.'
+            title: t('services.healthcare.title'),
+            description: t('services.healthcare.desc')
         },
         {
             icon: '🛒',
-            title: 'Retail & Commerce',
-            description: 'Next-generation e-commerce and retail management solutions for African businesses.'
+            title: t('services.retail.title'),
+            description: t('services.retail.desc')
         },
         {
             icon: '🏨',
-            title: 'Hospitality Tech',
-            description: 'Comprehensive hospitality management systems designed for Africa\'s growing tourism industry.'
+            title: t('services.hospitality.title'),
+            description: t('services.hospitality.desc')
         },
         {
             icon: '🏢',
-            title: 'Real Estate',
-            description: 'Smart property management and real estate solutions for Africa\'s urban development.'
+            title: t('services.realestate.title'),
+            description: t('services.realestate.desc')
         },
         {
             icon: '🚗',
-            title: 'Transport & Logistics',
-            description: 'Intelligent transportation and logistics platforms optimizing movement across the continent.'
+            title: t('services.transport.title'),
+            description: t('services.transport.desc')
         }
     ];
 
     const additionalServices: ServiceItem[] = [
         {
             icon: '👥',
-            title: 'HR Management',
-            description: 'Human resource solutions tailored for Africa\'s diverse and dynamic workforce.'
+            title: t('services.hr.title'),
+            description: t('services.hr.desc')
         },
         {
             icon: '📊',
-            title: 'Inventory & Billing',
-            description: 'Streamlined inventory management and billing systems for businesses of all sizes.'
+            title: t('services.inventory.title'),
+            description: t('services.inventory.desc')
         },
         {
             icon: '🏛️',
-            title: 'Government & NGO',
-            description: 'Digital governance solutions empowering public sector efficiency and transparency.'
+            title: t('services.government.title'),
+            description: t('services.government.desc')
         }
     ];
 

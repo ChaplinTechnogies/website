@@ -2,28 +2,31 @@
 import { Milestone } from '../types'
 import { logger } from '../lib/logger'
 import { useEffect } from 'react'
+import { useI18n } from '../contexts/I18nContext'
 
 const Journey = (): JSX.Element => {
+    const { t } = useI18n()
+    
     const milestones: Milestone[] = [
         {
             year: '2025',
-            title: 'Foundation',
-            description: 'Established in Kigali, Rwanda with a vision to transform African technology landscape through innovative solutions.'
+            title: t('journey.2025.foundation.title'),
+            description: t('journey.2025.foundation.desc')
         },
         {
             year: '2025',
-            title: 'Ogera MVP Launch',
-            description: 'Launching our flagship platform integrating AI-driven solutions across multiple sectors.'
+            title: t('journey.2025.ogera.title'),
+            description: t('journey.2025.ogera.desc')
         },
         {
             year: '2026',
-            title: 'Regional Expansion',
-            description: 'Expanding operations to Kenya, Uganda, and Tanzania, bringing our solutions to East Africa.'
+            title: t('journey.2026.expansion.title'),
+            description: t('journey.2026.expansion.desc')
         },
         {
             year: '2027',
-            title: 'Continental Reach',
-            description: 'Scaling across Africa, establishing partnerships and local presence in key markets.'
+            title: t('journey.2027.continental.title'),
+            description: t('journey.2027.continental.desc')
         }
     ];
 
@@ -43,13 +46,14 @@ const Journey = (): JSX.Element => {
     };
 
     return (
-        <section id="about" className="py-16 bg-white">
-            <div className="container mx-auto px-6">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl font-bold text-dark-blue mb-4">Our Journey & Vision</h2>
-                    <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                        From our foundation in Kigali to our vision of continental transformation,
-                        discover the milestones that define our commitment to African innovation.
+        <section id="about" className="py-12 sm:py-16 bg-white dark:bg-dark-bg">
+            <div className="container mx-auto px-4 sm:px-6">
+                <div className="text-center mb-12 sm:mb-16">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-dark-blue dark:text-dark-text mb-4">
+                        {t('journey.title')}
+                    </h2>
+                    <p className="text-base sm:text-lg text-gray-600 dark:text-dark-text-secondary max-w-3xl mx-auto">
+                        {t('journey.subtitle')}
                     </p>
                 </div>
 
