@@ -59,25 +59,25 @@ const Journey = () => {
 
                 <div className="max-w-4xl mx-auto">
                     <div className="relative">
-                        {/* Timeline line */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-accent"></div>
+                        {/* Timeline line - hidden on mobile, visible on desktop */}
+                        <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-accent"></div>
 
                         {milestones.map((milestone, index) => (
                             <div
                                 key={`milestone-${index}`}
-                                className={`relative flex items-center mb-12 ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                                    }`}
+                                className={`relative mb-8 md:mb-12 md:flex md:items-center ${
+                                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                                }`}
                             >
-                                {/* Timeline dot */}
-                                <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-accent rounded-full border-4 border-white shadow-lg z-10"></div>
+                                {/* Timeline dot - positioned differently for mobile vs desktop */}
+                                <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 md:w-6 md:h-6 bg-accent rounded-full border-2 md:border-4 border-white shadow-lg z-10"></div>
 
-                                {/* Content card */}
-                                <div
-                                    className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'
-                                        }`}
-                                >
+                                {/* Content card - full width on mobile, alternating on desktop */}
+                                <div className={`ml-12 md:ml-0 md:w-5/12 ${
+                                    index % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:pl-8 md:text-left'
+                                }`}>
                                     <div
-                                        className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                                        className="bg-white dark:bg-dark-surface p-4 md:p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 cursor-pointer"
                                         onClick={() => handleMilestoneClick(milestone)}
                                         role="button"
                                         tabIndex={0}
@@ -88,10 +88,10 @@ const Journey = () => {
                                         }}
                                         aria-label={`Learn more about ${milestone.title}`}
                                     >
-                                        <div className="text-accent font-bold text-lg mb-2">
+                                        <div className="text-accent font-bold text-base md:text-lg mb-2">
                                             {milestone.year} - {milestone.title}
                                         </div>
-                                        <p className="text-gray-600 leading-relaxed">
+                                        <p className="text-gray-600 dark:text-dark-text-secondary leading-relaxed text-sm md:text-base">
                                             {milestone.description}
                                         </p>
                                     </div>
