@@ -9,6 +9,10 @@ import OgeraDemo from '../components/OgeraDemo'
 import Chatbot from '../components/Chatbot'
 import { logger } from '../lib/logger'
 import { useEffect } from 'react'
+import TeamSlider from '@/components/Slider'
+import USPSection from '@/components/Usp'
+import EcosystemSolutions from '@/components/Ecosystem'
+import SubscriptionPopup from '@/components/Popup'
 
 export default function Page() {
     useEffect(() => {
@@ -23,10 +27,14 @@ export default function Page() {
             <Hero />
             <Services />
             <Projects />
+            <TeamSlider />
+            <USPSection />
             <OgeraDemo />
             <Journey />
+            <EcosystemSolutions />
             <ContactForm />
             <Chatbot />
+            <SubscriptionPopup />
         </div>
     )
 }
