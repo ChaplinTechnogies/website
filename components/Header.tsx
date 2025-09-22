@@ -11,12 +11,12 @@ export default function Header() {
   const [isLangOpen, setIsLangOpen] = useState(false);
 
   const navigationItems = [
-    { key: "Home", href: "#home" },
-    { key: "About", href: "#about" },
-    { key: "Projects", href: "#ogera" },
-    { key: "Updates", href: "#ogera" },
+    { key: "Home", href: "/" },
+    { key: "About", href: "/about" },
+    { key: "Projects", href: "/projects" },
+    { key: "Updates", href: "/updates" },
     { key: "Opportunities", href: "/blog" },
-    { key: "Inquiries", href: "#contact" },
+    { key: "Inquiries", href: "/contact" },
   ];
 
   const languages = [
