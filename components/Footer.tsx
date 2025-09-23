@@ -2,6 +2,7 @@
 import { logger } from '../lib/logger'
 import { useEffect } from 'react'
 import { useI18n } from '../contexts/I18nContext'
+import Link from 'next/link'
 
 const Footer = () => {
   const { t } = useI18n()
@@ -274,22 +275,22 @@ const Footer = () => {
               © 2025 Sybella Systems. {t('footer.copyright')}
             </div>
             <div className="flex space-x-6 text-sm">
-              <a
-                href="/privacy"
+              <Link
+                href="/privacy-policy"
                 onClick={() => handleFooterLinkClick('privacy')}
                 className="text-gray-300 hover:text-yellow transition-colors"
               >
                 {t('footer.privacy')}
-              </a>
+              </Link>
               <a
-                href="/terms"
+                href="/terms-service"
                 onClick={() => handleFooterLinkClick('terms')}
                 className="text-gray-300 hover:text-yellow transition-colors"
               >
                 {t('footer.terms')}
               </a>
               <a
-                href="/cookies"
+                href="/cookies-service"
                 onClick={() => handleFooterLinkClick('cookies')}
                 className="text-gray-300 hover:text-yellow transition-colors"
               >

@@ -20,14 +20,14 @@ const members: Member[] = [
   {
     name: "Bessora Neema Hirwa",
     role: "CEO",
-    image: "/ham.jpg",
+    image: "/profile.webp",
     linkedin: "#",
     twitter: "#",
   },
   {
     name: "Kayla Elyse",
     role: "CTO",
-    image: "/willsmith.jpg",
+    image: "/profile.webp",
     linkedin: "#",
     twitter: "#",
     github: "#",
@@ -35,13 +35,13 @@ const members: Member[] = [
   {
     name: "Zeenab",
     role: "Project Manager",
-    image: "/bolt.jpg",
+    image: "/profile.webp",
     linkedin: "#",
   },
   {
     name: "Saransh",
     role: "Developer",
-    image: "/rock.webp",
+    image: "/profile.webp",
     linkedin: "#",
     github: "#",
   },
