@@ -282,20 +282,20 @@ const Footer = () => {
               >
                 {t('footer.privacy')}
               </Link>
-              <a
+              <Link
                 href="/terms-service"
                 onClick={() => handleFooterLinkClick('terms')}
                 className="text-gray-300 hover:text-yellow transition-colors"
               >
                 {t('footer.terms')}
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/cookies-service"
                 onClick={() => handleFooterLinkClick('cookies')}
                 className="text-gray-300 hover:text-yellow transition-colors"
               >
                 {t('footer.cookies')}
-              </a>
+              </Link>
             </div>
           </div>
         </div>
