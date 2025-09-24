@@ -49,7 +49,7 @@ export default function UpdatesPage() {
 
   const [expandedIndex, setExpandedIndex] = useState(null);
 
-  const toggleExpand = (index) => {
+  const toggleExpand = (index:any) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
