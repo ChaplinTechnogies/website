@@ -53,7 +53,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.government.desc': 'Digital governance solutions empowering public sector efficiency and transparency.',
 
     // Projects
-    'projects.title': 'Introducing Our Projects',
+    'projects.intro.title': 'Introducing Our Projects',
     'projects.ogera.title': 'Ogera Platform Preview',
     'projects.ogera.subtitle': 'Coming Soon',
     'projects.requestAccess': 'Request Early Access',
@@ -334,7 +334,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.government.desc': 'Solutions de gouvernance numérique autonomisant l\'efficacité et la transparence du secteur public.',
 
     // Projects
-    'projects.title': 'Présentation de Nos Projets',
+    'projects.intro.title': 'Présentation de Nos Projets',
     'projects.ogera.title': 'Aperçu de la Plateforme Ogera',
     'projects.ogera.subtitle': 'Bientôt Disponible',
     'projects.requestAccess': 'Demander un Accès Anticipé',
@@ -615,7 +615,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.government.desc': 'Suluhisho za utawala wa kidijitali zinazowezesha ufanisi na uwazi wa sekta ya umma.',
 
     // Projects
-    'projects.title': 'Kutangaza Miradi Yetu',
+    'projects.intro.title': 'Kutangaza Miradi Yetu',
     'projects.ogera.title': 'Kiongozi cha Jukwaa la Ogera',
     'projects.ogera.subtitle': 'Inakuja Hivi Karibuni',
     'projects.requestAccess': 'Omba Ufikiaji wa Mapema',
@@ -896,7 +896,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'services.government.desc': 'Ibisubizo by\'ubwoba by\'ubwoba byongera ubwoba ku bwoba.',
 
     // Projects
-    'projects.title': 'Gutangaza Amashami yacu',
+    'projects.intro.title': 'Gutangaza Amashami yacu',
     'projects.ogera.title': 'Icyerekezo cy\'Urubuga rwa Ogera',
     'projects.ogera.subtitle': 'Riraza vuba',
     'projects.requestAccess': 'Saba ubwoba bwa mbere',

@@ -35,7 +35,7 @@ const Projects = () => {
       <div className="container mx-auto px-6 text-center relative z-10">
         {/* Section Title */}
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-12">
-          {t("projects.title")}
+          {t("projects.intro.title")}
         </h2>
 
         {/* Ogera Project Card */}

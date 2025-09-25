@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Valid email required" }, { status: 400 });
     }
 
-    const client = await clientPromise;
+    const client = await clientPromise();
     const db = client.db("newsletterDB");
     const collection = db.collection("subscribers");
 
