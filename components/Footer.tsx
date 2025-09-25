@@ -93,7 +93,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('education')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  Education Platform
+                  {t('footer.education')}
                 </a>
               </li>
               <li>
@@ -102,7 +102,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('healthcare')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  Healthcare Solutions
+                  {t('footer.healthcare')}
                 </a>
               </li>
               <li>
@@ -111,7 +111,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('retail')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  Retail & Commerce
+                  {t('footer.retail')}
                 </a>
               </li>
               <li>
@@ -120,7 +120,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('hospitality')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  Hospitality Tech
+                  {t('footer.hospitality')}
                 </a>
               </li>
             </ul>
@@ -136,7 +136,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('about')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  About Us
+                  {t('footer.about')}
                 </a>
               </li>
               <li>
@@ -145,7 +145,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('journey')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  Our Journey
+                  {t('footer.journey')}
                 </a>
               </li>
               <li>
@@ -154,7 +154,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('blog')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  Blog
+                  {t('footer.blog')}
                 </a>
               </li>
               <li>
@@ -163,7 +163,7 @@ const Footer = () => {
                   onClick={() => handleFooterLinkClick('contact')}
                   className="text-gray-300 hover:text-yellow transition-colors"
                 >
-                  Contact
+                  {t('footer.contact')}
                 </a>
               </li>
             </ul>

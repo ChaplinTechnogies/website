@@ -1,39 +1,37 @@
 "use client";
 import { FaCloud, FaChartLine, FaUsers, FaLock } from "react-icons/fa";
-
-const solutions = [
-  {
-    title: "Cloud SaaS",
-    description:
-      "Scalable and reliable cloud-based software to simplify operations and boost productivity.",
-    icon: <FaCloud size={30} />,
-  },
-  {
-    title: "Analytics & Insights",
-    description:
-      "Turn your business data into meaningful insights with powerful dashboards and reports.",
-    icon: <FaChartLine size={30} />,
-  },
-  {
-    title: "Collaboration Tools",
-    description:
-      "Seamlessly connect your teams and improve communication with modern digital solutions.",
-    icon: <FaUsers size={30} />,
-  },
-  {
-    title: "Secure Systems",
-    description:
-      "Enterprise-grade security and compliance for all your business-critical applications.",
-    icon: <FaLock size={30} />,
-  },
-];
+import { useI18n } from "../contexts/I18nContext";
 
 export default function EcosystemSolutions() {
+  const { t } = useI18n();
+  
+  const solutions = [
+    {
+      title: t("ecosystem.cloud.title"),
+      description: t("ecosystem.cloud.desc"),
+      icon: <FaCloud size={30} />,
+    },
+    {
+      title: t("ecosystem.analytics.title"),
+      description: t("ecosystem.analytics.desc"),
+      icon: <FaChartLine size={30} />,
+    },
+    {
+      title: t("ecosystem.collaboration.title"),
+      description: t("ecosystem.collaboration.desc"),
+      icon: <FaUsers size={30} />,
+    },
+    {
+      title: t("ecosystem.security.title"),
+      description: t("ecosystem.security.desc"),
+      icon: <FaLock size={30} />,
+    },
+  ];
   return (
     <section className="py-20 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-dark-surface dark:via-dark-card dark:to-dark-surface">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">
-          Our <span className="text-blue-600">Ecosystem Solutions</span>
+          {t("ecosystem.title")}
         </h2>
 
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">

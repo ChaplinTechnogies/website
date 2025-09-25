@@ -63,7 +63,7 @@ const Projects = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center text-sm font-medium text-white hover:underline mb-6"
             >
-              Learn More
+              {t("projects.learnMore")}
               <ExternalLink className="w-4 h-4 ml-2" />
             </a>
 

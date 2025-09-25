@@ -2,48 +2,42 @@
 
 import { useState } from "react";
 import { FaCalendarAlt, FaTag } from "react-icons/fa";
+import { useI18n } from '../../contexts/I18nContext';
 
 export default function UpdatesPage() {
+  const { t } = useI18n();
   const updates = [
     {
-      title: "New AI Learning Platform Launched",
+      title: t("updates.aiLearning.title"),
       date: "2025-09-15",
       category: "Product",
       image: "/ai-learning.jpg",
-      description:
-        "We launched an AI-powered learning platform that personalizes student learning paths, improving engagement and performance.",
-      details:
-        "The platform includes interactive dashboards, AI-driven content recommendations, and automated assessment features. It’s designed for both students and teachers to enhance learning efficiency and outcomes.",
+      description: t("updates.aiLearning.desc"),
+      details: t("updates.aiLearning.details"),
     },
     {
-      title: "Healthcare Dashboard Update",
+      title: t("updates.healthcare.title"),
       date: "2025-09-10",
       category: "Platform",
       image: "/healthcare-dashboard.jpg",
-      description:
-        "Our digital healthcare dashboard now includes predictive analytics for better patient care and inventory management.",
-      details:
-        "New features include AI-based patient diagnostics, automated reporting, and real-time alerts for critical events. Hospitals can now manage medical supplies efficiently and improve service delivery.",
+      description: t("updates.healthcare.desc"),
+      details: t("updates.healthcare.details"),
     },
     {
-      title: "Retail Automation Tools Released",
+      title: t("updates.retail.title"),
       date: "2025-09-05",
       category: "Product",
       image: "/retail-automation.jpg",
-      description:
-        "New smart automation tools for SMEs and enterprises are now available, enhancing sales trend prediction and operational efficiency.",
-      details:
-        "These tools allow businesses to forecast demand, optimize inventory, and generate performance insights, helping reduce costs and increase revenue.",
+      description: t("updates.retail.desc"),
+      details: t("updates.retail.details"),
     },
     {
-      title: "Transport & Logistics Optimization",
+      title: t("updates.transport.title"),
       date: "2025-08-28",
       category: "Platform",
       image: "/transport-logistics.jpg",
-      description:
-        "Predictive fleet maintenance and route optimization features are now live to improve efficiency and reduce costs.",
-      details:
-        "Fleet managers can track fuel usage, maintenance schedules, and driver performance in real-time, improving safety and logistics operations.",
+      description: t("updates.transport.desc"),
+      details: t("updates.transport.details"),
     },
   ];
 
@@ -58,11 +52,10 @@ export default function UpdatesPage() {
       {/* Page Heading */}
       <div className="max-w-7xl mx-auto text-center mb-16 px-6">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-indigo-700 dark:text-yellow-400">
-          Website Updates
+          {t('updates.title')}
         </h1>
         <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300">
-          Stay informed about our latest releases, improvements, and important
-          announcements.
+          {t('updates.subtitle')}
         </p>
       </div>
 
@@ -115,7 +108,7 @@ export default function UpdatesPage() {
                 onClick={() => toggleExpand(index)}
                 className="self-start mt-auto bg-indigo-600 dark:bg-yellow-400 text-white dark:text-gray-900 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-700 dark:hover:bg-yellow-500 transition-colors duration-300"
               >
-                {expandedIndex === index ? "Show Less" : "Read More"}
+                {expandedIndex === index ? t("updates.showLess") : t("updates.readMore")}
               </button>
             </div>
           </div>

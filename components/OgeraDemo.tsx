@@ -107,11 +107,11 @@ const OgeraDemo = () => {
     }
 
     return (
-        <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+        <section className="py-16 bg-gradient-to-br from-gray-50 to-white dark:from-dark-surface dark:to-dark-bg">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-dark-blue mb-4">{t('ogera.title')}</h2>
-                    <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                    <h2 className="text-4xl font-bold text-dark-blue dark:text-white mb-4">{t('ogera.title')}</h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                         {t('ogera.subtitle')}
                     </p>
                 </div>
@@ -119,9 +119,9 @@ const OgeraDemo = () => {
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     {/* Demo Content */}
                     <div className="space-y-6">
-                        <div className="bg-white rounded-2xl shadow-lg p-8">
+                        <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-8">
                             <div className="flex items-center justify-between mb-6">
-                                <h3 className="text-2xl font-bold text-dark-blue">
+                                <h3 className="text-2xl font-bold text-dark-blue dark:text-white">
                                     {demoSteps[currentStep].title}
                                 </h3>
                                 <div className="flex space-x-2">
@@ -135,17 +135,17 @@ const OgeraDemo = () => {
                                 </div>
                             </div>
 
-                            <p className="text-gray-600 mb-6 leading-relaxed">
+                            <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
                                 {demoSteps[currentStep].description}
                             </p>
 
                             <div className="space-y-3">
-                                <h4 className="font-semibold text-dark-blue">Key Features:</h4>
+                                <h4 className="font-semibold text-dark-blue dark:text-white">Key Features:</h4>
                                 <ul className="space-y-2">
                                     {demoSteps[currentStep].features.map((feature, index) => (
                                         <li key={index} className="flex items-center space-x-3">
                                             <span className="w-2 h-2 bg-accent rounded-full"></span>
-                                            <span className="text-gray-700">{feature}</span>
+                                            <span className="text-gray-700 dark:text-gray-300">{feature}</span>
                                         </li>
                                     ))}
                                 </ul>
@@ -160,7 +160,7 @@ const OgeraDemo = () => {
                                     onClick={() => handleStepClick(index)}
                                     className={`w-3 h-3 rounded-full transition-colors ${index === currentStep
                                         ? 'bg-accent'
-                                        : 'bg-gray-300 hover:bg-gray-400'
+                                        : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
                                         }`}
                                     aria-label={`Go to step ${index + 1}`}
                                 />
@@ -211,9 +211,9 @@ const OgeraDemo = () => {
 
                 {/* Additional Info */}
                 <div className="mt-16 text-center">
-                    <div className="bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
-                        <h3 className="text-2xl font-bold text-dark-blue mb-4">{t('ogera.transformTitle')}</h3>
-                        <p className="text-gray-600 mb-6">
+                    <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
+                        <h3 className="text-2xl font-bold text-dark-blue dark:text-white mb-4">{t('ogera.transformTitle')}</h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-6">
                             {t('ogera.transformDesc')}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -223,7 +223,7 @@ const OgeraDemo = () => {
                             >
                                 {t('ogera.joinWaitlist')}
                             </button>
-                            <button className="px-8 py-3 border-2 border-dark-blue text-dark-blue font-semibold rounded-lg hover:bg-dark-blue hover:text-white transition-colors">
+                            <button className="px-8 py-3 border-2 border-dark-blue dark:border-white text-dark-blue dark:text-white font-semibold rounded-lg hover:bg-dark-blue dark:hover:bg-white hover:text-white dark:hover:text-dark-blue transition-colors">
                                 {t('ogera.scheduleDemo')}
                             </button>
                         </div>

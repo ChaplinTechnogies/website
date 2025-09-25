@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { FaLinkedin, FaTwitter, FaGithub } from "react-icons/fa";
+import { useI18n } from "../contexts/I18nContext";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -48,11 +49,13 @@ const members: Member[] = [
 ];
 
 export default function TeamSlider() {
+  const { t } = useI18n();
+  
   return (
-    <section className="py-16 bg-gradient-to-r from-blue-50 via-white to-blue-50">
+    <section className="py-16 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-dark-surface dark:via-dark-bg dark:to-dark-surface">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
-          Meet Our <span className="text-blue-600">Amazing Team</span>
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">
+          {t("team.title")}
         </h2>
 
         <Swiper
@@ -70,7 +73,7 @@ export default function TeamSlider() {
         >
           {members.map((member, index) => (
             <SwiperSlide key={index}>
-              <div className="bg-white rounded-2xl shadow-lg p-6 text-center transition transform hover:scale-105 hover:shadow-2xl duration-300">
+              <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-6 text-center transition transform hover:scale-105 hover:shadow-2xl duration-300">
                 <div className="relative w-36 h-36 mx-auto mb-4 overflow-hidden rounded-full border-4 border-blue-100 shadow-md">
                   <Image
                     src={member.image}

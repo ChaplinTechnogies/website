@@ -2,6 +2,7 @@
 import { useState, useCallback } from 'react'
 import { logger } from '../lib/logger'
 import { SecurityValidator } from '../lib/security'
+import { useI18n } from '../contexts/I18nContext'
 
 interface NewsletterSignupProps {
     onSuccess?: (email: string) => void
@@ -12,10 +13,11 @@ interface NewsletterSignupProps {
 
 const NewsletterSignup = ({
     onSuccess,
-    placeholder = "Enter your email address",
-    buttonText = "Subscribe",
+    placeholder,
+    buttonText,
     className = ""
 }: NewsletterSignupProps) => {
+    const { t } = useI18n()
     const [email, setEmail] = useState<string>('')
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -26,13 +28,13 @@ const NewsletterSignup = ({
 
         // Validate email
         if (!email.trim()) {
-            setErrorMessage('Email is required')
+            setErrorMessage(t('newsletter.error.required'))
             setStatus('error')
             return
         }
 
         if (!SecurityValidator.validateEmail(email)) {
-            setErrorMessage('Please enter a valid email address')
+            setErrorMessage(t('newsletter.error.invalid'))
             setStatus('error')
             return
         }
@@ -69,7 +71,7 @@ const NewsletterSignup = ({
 
         } catch (error) {
             setStatus('error')
-            setErrorMessage('Failed to subscribe. Please try again.')
+            setErrorMessage(t('newsletter.error.failed'))
 
             logger.error('Newsletter signup failed', {
                 error: error instanceof Error ? error.message : 'Unknown error',
@@ -79,7 +81,7 @@ const NewsletterSignup = ({
         } finally {
             setIsSubmitting(false)
         }
-    }, [email, onSuccess])
+    }, [email, onSuccess, t])
 
     const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const sanitizedEmail = SecurityValidator.sanitizeInput(e.target.value)
@@ -99,8 +101,8 @@ const NewsletterSignup = ({
                     type="email"
                     value={email}
                     onChange={handleEmailChange}
-                    placeholder={placeholder}
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                    placeholder={placeholder || t('newsletter.placeholder')}
+                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-dark-bg dark:text-white rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     required
                     disabled={isSubmitting}
                 />
@@ -109,21 +111,21 @@ const NewsletterSignup = ({
                     disabled={isSubmitting}
                     className="px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
                 >
-                    {isSubmitting ? 'Subscribing...' : buttonText}
+                    {isSubmitting ? t('newsletter.subscribing') : (buttonText || t('newsletter.button'))}
                 </button>
             </form>
 
             {status === 'success' && (
-                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-green-800 text-sm">
-                        ✅ Thank you for subscribing! We'll keep you updated on our latest developments.
+                <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                    <p className="text-green-800 dark:text-green-200 text-sm">
+                        ✅ {t('newsletter.success')}
                     </p>
                 </div>
             )}
 
             {status === 'error' && (
-                <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-red-800 text-sm">
+                <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-red-800 dark:text-red-200 text-sm">
                         ❌ {errorMessage}
                     </p>
                 </div>

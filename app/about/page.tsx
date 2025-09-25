@@ -1,37 +1,30 @@
 "use client";
+import { useI18n } from '../../contexts/I18nContext';
 
 export default function AboutPage() {
+  const { t } = useI18n();
   return (
     <section className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-16">
       {/* Page Heading */}
       <div className="max-w-4xl mx-auto text-center mb-16 px-4">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-indigo-700 dark:text-yellow-400 leading-tight">
-          About Us
+          {t('about.title')}
         </h1>
         <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          Transforming Africa’s digital future through innovation, technology,
-          and community empowerment.
+          {t('about.subtitle')}
         </p>
       </div>
 
       {/* Who We Are */}
       <div className=" mx-auto px-6 mb-16">
         <h2 className="text-4xl font-bold mb-6 text-indigo-700 dark:text-yellow-400">
-          Who We Are
+          {t('about.whoWeAre.title')}
         </h2>
         <p className="mb-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-          Chaplin Technologies is a youth-led, Africa-focused technology startup
-          headquartered in Kigali, Rwanda. Founded in 2025 by Bessora Neema
-          Hirwa and Kayla Elyse, we are dedicated to bridging Africa’s digital
-          divide. Our AI-driven platforms span education, healthcare, retail,
-          hospitality, real estate, transport, HR, billing, and government/NGO
-          services.
+          {t('about.whoWeAre.desc1')}
         </p>
         <p className="mb-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-          Our mission is to empower Africa’s rapidly growing youth population
-          with tools for quality education, optimized business operations,
-          employment opportunities, and financial inclusion—turning local
-          challenges into opportunities for growth and innovation.
+          {t('about.whoWeAre.desc2')}
         </p>
       </div>
 
@@ -39,27 +32,18 @@ export default function AboutPage() {
       <div className=" mx-auto px-6 mb-16 grid md:grid-cols-2 gap-12">
         <div>
           <h3 className="text-3xl font-semibold mb-4 text-indigo-700 dark:text-yellow-400">
-            Our Mission
+            {t('about.mission.title')}
           </h3>
           <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-            Chaplin Technologies exists to transform Africa’s digital landscape
-            by empowering youth, businesses, and institutions through
-            accessible, AI-driven, and scalable digital solutions. We bridge the
-            digital divide, equipping young people with education and skills,
-            enabling businesses to innovate and grow, and supporting
-            institutions in delivering efficient, transparent services.
+            {t('about.mission.desc')}
           </p>
         </div>
         <div>
           <h3 className="text-3xl font-semibold mb-4 text-indigo-700 dark:text-yellow-400">
-            Our Vision
+            {t('about.vision.title')}
           </h3>
           <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-            Our vision is to position Africa at the forefront of global digital
-            transformation with secure, scalable AI-driven solutions, empowering
-            youth, businesses, and institutions to thrive in the digital
-            economy. By leveraging technology for inclusive growth, we aim to
-            foster sustainable development and make Africa a hub for innovation.
+            {t('about.vision.desc')}
           </p>
         </div>
       </div>
@@ -67,34 +51,34 @@ export default function AboutPage() {
       {/* Core Values */}
       <div className=" mx-auto px-6">
         <h2 className="text-4xl font-bold mb-12 text-center text-indigo-700 dark:text-yellow-400">
-          Our Core Values
+          {t('about.values.title')}
         </h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {/* Interactive Card */}
           {[
             {
-              title: "Innovation",
-              desc: "We create AI-driven solutions that address real-world challenges across Africa.",
+              title: t("about.values.innovation.title"),
+              desc: t("about.values.innovation.desc"),
               color: "from-indigo-50 to-blue-50",
             },
             {
-              title: "Empowerment",
-              desc: "We empower youth, businesses, and communities to reach their full potential through technology.",
+              title: t("about.values.empowerment.title"),
+              desc: t("about.values.empowerment.desc"),
               color: "from-purple-50 to-pink-50",
             },
             {
-              title: "Sustainability",
-              desc: "Our solutions are designed to have long-term impact, fostering growth and inclusion across Africa.",
+              title: t("about.values.sustainability.title"),
+              desc: t("about.values.sustainability.desc"),
               color: "from-green-50 to-teal-50",
             },
             {
-              title: "Community",
-              desc: "We co-create with communities to ensure our solutions respond to real needs and challenges.",
+              title: t("about.values.community.title"),
+              desc: t("about.values.community.desc"),
               color: "from-yellow-50 to-orange-50",
             },
             {
-              title: "Integrity",
-              desc: "Transparency, ethical practices, and trust are at the heart of everything we do.",
+              title: t("about.values.integrity.title"),
+              desc: t("about.values.integrity.desc"),
               color: "from-red-50 to-pink-100",
             },
           ].map((item, index) => (

@@ -1,31 +1,14 @@
-import { Metadata } from 'next'
+'use client'
 import Link from 'next/link'
 import { logger } from '../../lib/logger'
-
-export const metadata: Metadata = {
-    title: 'Blog - Sybella Systems | Thought Leadership in African Technology',
-    description: 'Insights, case studies, and industry reports on digital transformation across Africa. Stay updated with the latest trends in African technology.',
-    keywords: [
-        'African technology blog',
-        'digital transformation insights',
-        'technology case studies',
-        'African innovation',
-        'tech thought leadership',
-        'digital solutions Africa'
-    ],
-    openGraph: {
-        title: 'Blog - Sybella Systems',
-        description: 'Thought leadership and insights on African technology transformation',
-        type: 'website',
-    },
-}
+import { useI18n } from '../../contexts/I18nContext'
 
 // Mock blog posts - in a real implementation, these would come from a CMS or database
-const blogPosts = [
+const getBlogPosts = (t: (key: string) => string) => [
     {
         id: '1',
-        title: 'The Future of Digital Transformation in Africa',
-        excerpt: 'Exploring how African businesses are leveraging technology to drive growth and innovation across the continent.',
+        title: t('blog.post1.title'),
+        excerpt: t('blog.post1.excerpt'),
         content: 'Full article content would go here...',
         publishedAt: '2025-01-15',
         author: 'Kayla Elyse',
@@ -36,8 +19,8 @@ const blogPosts = [
     },
     {
         id: '2',
-        title: 'Building Scalable Healthcare Solutions for Rural Africa',
-        excerpt: 'How technology is bridging the healthcare gap in underserved communities across Africa.',
+        title: t('blog.post2.title'),
+        excerpt: t('blog.post2.excerpt'),
         content: 'Full article content would go here...',
         publishedAt: '2025-01-10',
         author: 'Bessora M.',
@@ -48,8 +31,8 @@ const blogPosts = [
     },
     {
         id: '3',
-        title: 'The Rise of AI in African Education',
-        excerpt: 'Examining how artificial intelligence is revolutionizing education delivery across the continent.',
+        title: t('blog.post3.title'),
+        excerpt: t('blog.post3.excerpt'),
         content: 'Full article content would go here...',
         publishedAt: '2025-01-05',
         author: 'Tech Team',
@@ -60,8 +43,8 @@ const blogPosts = [
     },
     {
         id: '4',
-        title: 'E-commerce Growth in East Africa: Trends and Opportunities',
-        excerpt: 'Analyzing the rapid growth of online commerce and the opportunities it presents for African businesses.',
+        title: t('blog.post4.title'),
+        excerpt: t('blog.post4.excerpt'),
         content: 'Full article content would go here...',
         publishedAt: '2024-12-28',
         author: 'Market Research Team',
@@ -72,17 +55,21 @@ const blogPosts = [
     }
 ]
 
-const categories = [
-    'All',
-    'Digital Transformation',
-    'Healthcare',
-    'Education',
-    'E-commerce',
-    'AI & Technology',
-    'Case Studies'
+const getCategories = (t: (key: string) => string) => [
+    t('blog.categories.all'),
+    t('blog.categories.digital'),
+    t('blog.categories.healthcare'),
+    t('blog.categories.education'),
+    t('blog.categories.ecommerce'),
+    t('blog.categories.ai'),
+    t('blog.categories.caseStudies')
 ]
 
 export default function BlogPage() {
+    const { t } = useI18n();
+    const blogPosts = getBlogPosts(t);
+    const categories = getCategories(t);
+    
     // Log page view
     logger.info('Blog page loaded', {
         page: 'blog',
@@ -90,15 +77,14 @@ export default function BlogPage() {
     })
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
             {/* Header */}
-            <div className="bg-white shadow-sm">
+            <div className="bg-white dark:bg-dark-surface shadow-sm">
                 <div className="container mx-auto px-6 py-12">
                     <div className="text-center">
-                        <h1 className="text-4xl font-bold text-dark-blue mb-4">Thought Leadership</h1>
-                        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                            Insights, case studies, and industry reports on digital transformation across Africa.
-                            Stay updated with the latest trends in African technology.
+                        <h1 className="text-4xl font-bold text-dark-blue dark:text-white mb-4">{t('blog.title')}</h1>
+                        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            {t('blog.subtitle')}
                         </p>
                     </div>
                 </div>
@@ -114,7 +100,7 @@ export default function BlogPage() {
                                 {categories.map((category) => (
                                     <button
                                         key={category}
-                                        className="px-4 py-2 rounded-full border border-gray-300 text-sm hover:bg-accent hover:text-white hover:border-accent transition-colors"
+                                        className="px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:bg-dark-surface text-sm hover:bg-accent hover:text-white hover:border-accent transition-colors"
                                     >
                                         {category}
                                     </button>
@@ -125,7 +111,7 @@ export default function BlogPage() {
                         {/* Blog Posts */}
                         <div className="space-y-8">
                             {blogPosts.map((post) => (
-                                <article key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                                <article key={post.id} className="bg-white dark:bg-dark-surface rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                                     <div className="md:flex">
                                         <div className="md:w-1/3">
                                             <div className="h-48 md:h-full bg-gradient-to-br from-accent to-yellow-400 flex items-center justify-center">
@@ -133,7 +119,7 @@ export default function BlogPage() {
                                             </div>
                                         </div>
                                         <div className="md:w-2/3 p-6">
-                                            <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                                            <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-3">
                                                 <span>{post.publishedAt}</span>
                                                 <span>•</span>
                                                 <span>{post.readTime}</span>
@@ -141,13 +127,13 @@ export default function BlogPage() {
                                                 <span>By {post.author}</span>
                                             </div>
 
-                                            <h2 className="text-2xl font-bold text-dark-blue mb-3 hover:text-accent transition-colors">
+                                            <h2 className="text-2xl font-bold text-dark-blue dark:text-white mb-3 hover:text-accent transition-colors">
                                                 <Link href={`/blog/${post.slug}`}>
                                                     {post.title}
                                                 </Link>
                                             </h2>
 
-                                            <p className="text-gray-600 mb-4 leading-relaxed">
+                                            <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
                                                 {post.excerpt}
                                             </p>
 
@@ -156,7 +142,7 @@ export default function BlogPage() {
                                                     {post.tags.map((tag) => (
                                                         <span
                                                             key={tag}
-                                                            className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                                                            className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full"
                                                         >
                                                             {tag}
                                                         </span>
@@ -167,7 +153,7 @@ export default function BlogPage() {
                                                     href={`/blog/${post.slug}`}
                                                     className="text-accent font-semibold hover:text-green-600 transition-colors"
                                                 >
-                                                    Read More →
+                                                    {t('blog.readMore')}
                                                 </Link>
                                             </div>
                                         </div>
@@ -191,26 +177,26 @@ export default function BlogPage() {
                     <div className="lg:w-1/3">
                         <div className="space-y-8">
                             {/* Newsletter Signup */}
-                            <div className="bg-white p-6 rounded-lg shadow-md">
-                                <h3 className="text-xl font-bold text-dark-blue mb-4">Stay Updated</h3>
-                                <p className="text-gray-600 mb-4">
-                                    Subscribe to our newsletter for the latest insights on African technology.
+                            <div className="bg-white dark:bg-dark-surface p-6 rounded-lg shadow-md">
+                                <h3 className="text-xl font-bold text-dark-blue dark:text-white mb-4">{t('blog.stayUpdated.title')}</h3>
+                                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                                    {t('blog.stayUpdated.desc')}
                                 </p>
                                 <div className="space-y-3">
                                     <input
                                         type="email"
-                                        placeholder="Enter your email"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                                        placeholder={t('blog.stayUpdated.placeholder')}
+                                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-dark-bg dark:text-white rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                                     />
                                     <button className="w-full px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-600 transition-colors">
-                                        Subscribe
+                                        {t('blog.stayUpdated.button')}
                                     </button>
                                 </div>
                             </div>
 
                             {/* Popular Posts */}
-                            <div className="bg-white p-6 rounded-lg shadow-md">
-                                <h3 className="text-xl font-bold text-dark-blue mb-4">Popular Posts</h3>
+                            <div className="bg-white dark:bg-dark-surface p-6 rounded-lg shadow-md">
+                                <h3 className="text-xl font-bold text-dark-blue dark:text-white mb-4">{t('blog.popularPosts.title')}</h3>
                                 <div className="space-y-4">
                                     {blogPosts.slice(0, 3).map((post) => (
                                         <div key={post.id} className="flex space-x-3">
@@ -218,12 +204,12 @@ export default function BlogPage() {
                                                 <span className="text-white text-lg">📝</span>
                                             </div>
                                             <div>
-                                                <h4 className="font-semibold text-sm text-dark-blue hover:text-accent transition-colors">
+                                                <h4 className="font-semibold text-sm text-dark-blue dark:text-white hover:text-accent transition-colors">
                                                     <Link href={`/blog/${post.slug}`}>
                                                         {post.title}
                                                     </Link>
                                                 </h4>
-                                                <p className="text-xs text-gray-500 mt-1">{post.publishedAt}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{post.publishedAt}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -231,13 +217,13 @@ export default function BlogPage() {
                             </div>
 
                             {/* Tags */}
-                            <div className="bg-white p-6 rounded-lg shadow-md">
-                                <h3 className="text-xl font-bold text-dark-blue mb-4">Tags</h3>
+                            <div className="bg-white dark:bg-dark-surface p-6 rounded-lg shadow-md">
+                                <h3 className="text-xl font-bold text-dark-blue dark:text-white mb-4">{t('blog.tags.title')}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {['Digital Transformation', 'AI', 'Healthcare', 'Education', 'E-commerce', 'Africa', 'Innovation', 'Technology'].map((tag) => (
                                         <span
                                             key={tag}
-                                            className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-accent hover:text-white transition-colors cursor-pointer"
+                                            className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-full hover:bg-accent hover:text-white transition-colors cursor-pointer"
                                         >
                                             {tag}
                                         </span>

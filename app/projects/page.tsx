@@ -10,13 +10,14 @@ import {
   FaUsers,
   FaGlobe,
 } from "react-icons/fa";
+import { useI18n } from '../../contexts/I18nContext';
 
 export default function ProjectsPage() {
+  const { t } = useI18n();
   const projects = [
     {
-      title: "Education",
-      description:
-        "AI-powered learning platforms that personalize student performance tracking, automate timetables, and provide skill-building resources to reduce school dropouts and improve employability.",
+      title: t("projects.education.title"),
+      description: t("projects.education.desc"),
       icon: (
         <FaGraduationCap
           size={36}
@@ -25,9 +26,8 @@ export default function ProjectsPage() {
       ),
     },
     {
-      title: "Business & Retail",
-      description:
-        "Smart automation tools for SMEs and enterprises, including sales trend prediction, inventory management, pricing optimization, and operational efficiency dashboards.",
+      title: t("projects.business.title"),
+      description: t("projects.business.desc"),
       icon: (
         <FaShoppingCart
           size={36}
@@ -36,9 +36,8 @@ export default function ProjectsPage() {
       ),
     },
     {
-      title: "Healthcare",
-      description:
-        "Digital tools for predictive diagnostics, automated patient record analysis, and inventory management for medical supplies, improving service delivery and operational efficiency.",
+      title: t("projects.healthcare.title"),
+      description: t("projects.healthcare.desc"),
       icon: (
         <FaHospital
           size={36}
@@ -47,41 +46,36 @@ export default function ProjectsPage() {
       ),
     },
     {
-      title: "Hospitality & Real Estate",
-      description:
-        "AI-driven guest experience optimization, housekeeping automation, rental default prediction, and maintenance scoring to improve management and customer satisfaction.",
+      title: t("projects.hospitality.title"),
+      description: t("projects.hospitality.desc"),
       icon: (
         <FaHotel size={36} className="text-indigo-600 dark:text-yellow-400" />
       ),
     },
     {
-      title: "Transport & Logistics",
-      description:
-        "Predictive fleet maintenance, fuel anomaly detection, and route optimization, enabling safer, more efficient transport operations.",
+      title: t("projects.transport.title"),
+      description: t("projects.transport.desc"),
       icon: (
         <FaTruck size={36} className="text-indigo-600 dark:text-yellow-400" />
       ),
     },
     {
-      title: "Financial Services",
-      description:
-        "Secure mobile wallets, transaction management, and AI-driven financial insights to enhance inclusion and streamline payments for individuals and SMEs.",
+      title: t("projects.financial.title"),
+      description: t("projects.financial.desc"),
       icon: (
         <FaWallet size={36} className="text-indigo-600 dark:text-yellow-400" />
       ),
     },
     {
-      title: "HR & Workforce Management",
-      description:
-        "Automated compliance checks, AI-based hiring recommendations, and payroll tools to support businesses in managing talent effectively.",
+      title: t("projects.hr.title"),
+      description: t("projects.hr.desc"),
       icon: (
         <FaUsers size={36} className="text-indigo-600 dark:text-yellow-400" />
       ),
     },
     {
-      title: "Government & NGO Services",
-      description:
-        "Platforms for real-time issue mapping, donor impact reporting, and data-driven resource allocation to improve transparency and efficiency.",
+      title: t("projects.government.title"),
+      description: t("projects.government.desc"),
       icon: (
         <FaGlobe size={36} className="text-indigo-600 dark:text-yellow-400" />
       ),
@@ -93,11 +87,10 @@ export default function ProjectsPage() {
       {/* Page Heading */}
       <div className="max-w-5xl mx-auto text-center mb-16 px-4">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-indigo-700 dark:text-yellow-400 leading-tight">
-          Our Projects
+          {t('projects.title')}
         </h1>
         <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          Explore the sectors where we are driving innovation and creating
-          impact across Africa.
+          {t('projects.subtitle')}
         </p>
       </div>
 

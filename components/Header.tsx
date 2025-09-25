@@ -14,12 +14,12 @@ export default function Header() {
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const navigationItems = [
-    { key: "Home", href: "/" },
-    { key: "About", href: "/about" },
-    { key: "Projects", href: "/projects" },
-    { key: "Updates", href: "/updates" },
-    { key: "Opportunities", href: "/blog" },
-    { key: "Inquiries", href: "/contact" },
+    { key: "nav.home", href: "/" },
+    { key: "nav.about", href: "/about" },
+    { key: "nav.projects", href: "/projects" },
+    { key: "nav.updates", href: "/updates" },
+    { key: "nav.blog", href: "/blog" },
+    { key: "nav.contact", href: "/contact" },
   ];
 
   const languages = [
