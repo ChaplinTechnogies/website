@@ -12,6 +12,7 @@ export interface ContactFormData {
   message: string;
   company?: string;
   phone?: string;
+  createdAt?: Date;
 }
 
 export interface BlogPost {
@@ -55,4 +56,10 @@ export interface LogEntry {
   context?: Record<string, any>;
   userId?: string;
   sessionId?: string;
+}
+
+export interface NewsletterSubscribe {
+  email: string
+  subscribeAt?: Date
+  source?:string
 }
