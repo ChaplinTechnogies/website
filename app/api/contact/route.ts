@@ -46,17 +46,6 @@ export async function POST(request: NextRequest) {
       phone: phoneStr ? SecurityValidator.sanitizeInput(phoneStr) : ''
     }
 
-
-    logger.info('Contact form submission', {
-      name: sanitizedData.name,
-      email: sanitizedData.email,
-      hasCompany: !!sanitizedData.company,
-      hasPhone: !!sanitizedData.phone,
-      messageLength: sanitizedData.message.length,
-      timestamp: new Date().toISOString()
-    })
-
-
     // In a real implementation, you would: ==> Solved
     // 1. Save to database ==> Solved
     // 2. Send to CRM (HubSpot, Salesforce, etc.) ==> Using Defaul storing, this will work after creating a admin dashboards
@@ -98,7 +87,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { message: "Message sent to user" },
+      { success: true, message: "Contact Saved"},
       { status: 201 }
     )
 
