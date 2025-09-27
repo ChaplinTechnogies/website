@@ -11,12 +11,11 @@ export interface EmailData {
 
 export async function sendEmail(data: EmailData) {
   try {
-    // create transporter with Gmail SMTP
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER,      // gmail address
-        pass: process.env.EMAIL_PASS,      // gmail app password
+        user: process.env.EMAIL_USER,  
+        pass: process.env.EMAIL_PASS, 
       },
     });
 
@@ -40,4 +39,3 @@ export async function sendEmail(data: EmailData) {
     return { success: false, error };
   }
 }
-

@@ -67,9 +67,6 @@ export async function POST(request: NextRequest) {
 
 
 export async function GET() {
-  // Return newsletter statistics (for admin dashboard)
-  // the same to the contacts here we will add a middleware to allow only admins access
-
   try {
     const subscribers = await getAllSubscribers();
     return NextResponse.json({success: true, subscribers}, {status: 200})

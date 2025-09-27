@@ -45,17 +45,6 @@ export async function POST(request: NextRequest) {
       company: company ? SecurityValidator.sanitizeInput(company) : '',
       phone: phoneStr ? SecurityValidator.sanitizeInput(phoneStr) : ''
     }
-
-    // In a real implementation, you would: ==> Solved
-    // 1. Save to database ==> Solved
-    // 2. Send to CRM (HubSpot, Salesforce, etc.) ==> Using Defaul storing, this will work after creating a admin dashboards
-
-    // 3. Send notification email to team
-    // 4. Send auto-reply to customer
-    // 5. Track lead scoring
-
-
-
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 1000))
     const newContact = await createContact({
@@ -104,12 +93,6 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  // AdsOn
-  // 1. Here will add a middleware to enable admins only to access this endpoint
-  // Right now will be open response to any one,
-
-  // Return contact form statistics (for admin dashboard)
-
   try {
     const contacts = await getAllContacts();
     return NextResponse.json(

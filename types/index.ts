@@ -16,15 +16,18 @@ export interface ContactFormData {
 }
 
 export interface BlogPost {
-  id: string;
   title: string;
   excerpt: string;
   content: string;
-  publishedAt: string;
+  publishedAt: Date;
   author: string;
   tags: string[];
   slug: string;
+  readTime: number;
+  thumbnailUrl: string;
 }
+
+
 
 export interface CaseStudy {
   id: string;
@@ -63,3 +66,4 @@ export interface NewsletterSubscribe {
   subscribeAt?: Date
   source?:string
 }
+

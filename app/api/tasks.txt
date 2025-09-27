@@ -1,0 +1,5 @@
+1. Creating the Login and Registration endpoints with powefull authentication
+
+2. Recreating  the blog for only admins to access them
+
+3. Modfying Contacts and newsletter endpoints to add admin midllewares
