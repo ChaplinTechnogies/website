@@ -19,9 +19,7 @@ export const staffMemberSchema = z.object({
   role: z.union([z.enum(PREDIFINEDROLES), z.string()]), 
   isActive: z.boolean().default(false),
   createdAt: z.date().default(() => new Date()),
-  updatedAt: z.preprocess((arg) => {
-    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
-  }, z.date()).optional(),
+  updatedAt: z.coerce.date().optional(),
   lastLogin: z.date().optional(),
   phone: z.string().optional(),
   avatarUrl: z.string().url().optional(),
@@ -38,16 +36,6 @@ export const staffMemberUpdateSchema = staffMemberSchema
     .omit({ id: true,  createdAt: true, password: true })
     .partial()
 
-// export const staffMemberUpdateSchema = z.object({
-//   names: z.string().min(5).max(40).optional(),
-//   email: z.string().email().optional(),
-//   role: z.string().optional(),
-//   isActive: z.boolean().optional(),
-//   phone: z.string().optional(),
-//   avatarUrl: z.string().url().optional(),
-//   updatedAt: z.date().default(() => new Date()).optional()
-// });    
-    
 
 // 
 

@@ -3,6 +3,7 @@ import { logger } from '../../../lib/logger'
 import { SecurityValidator } from '../../../lib/security'
 import { addSubscriber, getAllSubscribers } from '../../../lib/models/NewsLetter'
 import { sendEmail } from '../../../lib/email'
+import { authMiddleware } from "@/app/middleware/auth.middleware";
 
 
 export async function POST(request: NextRequest) {
@@ -10,7 +11,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email, source = 'website' } = body
 
-    // Validate email
     if (!email || !SecurityValidator.validateEmail(email)) {
       return NextResponse.json(
         { error: 'Valid email is required' },
@@ -66,7 +66,9 @@ export async function POST(request: NextRequest) {
 }
 
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const user = await authMiddleware(req, { roles: ["superadmin", "executive", "cto"] });
+  if (user instanceof NextResponse) return user;
   try {
     const subscribers = await getAllSubscribers();
     return NextResponse.json({success: true, subscribers}, {status: 200})

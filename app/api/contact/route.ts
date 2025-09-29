@@ -3,6 +3,7 @@ import { logger } from '../../../lib/logger'
 import { SecurityValidator } from '../../../lib/security'
 import { sendEmail } from '../../../lib/email'
 import { createContact, getAllContacts } from '../../../lib/models/Contact'
+import { authMiddleware } from "@/app/middleware/auth.middleware";
 
 
 
@@ -10,10 +11,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { name, email, message, company, phone } = body
-    // Ensure phone is a string if present
     const phoneStr = typeof phone === 'string' ? phone : (phone !== undefined && phone !== null ? String(phone) : '');
 
-    // Validate required fields
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: 'Name, email, and message are required' },
@@ -21,7 +20,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate email format
     if (!SecurityValidator.validateEmail(email)) {
       return NextResponse.json(
         { error: 'Valid email is required' },
@@ -29,7 +27,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate phone if provided
     if (phoneStr && !SecurityValidator.validatePhone(phoneStr)) {
       return NextResponse.json(
         { error: 'Valid phone number is required' },
@@ -37,7 +34,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Sanitize inputs
     const sanitizedData = {
       name: SecurityValidator.sanitizeInput(name),
       email: SecurityValidator.sanitizeInput(email),
@@ -45,7 +41,7 @@ export async function POST(request: NextRequest) {
       company: company ? SecurityValidator.sanitizeInput(company) : '',
       phone: phoneStr ? SecurityValidator.sanitizeInput(phoneStr) : ''
     }
-    // Simulate processing delay
+
     await new Promise(resolve => setTimeout(resolve, 1000))
     const newContact = await createContact({
       name,
@@ -63,7 +59,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // sending the email to the contact
     const emailResult = await sendEmail({
       receiver: email,
       message: "Thank you for your message! We'll get back to you within 24 hours.",
@@ -92,7 +87,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const user = await authMiddleware(req, { roles: ["superadmin", "executive", "cto"] });
+  if (user instanceof NextResponse) return user;
   try {
     const contacts = await getAllContacts();
     return NextResponse.json(

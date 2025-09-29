@@ -1,17 +1,17 @@
 // app/api/staff/create/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createStaffMember } from '@/lib/models/StaffMember';
-import { authMiddleware, adminMiddleware } from '@/app/middleware/auth.middleware';
+import { authMiddleware } from '@/app/middleware/auth.middleware';
 import { ZodError } from 'zod';
 export async function POST(req: NextRequest) {
-  await authMiddleware(req);
-  await adminMiddleware(req);
+  const user = await authMiddleware(req, { roles: ["executive", "superadmin", "manager"] });
+  if (user instanceof NextResponse) return user;
 
   const body = await req.json();
 
   try {
     const staff = await createStaffMember(body);
-    return NextResponse.json(staff, { status: 201 });
+    return NextResponse.json({staff, message: "New Staff Membwe Created"}, { status: 201 });
   } catch (err: any) {
 
     if (err instanceof ZodError) {

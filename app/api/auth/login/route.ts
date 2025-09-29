@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
 
     const { accessToken, refreshToken } = await loginStaff(parsed);
 
-    const response = NextResponse.json({ accessToken });
+    const response = NextResponse.json({ accessToken, refreshToken });
 
     response.headers.set(
       'Set-Cookie',

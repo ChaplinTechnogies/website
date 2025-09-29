@@ -38,7 +38,6 @@ export async function createStaffMember(staffMember: z.infer<typeof staffMemberS
     const hashedPassword = await bcrypt.hash(parsed.password, 10);
     const staffToInsert = {
         ...parsed,
-        role: 'superadmin',
         password: hashedPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -94,11 +93,12 @@ export async function updateStaffMember(id: string,
         throw new Error("Staff not found!");
     }
     await db.collection("staff_members").updateOne({ id }, { $set: { ...parsed, updatedAt: new Date() } });
-    const updatedStaff = db.collection("staff_members").findOne({ id });
+    const updatedStaff: z.infer<typeof updateStaffMember> = await db.collection("staff_members").findOne({ id });
     if (!updatedStaff) {
         throw new Error("Staff Member Not Found!")
     }
-    return staffMemberOutScheme.parse(updatedStaff);
+    const m = staffMemberOutScheme.parse(updatedStaff)
+    return {m};
 }
 
 // staff self update
