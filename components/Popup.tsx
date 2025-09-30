@@ -6,6 +6,7 @@ import { useI18n } from "../contexts/I18nContext";
 export default function SubscriptionPopup() {
   const { t } = useI18n();
   const [show, setShow] = useState(false);
+  const [ email, setEmail ] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => setShow(true), 2000);
@@ -14,11 +15,28 @@ export default function SubscriptionPopup() {
 
   const handleClose = () => setShow(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("/api/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to subscribe");
+    }
+
     alert(t("popup.success"));
     setShow(false);
-  };
+  } catch (err) {
+    console.error(err);
+    alert(t("popup.error"));
+  }
+};
+
 
   return (
     <AnimatePresence>
@@ -30,7 +48,6 @@ export default function SubscriptionPopup() {
           exit={{ opacity: 0 }}
         >
           <motion.div
-            // ✅ Make container relative so the button is anchored
             className="relative bg-white dark:bg-dark-surface rounded-2xl shadow-2xl p-6 w-80 text-center"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
@@ -56,6 +73,7 @@ export default function SubscriptionPopup() {
                 type="email"
                 required
                 placeholder={t("popup.placeholder")}
+                onChange={(e) => setEmail(e.target.value)}
                 className="border border-gray-300 dark:border-gray-600 dark:bg-dark-bg dark:text-white rounded-lg px-3 py-2 w-full mb-3"
               />
               <button
