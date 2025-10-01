@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
     "frame-ancestors 'none'"
   ].join('; ')
 
-  response.headers.set('Content-Security-Policy', csp)
+  // response.headers.set('Content-Security-Policy', csp)
 
   // Rate limiting (basic implementation)
   const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown'

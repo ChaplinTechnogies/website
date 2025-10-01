@@ -1,55 +1,53 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import React from "react"; 
-import { div } from "framer-motion/client";
-
 
 export function AdminLogin() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const res = await fetch("api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       let data;
       try {
         data = await res.json();
       } catch (err) {
-        console.error("Server did not return a valid JSON response.", err);
-        alert("Login failed: Unexpected server response format.");
-        return; 
+        console.error("Invalid JSON response from server:", err);
+        alert("Login failed: Unexpected server response.");
+        setLoading(false);
+        return;
       }
-
-      console.log(data)
 
       if (res.ok) {
-        if (data.accessToken) {
-          localStorage.setItem("adminToken", data.token);
-          console.log("Login successful. Redirecting...");
-          router.push("/admins/dashboard");
-        } else {
-          alert("Login successful, but no token received.");
-        }
+        console.log("Login successful. Redirecting...");
+        console.log(data);
+        localStorage.setItem("adminToken",data.accessToken );
+        router.push("/admin");
       } else {
-        console.log("Login failed with status:", res.status, data.message);
-        alert(data.message || `Login failed with status: ${res.status}`);
+        console.error("Login failed:", data.error || res.status);
+        alert(data.error || "Login failed. Please check your credentials.");
       }
-    } catch (error) {
-      console.error("Network error during login:", error);
-      alert("A network error occurred. Please check your connection.");
+    } catch (err) {
+      console.error("Network error during login:", err);
+      alert("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-10 rounded-2xl shadow-xl w-96 space-y-6"
@@ -79,11 +77,11 @@ export function AdminLogin() {
         <button
           type="submit"
           className="w-full py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-
     </div>
   );
 }

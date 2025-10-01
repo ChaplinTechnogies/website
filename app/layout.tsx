@@ -1,9 +1,12 @@
+
 import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Metadata } from 'next'
 import Script from 'next/script'
 import { I18nProvider } from '../contexts/I18nContext'
+import { usePathname } from 'next/navigation';
+import ClientWrapper from './ClientWrapper';
 
 export const metadata: Metadata = {
     title: 'Sybella Systems - Transforming Africa Through Innovation',
@@ -79,38 +82,35 @@ export const metadata: Metadata = {
     },
 }
 
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <html lang="en" className="scroll-smooth">
-            <head>
-                <link rel="icon" href="/favicon.ico" />
-                <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-                <link rel="manifest" href="/manifest.json" />
-                <meta name="theme-color" content="#1e3a8a" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-            </head>
+  return (
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1e3a8a" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className="antialiased bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-300">
         <I18nProvider>
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
+          <ClientWrapper>{children}</ClientWrapper>
         </I18nProvider>
 
-                {/* Analytics and Performance Monitoring */}
-                <Script
-                    src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
-                    strategy="afterInteractive"
-                />
-                <Script id="google-analytics" strategy="afterInteractive">
-                    {`
+        {/* Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'GA_MEASUREMENT_ID');
           `}
-                </Script>
-            </body>
-        </html>
-    )
+        </Script>
+      </body>
+    </html>
+  );
 }

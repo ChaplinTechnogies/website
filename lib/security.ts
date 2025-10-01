@@ -123,7 +123,7 @@ export const securityMiddleware = (req: any, res: any, next: any) => {
   const cspString = Object.entries(cspConfig.directives)
     .map(([key, values]) => `${key} ${values.join(' ')}`)
     .join('; ');
-  res.setHeader('Content-Security-Policy', cspString);
+  // res.setHeader('Content-Security-Policy', cspString);
 
   // Rate limiting
   const identifier = req.ip || req.connection.remoteAddress;
