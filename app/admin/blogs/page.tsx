@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 interface Blog {
+  _id?: string;
   title: string;
   excerpt: string;
   content: string;
@@ -93,9 +94,11 @@ export default function AdminBlogsPage() {
   const handleUpdateBlog = async (slug: string) => {
     if (!editingBlog) return;
     try {
+      const { _id, slug: _, publishedAt, ...updateData } = editingBlog as any;
+      
       await axios.patch(
         `/api/blogposts/${slug}`,
-        { ...editingBlog, tags: editingBlog.tags.map((t) => t.trim()) },
+        { ...updateData, tags: editingBlog.tags.map((t) => t.trim()) },
         { headers: { Authorization: `Bearer ${adminToken}` } }
       );
       toast.success("Blog updated successfully!");
@@ -125,7 +128,6 @@ export default function AdminBlogsPage() {
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold mb-4">Admin Blogs</h1>
 
-      {/* Create / Edit Blog Form */}
       <form
         onSubmit={editingBlog ? (e) => { e.preventDefault(); handleUpdateBlog(editingBlog.slug); } : handleCreateBlog}
         className="p-4 bg-white shadow rounded space-y-4"
@@ -237,7 +239,7 @@ export default function AdminBlogsPage() {
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="font-bold text-lg">Title: {blog.title}</h3>
-                  <p className="text-sm text-gray-500">Experpt: {blog.excerpt}</p>
+                  <p className="text-sm text-gray-500">Excerpt: {blog.excerpt}</p>
                   <p className="text-xs text-gray-400 mt-1">Author: {blog.author}</p>
                 </div>
                 <div className="mt-4 flex justify-between items-center">

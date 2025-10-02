@@ -27,7 +27,7 @@ export default function AdminStaffPage() {
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
 
-  // Fetch staff members
+
   const fetchStaffs = async () => {
     try {
       setLoading(true)
@@ -64,7 +64,7 @@ export default function AdminStaffPage() {
         headers: { Authorization: `Bearer ${token}` },
       })
       toast.success(res.data.message)
-      setNewStaff({ names: '', email: '', password: '', role: 'manager', phone: '' })
+      setNewStaff({ names: '', email: '', password: '', role: 'executive', phone: '' })
       fetchStaffs()
     } catch (err: any) {
       console.error(err)
@@ -75,9 +75,16 @@ export default function AdminStaffPage() {
   const handleUpdateStaff = async () => {
     if (!editingStaff) return
     try {
-      const res = await axios.patch(`/api/staff/self/${editingStaff._id}/`, editingStaff, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      // Exclude _id and other immutable fields from the update payload
+      const { _id, email, ...updateData } = editingStaff
+      
+      const res = await axios.patch(
+        `/api/staff/self/${_id}`, 
+        updateData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       toast.success('Staff updated successfully!')
       setEditingStaff(null)
       fetchStaffs()

@@ -1,24 +1,58 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useTokenRefresh } from "@/lib/userToken";
 
 export default function AdminHeader() {
   const [adminName, setAdminName] = useState("Admin");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  
+  useTokenRefresh();
 
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await fetch("/api/staff/me");
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+          router.push('/signup');
+          return;
+        }
+
+        const res = await fetch("/api/staff/me", {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
         if (!res.ok) throw new Error("Unauthorized");
+        
         const data = await res.json();
-        setAdminName(data.name);
+        setAdminName(data.name || data.names || "Admin");
       } catch (err) {
         console.error(err);
       }
     };
     fetchAdmin();
   }, []);
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('user');
+      router.push('/signup');
+    }
+  };
 
   return (
     <header className="bg-dark-blue shadow-sm sticky top-0 z-50 w-full">
@@ -41,15 +75,15 @@ export default function AdminHeader() {
             Staffs
           </Link>
           <span className="text-white font-semibold">Hello, {adminName}</span>
-          <Link
-            href="/api/auth/logout"
-            className="text-white hover:text-red-500"
+          <button
+            onClick={handleLogout}
+            className="text-white hover:text-red-500 cursor-pointer"
           >
             Logout
-          </Link>
+          </button>
         </nav>
 
-        {/* Mobi view */}
+        {/* Mobile view */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="lg:hidden text-white"
@@ -76,12 +110,12 @@ export default function AdminHeader() {
           <span className="block text-white font-semibold">
             Hello, {adminName}
           </span>
-          <Link
-            href="/api/auth/logout"
-            className="block text-white hover:text-red-500"
+          <button
+            onClick={handleLogout}
+            className="block text-white hover:text-red-500 text-left w-full"
           >
             Logout
-          </Link>
+          </button>
         </div>
       )}
     </header>
