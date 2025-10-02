@@ -75,7 +75,6 @@ export default function AdminStaffPage() {
   const handleUpdateStaff = async () => {
     if (!editingStaff) return
     try {
-      // Exclude _id and other immutable fields from the update payload
       const { _id, email, ...updateData } = editingStaff
       
       const res = await axios.patch(
