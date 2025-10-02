@@ -13,6 +13,7 @@ import TeamSlider from '@/components/Slider'
 import USPSection from '@/components/Usp'
 import EcosystemSolutions from '@/components/Ecosystem'
 import SubscriptionPopup from '@/components/Popup'
+import AdminLogin from '@/app/signup/page'
 
 export default function Page() {
     useEffect(() => {
@@ -35,6 +36,7 @@ export default function Page() {
             <ContactForm />
             <Chatbot />
             <SubscriptionPopup />
+            <AdminLogin />
         </div>
     )
 }

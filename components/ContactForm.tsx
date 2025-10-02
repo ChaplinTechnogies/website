@@ -33,31 +33,35 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
 
   // Contact form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
+  e.preventDefault();
+  setIsSubmitting(true);
+  setSubmitStatus("idle");
 
-    try {
-      if (onSubmit) {
-        await onSubmit(formData);
-      } else {
-        await emailjs.send(
-          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-          { ...formData },
-          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-        );
+  try {
+    if (onSubmit) {
+      await onSubmit(formData);
+    } else {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to send contact form");
       }
-
-      setSubmitStatus("success");
-      setFormData({ name: "", email: "", message: "", company: "", phone: "" });
-    } catch (error) {
-      setSubmitStatus("error");
-      console.error("Contact form submission failed:", error);
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+
+    setSubmitStatus("success");
+    setFormData({ name: "", email: "", message: "", company: "", phone: "" });
+  } catch (error) {
+    setSubmitStatus("error");
+    console.error("Contact form submission failed:", error);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   // Subscribe to newsletter
   const handleSubscribe = async () => {
