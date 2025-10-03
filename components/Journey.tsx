@@ -6,7 +6,6 @@ import { useI18n } from '../contexts/I18nContext'
 
 const Journey = () => {
     const { t } = useI18n()
-
     const milestones: Milestone[] = [
         {
             year: '2025',
