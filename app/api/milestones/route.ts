@@ -1,4 +1,3 @@
-// /app/api/milestones/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { authMiddleware } from "@/app/middleware/auth.middleware";
 import {
@@ -45,26 +44,6 @@ export async function POST(req: NextRequest) {
     const res = await addMilestone(milestone);
 
     return NextResponse.json({ success: true, milestoneId: res.milestoneId });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, message: err.message }, { status: 500 });
-  }
-}
-
-
-export async function PATCH(req: NextRequest) {
-  try {
-    await authMiddleware(req, {roles: ['executive']});
-
-    const body = await req.json();
-    const { id, ...updateFields } = body;
-
-    if (!id) return NextResponse.json({ success: false, message: "Milestone ID is required" }, { status: 400 });
-
-    const updated = await updateMilestone(id, updateFields);
-
-    if (!updated) return NextResponse.json({ success: false, message: "Failed to update milestone" }, { status: 400 });
-
-    return NextResponse.json({ success: true, message: "Milestone updated successfully" });
   } catch (err: any) {
     return NextResponse.json({ success: false, message: err.message }, { status: 500 });
   }

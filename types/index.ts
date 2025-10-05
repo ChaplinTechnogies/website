@@ -40,8 +40,10 @@ export interface CaseStudy {
 }
 
 export interface Milestone {
-  year: string;
-  title: string;
+  _id: string;
+  startYear: string;
+  endYear: string;
+  name: string;
   description: string;
 }
 

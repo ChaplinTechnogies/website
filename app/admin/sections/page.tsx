@@ -2,16 +2,18 @@
 
 import { useState } from 'react'
 import MilestonesSection from './MilestonesSection'
+import TeamMembersSection from './TeamMembersSection'
 // import ProjectsSection from './sections/ProjectsSection'
 // import BlogSection from './sections/BlogSection'
 
-type SectionType = 'milestones' | 'projects' | 'blogs'
+type SectionType = 'milestones' | 'projects' | 'blogs' | 'team_members'
 
 export default function AdminSectionsPage() {
   const [activeSection, setActiveSection] = useState<SectionType>('milestones')
 
   const sections: { label: string; key: SectionType }[] = [
     { label: 'Milestones', key: 'milestones' },
+    {label: 'Team Members', key: 'team_members'},
     { label: 'Projects', key: 'projects' },
     { label: 'Blogs', key: 'blogs' },
   ]
@@ -39,6 +41,7 @@ export default function AdminSectionsPage() {
 
       <main className="flex-1 p-6">
         {activeSection === 'milestones' && <MilestonesSection />}
+        {activeSection === 'team_members' && <TeamMembersSection />}
         {/* {activeSection === 'projects' && <ProjectsSection />} */}
         {/* {activeSection === 'blogs' && <BlogSection />} */}
       </main>

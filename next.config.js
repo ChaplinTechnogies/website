@@ -1,4 +1,4 @@
-// next.config.js
+/** @type {import('next').NextConfig} */
 
 module.exports = {
   reactStrictMode: true,
@@ -10,3 +10,20 @@ module.exports = {
     defaultLocale: 'en'
   }
 }
+
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: [
+      'avatars.githubusercontent.com',
+      'github.com',
+      'lh3.googleusercontent.com',
+      'cdn.discordapp.com',
+      'pbs.twimg.com',
+      'media.licdn.com',
+      
+    ],
+  },
+};
+
+module.exports = nextConfig;

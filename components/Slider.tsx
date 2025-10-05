@@ -1,89 +1,53 @@
-"use client";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import Image from "next/image";
-import { FaLinkedin, FaTwitter, FaGithub } from "react-icons/fa";
-import { useI18n } from "../contexts/I18nContext";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+'use client';
+
+import { useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import Image from 'next/image';
+import { FaLinkedin, FaTwitter, FaGithub } from 'react-icons/fa';
+import { useI18n } from '../contexts/I18nContext';
+import axios from 'axios';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface Member {
   name: string;
   role: string;
-  image: string;
+  image?: string;
   linkedin?: string;
   twitter?: string;
   github?: string;
 }
 
-const members: Member[] = [
-  {
-    name: "Bessora Neema Hirwa",
-    role: "CEO",
-    image: "/profile.webp",
-    linkedin: "#",
-    twitter: "#",
-  },
-  {
-    name: "Kayla Elyse",
-    role: "CEO",
-    image: "/profile.webp",
-    linkedin: "#",
-    twitter: "#",
-    github: "#",
-  },
-  {
-    name: "Zeenab",
-    role: "Project Manager",
-    image: "/profile.webp",
-    linkedin: "#",
-  },
-  {
-    name: "Niyogakiza Japhet",
-    role: "Full Stack Developer",
-    image: "/profile.webp",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Mwimule Bienvenu",
-    role: "Backend Developer",
-    image: "/profile.webp",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Marshall",
-    role: "QA Engineer",
-    image: "/profile.webp",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Prashant",
-    role: "Software Engineer",
-    image: "/profile.webp",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Yves Umuhuza Mugisha",
-    role: "Software Engineer",
-    image: "/profile.webp",
-    linkedin: "#",
-    github: "#",
-  },
-];
-
 export default function TeamSlider() {
   const { t } = useI18n();
-  
+  const [members, setMembers] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchMembers = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get('/api/team');
+      if (res.data.success) setMembers(res.data.members);
+    } catch (err) {
+      console.error('Failed to fetch team members:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMembers();
+  }, []);
+
+  if (loading) return <p className="text-center py-12">Loading team members...</p>;
+
   return (
     <section className="py-16 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-dark-surface dark:via-dark-bg dark:to-dark-surface">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">
-          {t("team.title")}
+          {t('team.title')}
         </h2>
 
         <Swiper
@@ -104,15 +68,13 @@ export default function TeamSlider() {
               <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-6 text-center transition transform hover:scale-105 hover:shadow-2xl duration-300">
                 <div className="relative w-36 h-36 mx-auto mb-4 overflow-hidden rounded-full border-4 border-blue-100 shadow-md">
                   <Image
-                    src={member.image}
+                    src={member.image || '/fallback-profile.png'}
                     alt={member.name}
                     fill
                     className="object-cover transition-transform duration-500 hover:scale-110"
                   />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {member.name}
-                </h3>
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{member.name}</h3>
                 <p className="text-blue-600 font-medium mb-3">{member.role}</p>
 
                 {/* Social Links */}
