@@ -66,11 +66,19 @@ export class SecurityValidator {
   }
 
   static sanitizeHtml(html: string): string {
-    // Basic HTML sanitization - in production, use a library like DOMPurify
     return html
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
       .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+  }
+
+  static sanitizeText(text: string): string {
+    if (!text || typeof text !== "string") return "";
+    let sanitized = text.replace(/<[^>]*>/g, "");
+    sanitized = sanitized.replace(/[<>$'"`]/g, "");
+    sanitized = sanitized.trim();
+
+    return sanitized;
   }
 }
 

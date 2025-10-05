@@ -6,37 +6,42 @@ import { useI18n } from "../contexts/I18nContext";
 export default function SubscriptionPopup() {
   const { t } = useI18n();
   const [show, setShow] = useState(false);
-  const [ email, setEmail ] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
-    const timer = setTimeout(() => setShow(true), 2000);
-    return () => clearTimeout(timer);
+    const hasClosed = sessionStorage.getItem("popupClosed");
+    if (!hasClosed) {
+      const timer = setTimeout(() => setShow(true), 2000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    sessionStorage.setItem("popupClosed", "true");
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-  try {
-    const res = await fetch("/api/newsletter", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+      if (!res.ok) {
+        throw new Error("Failed to subscribe");
+      }
 
-    if (!res.ok) {
-      throw new Error("Failed to subscribe");
+      alert(t("popup.success"));
+      setShow(false);
+      sessionStorage.setItem("popupClosed", "true"); // hide permanently this session
+    } catch (err) {
+      console.error(err);
+      alert(t("popup.error"));
     }
-
-    alert(t("popup.success"));
-    setShow(false);
-  } catch (err) {
-    console.error(err);
-    alert(t("popup.error"));
-  }
-};
-
+  };
 
   return (
     <AnimatePresence>
@@ -53,20 +58,20 @@ export default function SubscriptionPopup() {
             animate={{ scale: 1 }}
             exit={{ scale: 0.8 }}
           >
-            {/* ✅ Close button now correctly positioned and visible */}
             <button
               onClick={handleClose}
-              className="absolute -top-3 -right-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 
-                         rounded-full w-8 h-8 flex items-center justify-center shadow-md"
+              className="absolute -top-3 -right-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full w-8 h-8 flex items-center justify-center shadow-md"
               aria-label="Close"
             >
               ✖
             </button>
 
-                   <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{t("popup.title")}</h2>
-                   <p className="text-gray-600 dark:text-gray-300 mb-4">
-                     {t("popup.subtitle")}
-                   </p>
+            <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+              {t("popup.title")}
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              {t("popup.subtitle")}
+            </p>
 
             <form onSubmit={handleSubmit}>
               <input

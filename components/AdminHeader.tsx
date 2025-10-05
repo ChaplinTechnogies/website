@@ -74,6 +74,9 @@ export default function AdminHeader() {
           <Link href="/admin/staffs" className="text-white hover:text-yellow">
             Staffs
           </Link>
+          <Link href="/admin/sections" className="block text-white">
+            Sections
+          </Link>
           <span className="text-white font-semibold">Hello, {adminName}</span>
           <button
             onClick={handleLogout}
@@ -106,6 +109,9 @@ export default function AdminHeader() {
           </Link>
           <Link href="/admin/staffs" className="block text-white">
             Staffs
+          </Link>
+          <Link href="/admin/sections" className="block text-white">
+            Sections
           </Link>
           <span className="block text-white font-semibold">
             Hello, {adminName}

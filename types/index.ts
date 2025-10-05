@@ -67,3 +67,9 @@ export interface NewsletterSubscribe {
   source?:string
 }
 
+
+export interface ReplyData {
+  id: string;
+  subject: string;
+  message: string;
+}

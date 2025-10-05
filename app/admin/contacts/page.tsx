@@ -19,40 +19,61 @@ export default function AdminContactsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Get access token from localStorage
+  const [replyModal, setReplyModal] = useState<{ open: boolean; contact?: Contact }>({ open: false })
+  const [replyMessage, setReplyMessage] = useState("")
+  const [replySubject, setReplySubject] = useState("")
+
   const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
 
-  // Fetch all contacts
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        if (!token) {
-          setError('No access token found')
-          setLoading(false)
-          return
-        }
 
-        const res = await axios.get('/api/contact', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-
-        if (res.data.success) {
-          setContacts(res.data.contacts)
-        } else {
-          setError('Failed to fetch contacts')
-        }
-      } catch (err: any) {
-        console.error(err)
-        setError(err.response?.data?.message || 'Error fetching contacts')
-      } finally {
-        setLoading(false)
-      }
+  const fetchContacts = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      if (!token) throw new Error("No access token found")
+      const res = await axios.get('/api/contact', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (res.data.success) setContacts(res.data.contacts)
+      else setError(res.data.message || "Failed to fetch contacts")
+    } catch (err: any) {
+      console.error(err)
+      setError(err.response?.data?.message || err.message || "Error fetching contacts")
+    } finally {
+      setLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchContacts()
   }, [token])
+
+  const handleReply = async () => {
+    if (!replyModal.contact) return
+    try {
+      const res = await axios.post('/api/reply', {
+        type: "contact",
+        id: replyModal.contact._id,
+        subject: replySubject,
+        message: replyMessage,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      if (res.data.success) {
+        toast.success("Reply sent!")
+        setReplyModal({ open: false })
+        setReplyMessage("")
+        setReplySubject("")
+        fetchContacts()
+      } else {
+        toast.error(res.data.message || "Failed to send reply")
+      }
+    } catch (err: any) {
+      console.error(err)
+      toast.error(err.response?.data?.message || "Something went wrong")
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg p-6">
@@ -75,6 +96,7 @@ export default function AdminContactsPage() {
                 <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Phone</th>
                 <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Message</th>
                 <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Created At</th>
+                <th className="px-4 py-2 text-center text-gray-600 dark:text-gray-300">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -86,10 +108,54 @@ export default function AdminContactsPage() {
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.phone || '-'}</td>
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.message}</td>
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{new Date(contact.createdAt).toLocaleString()}</td>
+                  <td className="px-4 py-2 flex justify-center gap-2">
+                    <button
+                      onClick={() => setReplyModal({ open: true, contact })}
+                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                    >
+                      Reply
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Reply Modal */}
+      {replyModal.open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-xl shadow-lg w-96 p-6 relative">
+            <h2 className="text-xl font-bold mb-4">Reply to {replyModal.contact?.email}</h2>
+            <input
+              type="text"
+              placeholder="Subject"
+              className="w-full border px-3 py-2 rounded mb-3"
+              value={replySubject}
+              onChange={e => setReplySubject(e.target.value)}
+            />
+            <textarea
+              placeholder="Message"
+              className="w-full border px-3 py-2 rounded mb-3 h-32 resize-none"
+              value={replyMessage}
+              onChange={e => setReplyMessage(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setReplyModal({ open: false })}
+                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReply}
+                className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              >
+                Send
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
