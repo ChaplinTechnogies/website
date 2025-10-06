@@ -34,8 +34,8 @@ const members: Member[] = [
     github: "#",
   },
   {
-    name: "Zeenab",
-    role: "Project Manager",
+    name: "Zainab Adeyemi Omwonmi",
+    role: "Outreach Manager",
     image: "/profile.webp",
     linkedin: "#",
   },
@@ -54,7 +54,7 @@ const members: Member[] = [
     github: "#",
   },
   {
-    name: "Marshall",
+    name: "IRADUKUNDA Emmanuel",
     role: "QA Engineer",
     image: "/profile.webp",
     linkedin: "#",
