@@ -13,14 +13,22 @@ export async function POST(req: NextRequest) {
     const db = client.db("newsletterDB");
     const collection = db.collection("subscribers");
 
+    // Check if already subscribed
     const existing = await collection.findOne({ email });
     if (existing) {
       return NextResponse.json({ message: "Already subscribed" }, { status: 200 });
     }
 
-    await collection.insertOne({ email, subscribedAt: new Date() });
+    // Insert with sendNewsletter = false
+    await collection.insertOne({
+      email,
+      subscribedAt: new Date(),
+      sendNewsletter: false, // <-- important
+    });
+
     return NextResponse.json({ message: "Subscribed successfully" });
   } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: "Failed to subscribe" }, { status: 500 });
   }
 }
