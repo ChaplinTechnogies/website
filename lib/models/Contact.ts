@@ -5,7 +5,7 @@ import { ContactFormData } from '../../types/index'
 
 export async function createContact(data: ContactFormData) {
     const client = await getClientPromise();
-    const db = client.db(); // the name of db will be added here, in this case it will take Cluster0 from the connection string
+    const db = client.db();
     const contacts = db.collection<ContactFormData>("contacts"); // a mongodb collecion of clients
 
     const res = await contacts.insertOne({
@@ -21,7 +21,7 @@ export async function createContact(data: ContactFormData) {
 
 export async function getAllContacts() {
     const client = await getClientPromise();
-    const db = client.db() // here will insert a db name later
+    const db = client.db()
     const contacts = db.collection<ContactFormData>("contacts");
 
     return contacts.find({}).toArray();

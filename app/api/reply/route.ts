@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const record = await db.collection(collectionName).findOne({ _id: new ObjectId(id) });
     if (!record) return NextResponse.json({ success: false, message: `${type} not found` }, { status: 404 });
 
-    // Send email
+
     const emailResult = await sendEmail({
       receiver: record.email,
       subject,
