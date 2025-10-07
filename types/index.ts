@@ -12,7 +12,7 @@ export interface ContactFormData {
   message: string;
   company?: string;
   phone?: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export interface BlogPost {
