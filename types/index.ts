@@ -20,7 +20,7 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   content: string;
-  publishedAt: string;
+  publishedAt?: Date;
   author: string;
   tags: string[];
   slug: string;
