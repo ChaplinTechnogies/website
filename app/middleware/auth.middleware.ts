@@ -7,7 +7,7 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_ACCESS_SECRET || "";
 
 type MiddlewareOptions = {
-  roles?: string[]; 
+  roles?: string[];
 };
 
 export async function authMiddleware(req: NextRequest, options?: MiddlewareOptions) {
@@ -26,8 +26,9 @@ export async function authMiddleware(req: NextRequest, options?: MiddlewareOptio
       return NextResponse.json({ error: "Forbidden: Insufficient role" }, { status: 403 });
     }
 
- 
-    return decoded;
+    (req as any).user = decoded;
+
+    return null;
   } catch (err) {
     return NextResponse.json({ error: "Unauthorized: Invalid or expired token" }, { status: 401 });
   }
