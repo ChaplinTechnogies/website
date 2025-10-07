@@ -41,7 +41,39 @@ export default function TeamSlider() {
     fetchMembers();
   }, []);
 
-  if (loading) return <p className="text-center py-12">Loading team members...</p>;
+ 
+  if (loading) {
+    return (
+      <section className="py-16 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-dark-surface dark:via-dark-bg dark:to-dark-surface">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">
+            {t('team.title')}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-6 text-center animate-pulse"
+              >
+                <div className="relative w-36 h-36 mx-auto mb-4 rounded-full bg-gray-200 dark:bg-gray-700" />
+                <div className="h-5 w-32 mx-auto bg-gray-200 dark:bg-gray-700 mb-2 rounded" />
+                <div className="h-4 w-20 mx-auto bg-gray-200 dark:bg-gray-700 mb-3 rounded" />
+                <div className="flex justify-center gap-4">
+                  {[...Array(3)].map((_, j) => (
+                    <div
+                      key={j}
+                      className="h-5 w-5 bg-gray-200 dark:bg-gray-700 rounded-full"
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
 
   return (
     <section className="py-16 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-dark-surface dark:via-dark-bg dark:to-dark-surface">
@@ -71,7 +103,8 @@ export default function TeamSlider() {
                     src={member.image || '/fallback-profile.png'}
                     alt={member.name}
                     fill
-                    className="object-cover transition-transform duration-500 hover:scale-110"
+                    className="object-cover transition-opacity duration-500 opacity-0"
+                    onLoadingComplete={(img) => img.classList.remove('opacity-0')}
                   />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{member.name}</h3>

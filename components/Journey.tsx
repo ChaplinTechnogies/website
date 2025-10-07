@@ -13,10 +13,7 @@ const Journey = () => {
   useEffect(() => {
     const fetchMilestones = async () => {
       try {
-        const res = await fetch('/api/milestones', {
-          method: 'GET',
-        });
-
+        const res = await fetch('/api/milestones', { method: 'GET' });
         if (!res.ok) throw new Error(`Failed to fetch milestones (${res.status})`);
 
         const data = await res.json();
@@ -50,10 +47,42 @@ const Journey = () => {
     });
   };
 
+
   if (loading) {
     return (
-      <section className="py-12 text-center">
-        <p className="text-gray-600 dark:text-gray-400">Loading milestones...</p>
+      <section className="py-12 sm:py-16 bg-white dark:bg-dark-bg">
+        <div className="container mx-auto px-4 sm:px-6 animate-pulse">
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 mx-auto mb-4 rounded" />
+            <div className="h-4 w-80 bg-gray-200 dark:bg-gray-700 mx-auto rounded" />
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            {[...Array(4)].map((_, i) => (
+              <div
+                key={i}
+                className={`relative mb-8 md:mb-12 md:flex md:items-center ${
+                  i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                }`}
+              >
+                <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 md:w-6 md:h-6 bg-gray-300 dark:bg-gray-600 rounded-full border-2 md:border-4 border-white shadow-lg z-10" />
+
+                {/* Skeleton card */}
+                <div
+                  className={`ml-12 md:ml-0 md:w-5/12 ${
+                    i % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:pl-8 md:text-left'
+                  }`}
+                >
+                  <div className="bg-gray-100 dark:bg-gray-800 p-4 md:p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div className="h-5 w-40 bg-gray-300 dark:bg-gray-600 mb-3 mx-auto md:mx-0 rounded" />
+                    <div className="h-3 w-56 bg-gray-300 dark:bg-gray-600 mb-2 mx-auto md:mx-0 rounded" />
+                    <div className="h-3 w-44 bg-gray-300 dark:bg-gray-600 mx-auto md:mx-0 rounded" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     );
   }
@@ -65,6 +94,7 @@ const Journey = () => {
       </section>
     );
   }
+
 
   return (
     <section id="about" className="py-12 sm:py-16 bg-white dark:bg-dark-bg">
