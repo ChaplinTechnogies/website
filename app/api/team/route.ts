@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  createTeamMember,
-  getAllTeamMembers,
-} from "@/lib/models/TeamMember";
+import { createTeamMember, getAllTeamMembers } from "@/lib/models/TeamMember";
 import { authMiddleware } from "@/app/middleware/auth.middleware";
-
 
 export async function GET() {
   try {
@@ -15,13 +11,16 @@ export async function GET() {
   }
 }
 
-
-
 export async function POST(req: NextRequest) {
   try {
-    const authResponse = await authMiddleware(req, { roles: ["executive"] });
+    const authResult = await authMiddleware(req, { roles: ["executive"] });
 
-    if (authResponse) return authResponse;
+    // 🔒 If middleware returned a NextResponse, it means auth failed
+    if (authResult instanceof NextResponse) return authResult;
+
+    // ✅ Otherwise, authResult contains user info
+    const { id: userId, role: userRole } = authResult;
+    console.log("Authenticated as:", userId, userRole);
 
     const body = await req.json();
     const { name, role, image, linkedin, twitter, github } = body;
@@ -33,9 +32,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const id = await createTeamMember({ name, role, image, linkedin, twitter, github });
-    return NextResponse.json({ success: true, id, message: "Team member created" }, { status: 201 });
+    const newMemberId = await createTeamMember({
+      name,
+      role,
+      image,
+      linkedin,
+      twitter,
+      github,
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        createdBy: userId,
+        id: newMemberId,
+        message: "Team member created successfully",
+      },
+      { status: 201 }
+    );
   } catch (err: any) {
-    return NextResponse.json({ success: false, message: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: err.message },
+      { status: 500 }
+    );
   }
 }
