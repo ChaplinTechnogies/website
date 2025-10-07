@@ -115,13 +115,6 @@ sybella-next/
 NEXT_PUBLIC_GA_MEASUREMENT_ID=GA_MEASUREMENT_ID
 NEXT_PUBLIC_ANALYTICS_ENDPOINT=https://your-analytics-endpoint.com
 
-# Messaging
-EMAIL_PASS=emailAppPassword
-EMAIL_USER=useremail@mail.com
-
-# Data storage
-MONGODB_URI=mongodburi
-
 # Security
 NEXTAUTH_SECRET=your-nextauth-secret
 NEXTAUTH_URL=http://localhost:3000

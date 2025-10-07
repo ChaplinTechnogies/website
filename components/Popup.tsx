@@ -53,6 +53,7 @@ export default function SubscriptionPopup() {
           exit={{ opacity: 0 }}
         >
           <motion.div
+            // ✅ Make container relative so the button is anchored
             className="relative bg-white dark:bg-dark-surface rounded-2xl shadow-2xl p-6 w-80 text-center"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
@@ -78,7 +79,6 @@ export default function SubscriptionPopup() {
                 type="email"
                 required
                 placeholder={t("popup.placeholder")}
-                onChange={(e) => setEmail(e.target.value)}
                 className="border border-gray-300 dark:border-gray-600 dark:bg-dark-bg dark:text-white rounded-lg px-3 py-2 w-full mb-3"
               />
               <button

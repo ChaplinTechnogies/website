@@ -39,7 +39,7 @@ export default function Hero() {
             <div className="relative p-[3px] rounded-2xl overflow-hidden glow-border">
               <div className="relative rounded-2xl overflow-hidden aspect-video bg-black">
                 <Image
-                  src="/thirdman.jpg"
+                  src="/workingman.jpg"
                   alt={t("hero.imageAlt")}
                   fill
                   className="object-cover rounded-2xl"
