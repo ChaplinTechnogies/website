@@ -13,7 +13,7 @@ import TeamSlider from '@/components/Slider'
 import USPSection from '@/components/Usp'
 import EcosystemSolutions from '@/components/Ecosystem'
 import SubscriptionPopup from '@/components/Popup'
-import AdminLogin from '@/app/signup/page'
+import AdminLogin from '@/app/signin/page'
 
 export default function Page() {
     useEffect(() => {
