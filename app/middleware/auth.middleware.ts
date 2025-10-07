@@ -26,9 +26,11 @@ export async function authMiddleware(req: NextRequest, options?: MiddlewareOptio
       return NextResponse.json({ error: "Forbidden: Insufficient role" }, { status: 403 });
     }
 
+
     (req as any).user = decoded;
 
-    return null;
+
+    return { id: decoded.id, role: decoded.role };
   } catch (err) {
     return NextResponse.json({ error: "Unauthorized: Invalid or expired token" }, { status: 401 });
   }
