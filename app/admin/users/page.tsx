@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+
+const token = localStorage.getItem("adminToken");
 
 interface Subscriber {
   _id: string;
@@ -12,28 +13,14 @@ interface Subscriber {
 }
 
 export default function AdminUsersPage() {
-  const router = useRouter();
-
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState<string | null>(null);
   const [replyModal, setReplyModal] = useState<{ open: boolean; subscriber?: Subscriber }>({ open: false });
   const [replyMessage, setReplyMessage] = useState("");
   const [replySubject, setReplySubject] = useState("");
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("adminToken");
-    if (!storedToken) {
-      toast.error("You must be logged in first");
-      router.push("/admin/login");
-    } else {
-      setToken(storedToken);
-    }
-  }, [router]);
-
-
+ 
   const fetchSubscribers = async () => {
-    if (!token) return;
     setLoading(true);
     try {
       const res = await fetch("/api/newsletter", {
@@ -44,14 +31,6 @@ export default function AdminUsersPage() {
         },
       });
       const data = await res.json();
-
-      if (res.status === 401) {
-        toast.error("Session expired. Please log in again.");
-        localStorage.removeItem("adminToken");
-        router.push("/admin/login");
-        return;
-      }
-
       if (data.success) setSubscribers(data.subscribers);
       else toast.error(data.message || "Failed to fetch subscribers");
     } catch (err) {
@@ -64,7 +43,7 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     fetchSubscribers();
-  }, [token]);
+  }, []);
 
 
   const handleReply = async () => {
@@ -82,7 +61,6 @@ export default function AdminUsersPage() {
           message: replyMessage,
         }),
       });
-
       const data = await res.json();
       if (data.success) {
         toast.success("Reply sent!");
@@ -98,7 +76,6 @@ export default function AdminUsersPage() {
     }
   };
 
-
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this subscriber?")) return;
     try {
@@ -110,10 +87,9 @@ export default function AdminUsersPage() {
         },
       });
       const data = await res.json();
-
       if (data.success) {
         toast.success("Subscriber deleted");
-        await fetchSubscribers(); 
+        await fetchSubscribers(); // <-- refetch automatically
       } else toast.error(data.message || "Failed to delete subscriber");
     } catch (err) {
       console.error(err);
@@ -141,7 +117,7 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody>
-              {subscribers.map((sub) => (
+              {subscribers.map(sub => (
                 <tr key={sub._id} className="border-b hover:bg-gray-50">
                   <td className="py-2 px-4">{sub.name || "-"}</td>
                   <td className="py-2 px-4">{sub.email}</td>
@@ -167,25 +143,23 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      {/* ✅ Reply Modal */}
+      {/* Reply Modal */}
       {replyModal.open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-xl shadow-lg w-96 p-6 relative">
-            <h2 className="text-xl font-bold mb-4">
-              Reply to {replyModal.subscriber?.email}
-            </h2>
+            <h2 className="text-xl font-bold mb-4">Reply to {replyModal.subscriber?.email}</h2>
             <input
               type="text"
               placeholder="Subject"
               className="w-full border px-3 py-2 rounded mb-3"
               value={replySubject}
-              onChange={(e) => setReplySubject(e.target.value)}
+              onChange={e => setReplySubject(e.target.value)}
             />
             <textarea
               placeholder="Message"
               className="w-full border px-3 py-2 rounded mb-3 h-32 resize-none"
               value={replyMessage}
-              onChange={(e) => setReplyMessage(e.target.value)}
+              onChange={e => setReplyMessage(e.target.value)}
             />
             <div className="flex justify-end gap-2">
               <button
