@@ -67,12 +67,12 @@ export const metadata: Metadata = {
         creator: '@sybellasystems',
     },
     alternates: {
-        canonical: 'https://sybellasystems.com',
+        canonical: 'https://sybellasystems.co.rw',
         languages: {
-            'en-US': 'https://sybellasystems.com',
-            'fr-FR': 'https://sybellasystems.com/fr',
-            'sw-KE': 'https://sybellasystems.com/sw',
-            'rw-RW': 'https://sybellasystems.com/rw',
+            'en-US': 'https://sybellasystems.co.rw',
+            'fr-FR': 'https://sybellasystems.co.rw/fr',
+            'sw-KE': 'https://sybellasystems.co.rw/sw',
+            'rw-RW': 'https://sybellasystems.co.rw/rw',
         },
     },
     verification: {
