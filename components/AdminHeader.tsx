@@ -72,7 +72,7 @@ export default function AdminHeader() {
             Contacts
           </Link>
           <Link href="/admin/staffs" className="text-white hover:text-yellow">
-            Staffs
+            Staff
           </Link>
           <Link href="/admin/sections" className="block text-white">
             Sections

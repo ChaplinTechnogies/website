@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '../../../lib/logger'
 import { SecurityValidator } from '../../../lib/security'
+import { addSubscriber, getAllSubscribers } from '../../../lib/models/NewsLetter'
+import { sendEmail } from '../../../lib/email'
+import { authMiddleware } from "@/app/middleware/auth.middleware";
+
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { email, source = 'website' } = body
 
-    // Validate email
     if (!email || !SecurityValidator.validateEmail(email)) {
       return NextResponse.json(
         { error: 'Valid email is required' },
@@ -18,38 +21,38 @@ export async function POST(request: NextRequest) {
     // Sanitize email
     const sanitizedEmail = SecurityValidator.sanitizeInput(email)
 
-    logger.info('Newsletter signup request', {
+    // Add subscriber to DB
+    const insertResult = await addSubscriber({
       email: sanitizedEmail,
-      source,
-      timestamp: new Date().toISOString()
+      subscribeAt: new Date(),
+      ...(source && { source })
     })
 
-    // In a real implementation, you would:
-    // 1. Check if email already exists
-    // 2. Add to your CRM (HubSpot, Mailchimp, etc.)
-    // 3. Add to Ogera waitlist if specified
-    // 4. Send welcome email
-    // 5. Track conversion metrics
-
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    // Mock response - replace with actual CRM integration
-    const response = {
-      success: true,
-      message: 'Successfully subscribed to newsletter',
-      email: sanitizedEmail,
-      subscriptionId: `sub_${Date.now()}`,
-      addedToOgeraWaitlist: source === 'ogera'
+    if (!insertResult.acknowledged) {
+      return NextResponse.json(
+        { error: "Failed to create new subscription" },
+        { status: 500 }
+      )
     }
 
-    logger.info('Newsletter signup successful', {
-      email: sanitizedEmail,
-      subscriptionId: response.subscriptionId,
-      addedToOgeraWaitlist: response.addedToOgeraWaitlist
+    // sending the subscription success email to the user
+
+    const emailResult = await sendEmail({
+      receiver: sanitizedEmail,
+      message: "Thanks for subscribing to Sybella Systems newsletter.",
+      subject: "Welcome to our Newsletter!"
     })
 
-    return NextResponse.json(response)
+    if(!emailResult.success) {
+      logger.error("Failed to send Email", { error: emailResult.error });
+
+    }
+
+    return NextResponse.json(
+      { message: "Successfully subscribed to newsletter" },
+      { status: 201 }
+    )
+
   } catch (error) {
     logger.error('Newsletter signup error', {
       error: error instanceof Error ? error.message : 'Unknown error'
@@ -62,21 +65,17 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
-  // Return newsletter statistics (for admin dashboard)
-  const mockStats = {
-    totalSubscribers: 1250,
-    monthlyGrowth: 15.3,
-    openRate: 24.7,
-    clickRate: 8.2,
-    recentSubscribers: [
-      { email: 'user1@example.com', date: '2025-01-15' },
-      { email: 'user2@example.com', date: '2025-01-14' },
-      { email: 'user3@example.com', date: '2025-01-13' }
-    ]
+
+export async function GET(req: NextRequest) {
+  const user = await authMiddleware(req, { roles: ["superadmin", "executive", "cto"] });
+  if (user instanceof NextResponse) return user;
+  try {
+    const subscribers = await getAllSubscribers();
+    return NextResponse.json({success: true, subscribers}, {status: 200})
+  } catch (err) {
+    return NextResponse.json({error: "Failed to fetch users"}, {status: 500})
   }
 
-  return NextResponse.json(mockStats)
 }
 
 
