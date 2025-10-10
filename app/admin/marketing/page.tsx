@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Eye, Users, Globe, TrendingUp, MapPin, Info } from 'lucide-react';
+import { Eye, Users, Globe, TrendingUp, MapPin, Info, Download } from 'lucide-react';
 import dynamic from 'next/dynamic';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -32,45 +32,86 @@ export default function MarketingDashboard() {
   const totalUniqueVisitors = pageViews.reduce((sum, page) => sum + page.uniqueVisitors, 0);
   const totalCountries = new Set(geoStats.map(g => g.country)).size;
 
+  const handleDownload = async (type: 'excel' | 'pdf') => {
+    try {
+      const res = await fetch(`/api/marketing/export/${type}`);
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = type === 'excel' ? 'page_views.xlsx' : 'page_views.pdf';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert('Failed to download file. Please try again.');
+      console.error(error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Website Performance Overview</h1>
-          <p className="text-gray-600 text-lg">Monitor your website’s traffic and engagement at a glance.</p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">Website Performance Overview</h1>
+            <p className="text-gray-600 text-lg">Monitor your website’s traffic and engagement at a glance.</p>
+          </div>
+
+          {/* Download Buttons */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => handleDownload('excel')}
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition"
+            >
+              <Download className="w-4 h-4" /> Excel
+            </button>
+            <button
+              onClick={() => handleDownload('pdf')}
+              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-md transition"
+            >
+              <Download className="w-4 h-4" /> PDF
+            </button>
+          </div>
         </div>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <InfoCard 
-            title="Total Page Views" 
-            value={totalViews.toLocaleString()} 
-            description="The number of times all pages on your site were viewed." 
-            icon={<Eye className="w-8 h-8 text-blue-600" />} 
+          <InfoCard
+            title="Total Page Views"
+            value={totalViews.toLocaleString()}
+            description="The number of times all pages on your site were viewed."
+            icon={<Eye className="w-8 h-8 text-blue-600" />}
             color="blue"
           />
-          <InfoCard 
-            title="Unique Visitors" 
-            value={totalUniqueVisitors.toLocaleString()} 
-            description="The number of distinct users visiting your site." 
-            icon={<Users className="w-8 h-8 text-green-600" />} 
+          <InfoCard
+            title="Unique Visitors"
+            value={totalUniqueVisitors.toLocaleString()}
+            description="The number of distinct users visiting your site."
+            icon={<Users className="w-8 h-8 text-green-600" />}
             color="green"
           />
-          <InfoCard 
-            title="Countries Reached" 
-            value={totalCountries} 
-            description="Shows which countries your visitors come from." 
-            icon={<Globe className="w-8 h-8 text-purple-600" />} 
+          <InfoCard
+            title="Countries Reached"
+            value={totalCountries}
+            description="Shows which countries your visitors come from."
+            icon={<Globe className="w-8 h-8 text-purple-600" />}
             color="purple"
           />
         </div>
 
         {/* Top Performing Pages */}
-        <Box title="Most Popular Pages" icon={<TrendingUp className="w-6 h-6 text-orange-600" />} description="The top pages on your site by total views and unique visitors.">
+        <Box
+          title="Most Popular Pages"
+          icon={<TrendingUp className="w-6 h-6 text-orange-600" />}
+          description="The top pages on your site by total views and unique visitors."
+        >
           <div className="space-y-4">
             {topContent.slice(0, 5).map((page, idx) => (
-              <div key={page.pageUrl} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <div
+                key={page.pageUrl}
+                className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+              >
                 <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
                   {idx + 1}
                 </div>
@@ -107,7 +148,11 @@ export default function MarketingDashboard() {
         </Box>
 
         {/* Visitor Locations */}
-        <Box title="Visitor Locations" icon={<MapPin className="w-6 h-6 text-green-600" />} description="Shows where your website visitors are coming from.">
+        <Box
+          title="Visitor Locations"
+          icon={<MapPin className="w-6 h-6 text-green-600" />}
+          description="Shows where your website visitors are coming from."
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               {geoStats.slice(0, 5).map((geo, idx) => (
@@ -159,7 +204,6 @@ export default function MarketingDashboard() {
   );
 }
 
-
 function InfoCard({ title, value, description, icon, color }: { title: string, value: string | number, description: string, icon: React.ReactNode, color: string }) {
   return (
     <div className={`bg-white rounded-2xl shadow-lg p-6 border-l-4 border-${color}-500 hover:shadow-xl transition-shadow`}>
@@ -178,7 +222,6 @@ function InfoCard({ title, value, description, icon, color }: { title: string, v
     </div>
   );
 }
-
 
 function Box({ title, icon, description, children }: { title: string, icon: React.ReactNode, description: string, children: React.ReactNode }) {
   return (

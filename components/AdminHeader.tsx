@@ -21,12 +21,12 @@ export default function AdminHeader() {
           router.push("/signin");
           return;
         }
-
-
         const decoded: any = jwtDecode(token);
         setRole(decoded.role);
-
-
+        // redirects
+        if(decoded.role == 'marketing'){
+          router.push('/admin/marketing')
+        }
         const res = await fetch("/api/staff/me", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ export default function AdminHeader() {
     } finally {
       localStorage.removeItem("adminToken");
       localStorage.removeItem("user");
-      router.push("/signup");
+      router.push("/signin");
     }
   };
 
