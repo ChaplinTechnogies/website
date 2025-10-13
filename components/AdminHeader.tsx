@@ -26,6 +26,8 @@ export default function AdminHeader() {
         // redirects
         if(decoded.role == 'marketing'){
           router.push('/admin/marketing')
+        } else if (decoded.role == "qa-tester") {
+          router.push("/admin/qa-tester")
         }
         const res = await fetch("/api/staff/me", {
           headers: {
@@ -67,6 +69,7 @@ export default function AdminHeader() {
   const isAccountant = role === "accountant";
   const isSales = role === "sales";
   const isMarketing = role === "marketing";
+  const isQaTester = role === "qa-tester";
 
   return (
     <header className="bg-dark-blue shadow-sm sticky top-0 z-50 w-full">
@@ -77,13 +80,17 @@ export default function AdminHeader() {
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center gap-6">
-
+        { isExecutive || isMarketing && (
+          <>
           <Link href="/admin/contacts" className="text-white hover:text-yellow">
             Contacts
           </Link>
           <Link href="/admin/blogs" className="text-white hover:text-yellow">
             Blogs
           </Link>
+          </>
+        )
+      }
 
           {isExecutive && (
             <>
