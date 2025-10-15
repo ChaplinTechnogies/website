@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import MilestonesSection from './MilestonesSection'
 import TeamMembersSection from './TeamMembersSection'
-// import ProjectsSection from './sections/ProjectsSection'
+import ProjectsSection from './ProjectsSection'
 // import BlogSection from './sections/BlogSection'
 
 type SectionType = 'milestones' | 'projects' | 'blogs' | 'team_members'
@@ -42,7 +42,7 @@ export default function AdminSectionsPage() {
       <main className="flex-1 p-6">
         {activeSection === 'milestones' && <MilestonesSection />}
         {activeSection === 'team_members' && <TeamMembersSection />}
-        {/* {activeSection === 'projects' && <ProjectsSection />} */}
+        {activeSection === 'projects' && <ProjectsSection />}
         {/* {activeSection === 'blogs' && <BlogSection />} */}
       </main>
     </div>

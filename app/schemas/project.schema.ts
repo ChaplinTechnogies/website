@@ -10,8 +10,14 @@ export const projectSchema = z.object({
   partners: z.array(z.string()).optional(),
   callToAction: z.string().optional(),
   isActive: z.boolean().optional().default(true),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+   createdAt: z.preprocess(
+    (val) => (typeof val === "string" ? new Date(val) : val),
+    z.date().optional()
+  ),
+  updatedAt: z.preprocess(
+    (val) => (typeof val === "string" ? new Date(val) : val),
+    z.date().optional()
+  ),
 });
 
 export type ProjectInput = z.infer<typeof projectSchema>;
