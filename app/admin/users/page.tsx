@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-const token = localStorage.getItem("adminToken");
+
 
 interface Subscriber {
   _id: string;
@@ -13,13 +13,18 @@ interface Subscriber {
 }
 
 export default function AdminUsersPage() {
+  const [token, setToken] = useState<string | null>(null);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [replyModal, setReplyModal] = useState<{ open: boolean; subscriber?: Subscriber }>({ open: false });
   const [replyMessage, setReplyMessage] = useState("");
   const [replySubject, setReplySubject] = useState("");
 
- 
+  useEffect(()=> {
+  const token = localStorage.getItem("adminToken");
+  setToken(token);
+})
+  
   const fetchSubscribers = async () => {
     setLoading(true);
     try {

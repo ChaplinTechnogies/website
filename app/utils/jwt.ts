@@ -8,7 +8,7 @@ if (!ACCESS_SECRET) throw new Error('JWT_ACCESS_SECRET is not defined in .env');
 if (!REFRESH_SECRET) throw new Error('JWT_REFRESH_SECRET is not defined in .env');
 
 export function createAccessToken(payload: { id: string; role: string }) {
-  return jwt.sign(payload, ACCESS_SECRET, { expiresIn: '15m' });
+  return jwt.sign(payload, ACCESS_SECRET, { expiresIn: '5m' });
 }
 
 export function createRefreshToken(payload: { id: string; role: string }) {

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import MilestonesSection from './MilestonesSection'
 import TeamMembersSection from './TeamMembersSection'
 import ProjectsSection from './ProjectsSection'
-// import BlogSection from './sections/BlogSection'
+import BlogSection from './BlogSection'
 
 type SectionType = 'milestones' | 'projects' | 'blogs' | 'team_members'
 
@@ -43,7 +43,7 @@ export default function AdminSectionsPage() {
         {activeSection === 'milestones' && <MilestonesSection />}
         {activeSection === 'team_members' && <TeamMembersSection />}
         {activeSection === 'projects' && <ProjectsSection />}
-        {/* {activeSection === 'blogs' && <BlogSection />} */}
+        {activeSection === 'blogs' && <BlogSection />}
       </main>
     </div>
   )

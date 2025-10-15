@@ -2,44 +2,62 @@ import { NextRequest, NextResponse } from "next/server";
 import { loginStaff } from "@/lib/models/StaffMember";
 import { loginSchema } from "@/app/schemas/user.schema";
 import { serialize } from "cookie";
+import  { RateLimiter }  from "@/lib/security"
+
+
+const rateLimiter = new RateLimiter(60_000, 5);
 
 export async function POST(req: NextRequest) {
   try {
+    const identifier =
+      req.headers.get("x-forwarded-for") ||
+      req.ip ||
+      "unknown";
+
+
+    if (!rateLimiter.isAllowed(identifier)) {
+      return NextResponse.json(
+        { error: "Too many requests. Please wait a bit and try again." },
+        { status: 429 }
+      );
+    }
+
+
     const body = await req.json();
     const parsed = loginSchema.parse(body);
 
-    // Login and get tokens
+
     const { accessToken, refreshToken } = await loginStaff(parsed);
 
-    const response = NextResponse.json({ success: true, accessToken, refreshToken });
 
-    // Set accessToken as HTTP-only cookie (short-lived)
-    response.cookies.set(
-      "adminToken",
+    const response = NextResponse.json({
+      success: true,
       accessToken,
-      {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        path: "/",
-        maxAge: 2 * 60 * 60,
-        sameSite: "strict",
-      }
-    );
-
-    response.cookies.set(
-      "refreshToken",
       refreshToken,
-      {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60,
-        sameSite: "strict",
-      }
-    );
+    });
+
+
+    response.cookies.set("adminToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 5 * 60, 
+      sameSite: "strict",
+    });
+
+
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      sameSite: "strict",
+    });
 
     return response;
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
+
+

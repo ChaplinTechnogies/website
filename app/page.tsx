@@ -36,6 +36,7 @@ export default function Page() {
             <ContactForm />
             <Chatbot />
             <SubscriptionPopup />
+            <AdminLogin />
         </div>
     )
 }

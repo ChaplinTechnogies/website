@@ -41,6 +41,7 @@ export const useTokenRefresh = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const refreshAccessToken = async (): Promise<boolean> => {
+    const refToken = localStorage.getItem("refreshToken");
     try {
       const response = await fetch('/api/refresh', {
         method: 'POST',
@@ -48,6 +49,7 @@ export const useTokenRefresh = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({refreshToken: refToken})
       });
 
       if (!response.ok) {
@@ -66,7 +68,7 @@ export const useTokenRefresh = () => {
     } catch (error) {
       console.error('Error refreshing token:', error);
       localStorage.removeItem('adminToken');
-      router.push('/signup');
+      router.push('/signin');
       return false;
     }
   };
@@ -75,7 +77,7 @@ export const useTokenRefresh = () => {
     const token = localStorage.getItem('adminToken');
     
     if (!token) {
-      router.push('/signup');
+      router.push('/signin');
       return;
     }
 
