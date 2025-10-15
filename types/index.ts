@@ -72,3 +72,19 @@ export interface ReplyData {
   subject: string;
   message: string;
 }
+
+
+export interface Project {
+  id?: string;
+  title: string;
+  overview: string;
+  image: string;
+  demoLink?: string;
+  problemSolved: string;
+  techStack: string[];
+  partners?: string[];
+  callToAction?: string;
+  isActive?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
