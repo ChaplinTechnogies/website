@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { ContactFormData } from "../types";
 import { useI18n } from "../contexts/I18nContext";
-import emailjs from "@emailjs/browser";
 
 interface ContactFormProps {
   onSubmit?: (data: ContactFormData) => Promise<void>;
@@ -18,22 +17,35 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
     phone: "",
   });
 
+  const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
-  const [subscribeStatus, setSubscribeStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [subscribeStatus, setSubscribeStatus] = useState<"idle" | "success" | "error">("idle");
 
   // Handle input change
   const handleInputChange = (field: keyof ContactFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validate = () => {
+    const newErrors: Partial<Record<keyof ContactFormData, string>> = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+    return newErrors;
   };
 
   // Contact form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return; // stop submission
+    }
+
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
@@ -41,12 +53,13 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
       if (onSubmit) {
         await onSubmit(formData);
       } else {
-        await emailjs.send(
-          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-          { ...formData },
-          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-        );
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        if (!res.ok) throw new Error("Failed to send contact form");
       }
 
       setSubmitStatus("success");
@@ -61,9 +74,12 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
 
   // Subscribe to newsletter
   const handleSubscribe = async () => {
-    setSubscribeStatus("idle");
-    console.log("ffffffffff==============");
+    if (!formData.email.trim()) {
+      setErrors({ email: "Email is required to subscribe" });
+      return;
+    }
 
+    setSubscribeStatus("idle");
     try {
       await fetch("/api/subscribe", {
         method: "POST",
@@ -91,20 +107,27 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-              <input
-                type="text"
-                placeholder={t("contact.placeholder.name")}
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text"
-              />
-              <input
-                type="email"
-                placeholder={t("contact.placeholder.email")}
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text"
-              />
+              <div className="flex flex-col">
+                <input
+                  type="text"
+                  placeholder={t("contact.placeholder.name")}
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text"
+                />
+                {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name}</span>}
+              </div>
+
+              <div className="flex flex-col">
+                <input
+                  type="email"
+                  placeholder={t("contact.placeholder.email")}
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text"
+                />
+                {errors.email && <span className="text-red-500 text-sm mt-1">{errors.email}</span>}
+              </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
@@ -124,13 +147,16 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
               />
             </div>
 
-            <textarea
-              rows={6}
-              placeholder={t("contact.placeholder.message")}
-              value={formData.message}
-              onChange={(e) => handleInputChange("message", e.target.value)}
-              className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text"
-            />
+            <div className="flex flex-col">
+              <textarea
+                rows={6}
+                placeholder={t("contact.placeholder.message")}
+                value={formData.message}
+                onChange={(e) => handleInputChange("message", e.target.value)}
+                className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-dark-surface dark:text-dark-text"
+              />
+              {errors.message && <span className="text-red-500 text-sm mt-1">{errors.message}</span>}
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <button
@@ -154,6 +180,13 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
               </button>
             </div>
           </form>
+
+          {submitStatus === "success" && (
+            <p className="mt-4 text-green-600 font-medium text-center">Message sent successfully!</p>
+          )}
+          {submitStatus === "error" && (
+            <p className="mt-4 text-red-600 font-medium text-center">Failed to send message. Please try again.</p>
+          )}
         </div>
       </div>
     </section>
