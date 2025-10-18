@@ -56,6 +56,7 @@ export async function getProjectById(id: string): Promise<Project | null> {
   return doc ? mapProject(doc) : null;
 }
 
+
 export async function updateProject(
   id: string,
   data: Partial<Project>
@@ -65,15 +66,18 @@ export async function updateProject(
   const projects: Collection<ProjectDocument> = db.collection("projects");
 
   const res = await projects.findOneAndUpdate(
-  { _id: new ObjectId(id) },
-  { $set: { ...data, updatedAt: new Date() } },
-  { returnDocument: "after" }
-);
+    { _id: new ObjectId(id) },
+    { $set: { ...data, updatedAt: new Date() } },
+    { returnDocument: "after" }
+  )
 
-if (!res) return null;
-return mapProject(res);
-
+  if (!res) return null;
+  return mapProject(res);
+  
 }
+
+
+
 
 export async function deleteProject(id: string): Promise<boolean> {
   const client = await getClientPromise();

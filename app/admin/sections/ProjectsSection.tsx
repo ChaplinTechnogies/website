@@ -22,8 +22,16 @@ export default function ProjectsSection() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+
   const [editingProject, setEditingProject] = useState<Partial<Project> | null>(
     null
+  );
+  const [techStackInput, setTechStackInput] = useState(
+    editingProject?.techStack?.join(",") || ""
+  );
+
+  const [partnersInput, setPartnersInput] = useState(
+    editingProject?.partners?.join(",") || ""
   );
 
   useEffect(() => {
@@ -41,21 +49,28 @@ export default function ProjectsSection() {
   }, []);
 
   const handleSave = async () => {
+    if (!editingProject) return;
+
+    const projectToSave = {
+      ...editingProject,
+      techStack: editingProject.techStack?.map((s) => s.trim()).filter(Boolean),
+    };
+
     try {
-      if (editingProject?.id) {
-        // Update existing project
+      if (editingProject.id) {
         const res = await axios.patch(
           `/api/projects/${editingProject.id}`,
-          editingProject
+          projectToSave,
+          { headers: { "Content-Type": "application/json" } }
         );
         setProjects((prev) =>
           prev.map((p) => (p.id === editingProject.id ? res.data : p))
         );
       } else {
-        // Create new project
-        const res = await axios.post("/api/projects", editingProject);
+        const res = await axios.post("/api/projects", projectToSave);
         setProjects((prev) => [res.data, ...prev]);
       }
+
       setShowForm(false);
       setEditingProject(null);
     } catch (err: any) {
@@ -150,7 +165,10 @@ export default function ProjectsSection() {
                 placeholder="Title"
                 value={editingProject.title || ""}
                 onChange={(e) =>
-                  setEditingProject({ ...editingProject, title: e.target.value })
+                  setEditingProject({
+                    ...editingProject,
+                    title: e.target.value,
+                  })
                 }
               />
               <textarea
@@ -169,7 +187,10 @@ export default function ProjectsSection() {
                 placeholder="Image URL"
                 value={editingProject.image || ""}
                 onChange={(e) =>
-                  setEditingProject({ ...editingProject, image: e.target.value })
+                  setEditingProject({
+                    ...editingProject,
+                    image: e.target.value,
+                  })
                 }
               />
               <textarea
@@ -190,10 +211,7 @@ export default function ProjectsSection() {
                 onChange={(e) =>
                   setEditingProject({
                     ...editingProject,
-                    techStack: e.target.value
-                      .split(",")
-                      .map((s) => s.trim())
-                      .filter(Boolean),
+                    techStack: e.target.value.split(",").map((s) => s.trim()),
                   })
                 }
               />
@@ -204,13 +222,11 @@ export default function ProjectsSection() {
                 onChange={(e) =>
                   setEditingProject({
                     ...editingProject,
-                    partners: e.target.value
-                      .split(",")
-                      .map((s) => s.trim())
-                      .filter(Boolean),
+                    partners: e.target.value.split(",").map((s) => s.trim()),
                   })
                 }
               />
+
               <input
                 className="border p-2 rounded"
                 placeholder="Call to Action"
