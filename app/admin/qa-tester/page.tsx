@@ -3,7 +3,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
 
-
 interface QATestReport {
   _id: string;
   uploadBy: string;
@@ -26,6 +25,12 @@ interface Feedback {
   createdAt: string;
 }
 
+interface StaffMember {
+  _id: string;
+  names: string;
+  email: string;
+  role: string;
+}
 
 export default function QADashboard() {
   const [activeTab, setActiveTab] = useState<"upload" | "reports" | "feedback" | "metrics">("upload");
@@ -34,36 +39,75 @@ export default function QADashboard() {
   const [testPhase, setTestPhase] = useState("");
   const [reports, setReports] = useState<QATestReport[]>([]);
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [staff, setStaff] = useState<StaffMember[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [token, setToken] = useState<string | null>(null);
 
+  // Get token on client-side only
+  useEffect(() => {
+    const storedToken = localStorage.getItem("adminToken");
+    setToken(storedToken);
+  }, []);
 
+  // Fetch reports
   const fetchReports = async () => {
-    const res = await axios.get("/api/qa-tester/reports");
-    setReports(res.data);
+    try {
+      const res = await axios.get("/api/qa-tester/reports");
+      setReports(res.data);
+    } catch (err) {
+      console.error("Failed to fetch reports:", err);
+    }
+  };
+
+  // Fetch staff
+  const fetchStaff = async () => {
+    if (!token) return; // wait until token is loaded
+    try {
+      const res = await axios.get("/api/staff", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setStaff(res.data);
+    } catch (err) {
+      console.error("Failed to fetch staff:", err);
+    }
   };
 
   // Fetch feedbacks
   const fetchFeedbacks = async () => {
-    const res = await axios.get("/api/qa-tester/feedback");
-    setFeedbacks(res.data);
+    try {
+      const res = await axios.get("/api/qa-tester/feedback");
+      setFeedbacks(res.data);
+    } catch (err) {
+      console.error("Failed to fetch feedbacks:", err);
+    }
   };
 
+  // Load data whenever tab or token changes
   useEffect(() => {
+    if (!token) return;
     if (activeTab === "reports") fetchReports();
     if (activeTab === "feedback") fetchFeedbacks();
-  }, [activeTab]);
-
+    if (activeTab === "upload") fetchStaff();
+  }, [activeTab, token]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) setFile(e.target.files[0]);
   };
 
-
   const handleUpload = async () => {
     if (!file) return alert("Select a file first!");
+    if (!uploadBy) return alert("Please provide your name");
+    if (!testPhase) return alert("Please provide the test phase");
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("uploadBy", uploadBy);
     formData.append("testPhase", testPhase);
+    formData.append("notifiedUsers", JSON.stringify(selectedUsers)); // now _id strings
 
     try {
       const res = await axios.post("/api/qa-tester/upload", formData);
@@ -71,10 +115,26 @@ export default function QADashboard() {
       setFile(null);
       setUploadBy("");
       setTestPhase("");
+      setSelectedUsers([]);
     } catch (err) {
       console.error(err);
       alert("Upload failed");
     }
+  };
+
+  // Filter staff based on search
+  const filteredStaff = staff.filter(
+    (s) =>
+      s.names.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.role.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Toggle selection by _id now
+  const toggleUserSelection = (id: string) => {
+    setSelectedUsers((prev) =>
+      prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
+    );
   };
 
   return (
@@ -115,6 +175,7 @@ export default function QADashboard() {
         {activeTab === "upload" && (
           <div>
             <h2 className="text-2xl mb-4">Upload QA Report</h2>
+
             <input
               type="text"
               placeholder="Uploaded by"
@@ -130,6 +191,34 @@ export default function QADashboard() {
               className="border p-2 mb-2 w-full"
             />
             <input type="file" accept=".xlsx" onChange={handleFileChange} className="mb-4" />
+
+            {/* Staff Selection Section */}
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold mb-2">Notify Staff Members</h3>
+              <input
+                type="text"
+                placeholder="Search staff by name, email, or role..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border p-2 w-full mb-2"
+              />
+              <div className="border rounded p-2 max-h-60 overflow-y-auto bg-gray-50">
+                {filteredStaff.map((s) => (
+                  <div key={s._id} className="flex items-center mb-1">
+                    <input
+                      type="checkbox"
+                      checked={selectedUsers.includes(s._id)}
+                      onChange={() => toggleUserSelection(s._id)} // use _id now
+                      className="mr-2"
+                    />
+                    <span>
+                      {s.names} ({s.role}) — <span className="text-gray-600">{s.email}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <button
               onClick={handleUpload}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -139,6 +228,7 @@ export default function QADashboard() {
           </div>
         )}
 
+        {/* Reports & Feedback */}
         {activeTab === "reports" && (
           <div>
             <h2 className="text-2xl mb-4">QA Reports</h2>

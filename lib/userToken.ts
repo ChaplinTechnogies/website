@@ -60,6 +60,7 @@ export const useTokenRefresh = () => {
       
       if (data.accessToken) {
         localStorage.setItem('adminToken', data.accessToken);
+        cookieStore.set('adminToken', data.accessToken);
         console.log('Access token refreshed successfully');
         return true;
       }

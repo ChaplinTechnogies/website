@@ -140,25 +140,32 @@ export async function updateStaffPassword(id: string, data: z.infer<typeof staff
 // Staff Member Filtering
 
 export async function staffMemberQuery(query: z.infer<typeof staffMemberQuerySchema>) {
-    const parsed = staffMemberQuerySchema.parse(query);
-    const client = await getClientPromise();
-    const db = client.db();
+  // Validate query
+  const parsed = staffMemberQuerySchema.parse(query);
 
-    const filter: any = {};
-    if(parsed.role) filter.role = parsed.role;
-    if(typeof parsed.isActive==="boolean") filter.isActive = parsed.isActive;
-    if(parsed.search) {
-        filter.$or = [
-            {names: { $regex: parsed.search, $options: 'i' }},
-            {email: {$regex: parsed.search, $options: 'i'}}
-        ]
-    }
+  const client = await getClientPromise();
+  const db = client.db();
 
-    const staffList = await db.collection('staff_members').find(filter).toArray();
+  // Build filter
+  const filter: any = {};
+  if (parsed.role) filter.role = parsed.role;
+  if (typeof parsed.isActive === "boolean") filter.isActive = parsed.isActive;
+  if (parsed.search) {
+    filter.$or = [
+      { names: { $regex: parsed.search, $options: "i" } },
+      { email: { $regex: parsed.search, $options: "i" } },
+    ];
+  }
 
+  // Query DB
+  const staffList = await db.collection("staff_members").find(filter).toArray();
 
-  return staffList.map(staff => staffMemberOutScheme.parse(staff));
+  return staffList.map((staff) => {
+    const parsedStaff = staffMemberOutScheme.parse(staff);
+    return { ...parsedStaff, _id: staff._id.toString() };
+  });
 }
+
 
 // Staff Member Login
 

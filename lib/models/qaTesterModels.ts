@@ -1,5 +1,8 @@
 import getClientPromise from "../mongodb";
 import { ObjectId } from "mongodb";
+import nodemailer from "nodemailer";
+import { COLLECTIONS } from '@/lib/constants'
+import { sendEmail } from '@/lib/email'
 
 
 const FIELD_ALIASES: Record<string, string[]> = {
@@ -9,7 +12,6 @@ const FIELD_ALIASES: Record<string, string[]> = {
   BugID: ["BugID", "Bug", "IssueID"],
   ResolutionTime: ["ResolutionTime", "TimeToFix", "FixHours"],
 };
-
 
 export function mapExcelRow(row: any) {
   const mapped: any = {};
@@ -25,26 +27,22 @@ export function mapExcelRow(row: any) {
   return mapped;
 }
 
+// excel data sanitizer
+
 export function sanitizeExcelData(rawData: any[]) {
   return rawData.map((row) => {
     const mapped = mapExcelRow(row);
-
     return {
       TestCaseID: String(mapped.TestCaseID || "Unknown"),
       Description: mapped.Description || "No description",
-      Status: ["Passed", "Failed"].includes(mapped.Status) ? mapped.Status : "Unknown",
+      Status: ["Passed", "Failed"].includes(mapped.Status)
+        ? mapped.Status
+        : "Unknown",
       BugID: mapped.BugID || null,
       ResolutionTime: Number(mapped.ResolutionTime || 0),
     };
   });
 }
-
-
-const COLLECTIONS = {
-  REPORTS: "qa_test_reports",
-  FEEDBACK: "qa_feedback",
-  METRICS: "qa_metrics",
-};
 
 
 export async function saveQATestReport(data: {
@@ -58,6 +56,7 @@ export async function saveQATestReport(data: {
   avgResolutionTime?: number;
   remarks?: string;
   rawData?: any[];
+  notifiedUsers?: string[];
 }) {
   const client = await getClientPromise();
   const db = client.db();
@@ -67,20 +66,50 @@ export async function saveQATestReport(data: {
     uploadDate: new Date(),
   });
 
+  if(!result) return {error: "Failed to create report"}
+
+  // Send email notifications
+if (data.notifiedUsers && data.notifiedUsers.length > 0) {
+  const validIds = data.notifiedUsers.filter((id) => ObjectId.isValid(id));
+  if (validIds.length > 0) {
+    const users = await db
+      .collection(COLLECTIONS.STAFF)
+      .find({
+        _id: { $in: validIds.map((id) => new ObjectId(id)) },
+      })
+      .toArray();
+
+    for (const user of users) {
+      if (!user.email) continue;
+
+      await sendEmail({
+        receiver: user.email,
+        subject: `New QA Test Report - ${data.testPhase}`,
+        message: `
+          A new QA test report <b>${data.fileName}</b> has been uploaded for the 
+          <b>${data.testPhase}</b> phase.<br><br>
+          Please log in to the dashboard to view details.
+        `,
+        name: "QA Notification Bot",
+        company: "Sybella Systems",
+      });
+    }
+  }
+}
+
   return result.insertedId;
 }
+
 
 export async function getAllQATestReports() {
   const client = await getClientPromise();
   const db = client.db();
 
-  const reports = await db
+  return await db
     .collection(COLLECTIONS.REPORTS)
     .find({})
     .sort({ uploadDate: -1 })
     .toArray();
-
-  return reports;
 }
 
 export async function getQATestReportById(id: string) {
@@ -104,11 +133,12 @@ export async function deleteQATestReport(id: string) {
 }
 
 
+
 export async function saveUserFeedback(data: {
   userId?: string;
   feedbackText: string;
-  sentiment?: string; // positive, neutral, negative
-  source?: string; // form or excel
+  sentiment?: string;
+  source?: string;
 }) {
   const client = await getClientPromise();
   const db = client.db();
@@ -131,7 +161,6 @@ export async function getAllUserFeedback() {
     .sort({ createdAt: -1 })
     .toArray();
 }
-
 
 export async function saveOrUpdateMetrics(data: {
   reportId: string;
