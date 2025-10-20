@@ -182,8 +182,8 @@ export async function loginStaff(input: unknown) {
     const passwordMatch  = await bcrypt.compare(parsed.password, staff.password);
     if (!passwordMatch) throw new Error ("Invalid Email or Password");
 
-    const accessToken = createAccessToken({id: staff.id, role: staff.role});
-    const refreshToken = createRefreshToken({ id: staff.id, role: staff.role })
+    const accessToken = createAccessToken({id: staff.id, role: staff.role, permissions: staff.permissions });
+    const refreshToken = createRefreshToken({ id: staff.id, role: staff.role, permissions: staff.permissions });
 
     return { accessToken, refreshToken }
 

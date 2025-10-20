@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
       name: staff.names,
       email: staff.email,
       role: staff.role,
+      permissions: staff.permissions,
     });
   } catch (err) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

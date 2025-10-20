@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import  getClientPromise  from "@/lib/mongodb";
 
 dotenv.config();
 
@@ -19,18 +20,25 @@ export async function authMiddleware(req: NextRequest, options?: MiddlewareOptio
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string; permissions?: string[] };
 
-
+    // role filter
     if (options?.roles && !options.roles.includes("*") && !options.roles.includes(decoded.role)) {
       return NextResponse.json({ error: "Forbidden: Insufficient role" }, { status: 403 });
     }
 
+    //fetch from DB
+    if (!decoded.permissions) {
+      const client = await getClientPromise();
+      const db = client.db();
+      const foundUser = await db.collection("users").findOne({ id: decoded.id });
+      if (foundUser) decoded.permissions = foundUser.permissions || [];
+    }
 
+    // Attach to request
     (req as any).user = decoded;
 
-
-    return { id: decoded.id, role: decoded.role };
+    return decoded;
   } catch (err) {
     return NextResponse.json({ error: "Unauthorized: Invalid or expired token" }, { status: 401 });
   }

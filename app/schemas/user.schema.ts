@@ -17,6 +17,7 @@ export const staffMemberSchema = z.object({
     .regex(/\d/, "Must contain number")
     .regex(/[\W_]/, "Must contain special char"),
   role: z.union([z.enum(PREDIFINEDROLES), z.string()]), 
+  permissions: z.array(z.string()).optional(),
   isActive: z.boolean().default(false),
   createdAt: z.date().default(() => new Date()),
   updatedAt: z.coerce.date().optional(),
