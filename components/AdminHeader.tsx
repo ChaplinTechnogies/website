@@ -80,7 +80,7 @@ export default function AdminHeader() {
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center gap-6">
-        { isExecutive || isMarketing && (
+        { (isExecutive || isMarketing) && (
           <>
           <Link href="/admin/contacts" className="text-white hover:text-yellow">
             Contacts
