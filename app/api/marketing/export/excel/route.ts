@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import getClientPromise from "@/lib/mongodb";
 
+// make this route server-only
+export const runtime = "nodejs";
+
 export async function GET(req: Request) {
   try {
     const client = await getClientPromise();
     const db = client.db();
     const collection = db.collection("pageviews");
-
 
     const { searchParams } = new URL(req.url);
     const start = searchParams.get("start");
@@ -19,7 +21,6 @@ export async function GET(req: Request) {
     if (pageUrl) query.pageUrl = pageUrl;
 
     const data = await collection.find(query).toArray();
-
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Page Views");
