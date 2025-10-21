@@ -132,10 +132,44 @@ export async function updateStaffPassword(id: string, data: z.infer<typeof staff
     if(!existing) {
         throw new Error("Staff Member Not Found!");
     }
-    const hashedPassword = await bcrypt.hash(parsed.password, 10);
+    const hashedPassword = await bcrypt.hash(parsed.oldPassword, 10);
     await db.collection("staff_members").updateOne({ id }, {$set: {password: hashedPassword, updatedAt: new Date()}})
     return {message: "Password Updated well"};
 }
+
+// member updaing self password
+
+export async function updateSelfPassword(id: string, data: z.infer<typeof staffMemberPasswordSchema>) {
+  const parsed = staffMemberPasswordSchema.parse(data);
+  const client = await getClientPromise();
+  const db = client.db();
+
+  const existing = await db.collection("staff_members").findOne({ id });
+  if (!existing) {
+    throw new Error("Staff Member Not Found!");
+  }
+
+  const oldPasswordMatch = await bcrypt.compare(parsed.oldPassword, existing.password);
+    if (!oldPasswordMatch) {
+        throw new Error("Old password is incorrect!");
+    }
+
+  const isSame = await bcrypt.compare(parsed.newPassword, existing.password);
+  if (isSame) {
+    throw new Error("New password cannot be the same as the current password!");
+  }
+
+  // Hash and update
+  const hashedPassword = await bcrypt.hash(parsed.newPassword, 10);
+  await db.collection("staff_members").updateOne(
+    { id },
+    { $set: { password: hashedPassword, updatedAt: new Date() } }
+  );
+
+  return { message: "Password updated successfully" };
+}
+
+
 
 // Staff Member Filtering
 
@@ -187,4 +221,4 @@ export async function loginStaff(input: unknown) {
 
     return { accessToken, refreshToken }
 
-}        
+}

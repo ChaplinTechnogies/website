@@ -19,9 +19,10 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       id: staff.id,
-      name: staff.names,
+      names: staff.names,
       email: staff.email,
       role: staff.role,
+      phone: staff.phone,
       permissions: staff.permissions,
     });
   } catch (err) {

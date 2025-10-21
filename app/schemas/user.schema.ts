@@ -55,13 +55,20 @@ export const staffMemberQuerySchema = z.object({
 // password reset schema
 
 export const staffMemberPasswordSchema = z.object({
-  password: z.string()
+  oldPassword: z.string()
     .min(8, "Password must be at least 8 characters")
     .max(25, "Password is too long")
     .regex(/[A-Z]/, "Must contain uppercase")
     .regex(/[a-z]/, "Must contain lowercase")
     .regex(/\d/, "Must contain number")
-    .regex(/[\W_]/, "Must contain special char")
+    .regex(/[\W_]/, "Must contain special char"),
+  newPassword: z.string()
+    .min(8, "New password must be at least 8 characters")
+    .max(25, "New password is too long")
+    .regex(/[A-Z]/, "Must contain uppercase")
+    .regex(/[a-z]/, "Must contain lowercase")
+    .regex(/\d/, "Must contain number")
+    .regex(/[\W_]/, "Must contain special char"),
 });
 
 // User Login

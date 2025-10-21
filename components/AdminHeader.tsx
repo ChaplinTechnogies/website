@@ -125,7 +125,11 @@ export default function AdminHeader() {
               Sales
             </Link>
           )}
-
+          <span>
+            <Link href="/admin/settings" className="text-white hover:text-yellow">
+              Settings
+            </Link>
+          </span>
           <span className="text-white font-semibold">Hello, {adminName}</span>
           <button
             onClick={handleLogout}
@@ -183,9 +187,14 @@ export default function AdminHeader() {
               Sales
             </Link>
           )}
-
+          <span className="block text-white font-semibold">
+            <Link href="/admin/settings" className="block text-white">
+              Settings
+            </Link>
+          </span>
           <span className="block text-white font-semibold">
             Hello, {adminName}
+
           </span>
           <button
             onClick={handleLogout}

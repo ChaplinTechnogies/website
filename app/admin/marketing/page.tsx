@@ -7,14 +7,14 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 interface PageViewStats {
   pageUrl: string;
-  totalViews: number;
-  uniqueVisitors: number;
+  totalViews: number | null;
+  uniqueVisitors: number | null;
 }
 
 interface GeoStats {
-  country: string;
-  region: string;
-  uniqueVisitors: number;
+  country: string | null;
+  region: string | null;
+  uniqueVisitors: number | null;
 }
 
 export default function MarketingDashboard() {
@@ -23,14 +23,26 @@ export default function MarketingDashboard() {
   const [topContent, setTopContent] = useState<PageViewStats[]>([]);
 
   useEffect(() => {
-    fetch('/api/marketing/page-views').then(res => res.json()).then(setPageViews).catch(console.error);
-    fetch('/api/marketing/geo-stats').then(res => res.json()).then(setGeoStats).catch(console.error);
-    fetch('/api/marketing/top-content').then(res => res.json()).then(setTopContent).catch(console.error);
+    fetch('/api/marketing/page-views')
+      .then(res => res.json())
+      .then(data => setPageViews(data || []))
+      .catch(console.error);
+
+    fetch('/api/marketing/geo-stats')
+      .then(res => res.json())
+      .then(data => setGeoStats(data || []))
+      .catch(console.error);
+
+    fetch('/api/marketing/top-content')
+      .then(res => res.json())
+      .then(data => setTopContent(data || []))
+      .catch(console.error);
   }, []);
 
-  const totalViews = pageViews.reduce((sum, page) => sum + page.totalViews, 0);
-  const totalUniqueVisitors = pageViews.reduce((sum, page) => sum + page.uniqueVisitors, 0);
-  const totalCountries = new Set(geoStats.map(g => g.country)).size;
+  // Safely calculate totals
+  const totalViews = pageViews.reduce((sum, page) => sum + (page.totalViews ?? 0), 0);
+  const totalUniqueVisitors = pageViews.reduce((sum, page) => sum + (page.uniqueVisitors ?? 0), 0);
+  const totalCountries = new Set(geoStats.map(g => g.country ?? '')).size;
 
   const handleDownload = async (type: 'excel' | 'pdf') => {
     try {
@@ -116,29 +128,29 @@ export default function MarketingDashboard() {
                   {idx + 1}
                 </div>
                 <div className="flex-grow">
-                  <p className="font-semibold text-gray-800">{page.pageUrl}</p>
-                  <p className="text-sm text-gray-500">{page.uniqueVisitors} unique visitors</p>
+                  <p className="font-semibold text-gray-800">{page.pageUrl ?? 'Unknown'}</p>
+                  <p className="text-sm text-gray-500">{page.uniqueVisitors ?? 0} unique visitors</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-blue-600">{page.totalViews.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-blue-600">{(page.totalViews ?? 0).toLocaleString()}</p>
                   <p className="text-xs text-gray-500">views</p>
                 </div>
               </div>
             ))}
           </div>
 
-          {topContent.length > 0 && (
+          {topContent.some(p => p.totalViews != null) && (
             <div className="mt-6">
               <Chart
                 type="bar"
                 height={300}
-                series={[{ name: 'Views', data: topContent.slice(0, 5).map(p => p.totalViews) }]}
+                series={[{ name: 'Views', data: topContent.slice(0, 5).map(p => p.totalViews ?? 0) }]}
                 options={{
                   chart: { toolbar: { show: false }, fontFamily: 'inherit' },
                   colors: ['#3b82f6'],
                   plotOptions: { bar: { borderRadius: 8, horizontal: true } },
                   dataLabels: { enabled: true, style: { fontSize: '14px', fontWeight: 'bold' } },
-                  xaxis: { categories: topContent.slice(0, 5).map(p => p.pageUrl), labels: { style: { fontSize: '12px' } } },
+                  xaxis: { categories: topContent.slice(0, 5).map(p => p.pageUrl ?? 'Unknown'), labels: { style: { fontSize: '12px' } } },
                   yaxis: { labels: { style: { fontSize: '12px' } } },
                   grid: { borderColor: '#f3f4f6' }
                 }}
@@ -162,12 +174,12 @@ export default function MarketingDashboard() {
                       {idx + 1}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-800">{geo.country}</p>
-                      <p className="text-sm text-gray-500">{geo.region}</p>
+                      <p className="font-semibold text-gray-800">{geo.country ?? 'Unknown'}</p>
+                      <p className="text-sm text-gray-500">{geo.region ?? '-'}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-bold text-green-600">{geo.uniqueVisitors}</p>
+                    <p className="text-xl font-bold text-green-600">{geo.uniqueVisitors ?? 0}</p>
                     <p className="text-xs text-gray-500">visitors</p>
                   </div>
                 </div>
@@ -175,13 +187,13 @@ export default function MarketingDashboard() {
             </div>
 
             <div>
-              {geoStats.length > 0 && (
+              {geoStats.some(g => g.uniqueVisitors != null) && (
                 <Chart
                   type="donut"
                   height={350}
-                  series={geoStats.slice(0, 5).map(g => g.uniqueVisitors)}
+                  series={geoStats.slice(0, 5).map(g => g.uniqueVisitors ?? 0)}
                   options={{
-                    labels: geoStats.slice(0, 5).map(g => g.country),
+                    labels: geoStats.slice(0, 5).map(g => g.country ?? 'Unknown'),
                     colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
                     legend: { position: 'bottom', fontSize: '14px' },
                     plotOptions: {

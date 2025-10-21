@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const user = await authMiddleware(req, { roles: ["superadmin", "executive", "cto"] });
+  const user = await authMiddleware(req, { roles: ["superadmin", "executive", "cto", "marketing"] });
   if (user instanceof NextResponse) return user;
   try {
     const contacts = await getAllContacts();

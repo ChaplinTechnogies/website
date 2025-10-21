@@ -20,7 +20,7 @@ export default function AdminStaffPage() {
     names: '',
     email: '',
     password: '',
-    role: 'executive',
+    role: 'marketing',
     phone: ''
   })
   const [editingStaff, setEditingStaff] = useState<Staff | null>(null)
@@ -152,6 +152,7 @@ export default function AdminStaffPage() {
             <option value="manager">Manager</option>
             <option value="sales">Sales</option>
             <option value="accountant">Accountant</option>
+            <option value="marketing">Marketing</option>
           </select>
           <div className="flex items-center gap-4">
             <button

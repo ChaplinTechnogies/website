@@ -35,10 +35,10 @@ export default function AdminContactsPage() {
         headers: { Authorization: `Bearer ${token}` }
       })
       if (res.data.success) setContacts(res.data.contacts)
-      else setError(res.data.message || "Failed to fetch contacts")
+      else setError(res.data.error || "Failed to fetch contacts")
     } catch (err: any) {
       console.error(err)
-      setError(err.response?.data?.message || err.message || "Error fetching contacts")
+      setError(err.response?.data?.error || err.message || "Error fetching contacts")
     } finally {
       setLoading(false)
     }
@@ -52,7 +52,7 @@ export default function AdminContactsPage() {
     if (!replyModal.contact) return
     try {
       const res = await axios.post('/api/reply', {
-        type: "contact",
+        type: "contacts",
         id: replyModal.contact._id,
         subject: replySubject,
         message: replyMessage,
@@ -67,7 +67,7 @@ export default function AdminContactsPage() {
         setReplySubject("")
         fetchContacts()
       } else {
-        toast.error(res.data.message || "Failed to send reply")
+        toast.error(res.data.error || "Failed to send reply")
       }
     } catch (err: any) {
       console.error(err)
@@ -106,8 +106,13 @@ export default function AdminContactsPage() {
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.email}</td>
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.company || '-'}</td>
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.phone || '-'}</td>
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.message}</td>
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{new Date(contact.createdAt).toLocaleString()}</td>
+                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.message || '-'}</td>
+                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">
+                    {contact.createdAt && !isNaN(new Date(contact.createdAt).getTime())
+                      ? new Date(contact.createdAt).toLocaleString()
+                      : '-'}
+                  </td>
+
                   <td className="px-4 py-2 flex justify-center gap-2">
                     <button
                       onClick={() => setReplyModal({ open: true, contact })}
