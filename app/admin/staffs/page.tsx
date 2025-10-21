@@ -5,7 +5,7 @@ import axios from 'axios'
 import { toast } from 'react-hot-toast'
 
 interface Staff {
-  _id: string
+  id: string
   names: string
   email: string
   role: string
@@ -64,7 +64,7 @@ export default function AdminStaffPage() {
         headers: { Authorization: `Bearer ${token}` },
       })
       toast.success(res.data.message)
-      setNewStaff({ names: '', email: '', password: '', role: 'executive', phone: '' })
+      setNewStaff({ names: '', email: '', password: '', role: '', phone: '' })
       fetchStaffs()
     } catch (err: any) {
       console.error(err)
@@ -75,10 +75,10 @@ export default function AdminStaffPage() {
   const handleUpdateStaff = async () => {
     if (!editingStaff) return
     try {
-      const { _id, email, ...updateData } = editingStaff
+      const { id, email, ...updateData } = editingStaff
       
       const res = await axios.patch(
-        `/api/staff/self/${_id}`, 
+        `/api/staff?id=${id}`, 
         updateData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -189,7 +189,7 @@ export default function AdminStaffPage() {
             </thead>
             <tbody>
               {staffs.map((staff) => (
-                <tr key={staff._id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-hover transition-colors">
+                <tr key={staff.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-hover transition-colors">
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{staff.names}</td>
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{staff.email}</td>
                   <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{staff.role}</td>
