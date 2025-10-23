@@ -88,3 +88,14 @@ export interface Project {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface Update {
+  id?: string;
+  title: string;
+  category: "news" | "announcement" | "event" | "general";
+  content: string;
+  author: string;
+  published?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
