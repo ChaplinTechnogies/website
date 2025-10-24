@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { createUpdate, getAllUpdates } from "@/lib/models/Update";
+import { authMiddleware } from "@/app/middleware/auth.middleware";
+import { permissionMiddleware } from "@/app/middleware/permissionMiddleware";
 
 export async function GET() {
   try {
@@ -10,7 +12,12 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const authResult = await authMiddleware(request, { roles: ["*"] });
+  // If middleware returned a NextResponse, it means auth failed
+  if (authResult instanceof NextResponse) return authResult;
+  const permissionResult = await permissionMiddleware(request as any, ["create_updates"]);
+  if (permissionResult instanceof NextResponse) return permissionResult;
   try {
     const data = await request.json();
     const update = await createUpdate(data);
