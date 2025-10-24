@@ -5,8 +5,10 @@ import MilestonesSection from './MilestonesSection'
 import TeamMembersSection from './TeamMembersSection'
 import ProjectsSection from './ProjectsSection'
 import BlogSection from './BlogSection'
+import UpdatesSection from './UpdatesSections'
 
-type SectionType = 'milestones' | 'projects' | 'blogs' | 'team_members'
+
+type SectionType = 'milestones' | 'projects' | 'blogs' | 'team_members' | 'updates'
 
 export default function AdminSectionsPage() {
   const [activeSection, setActiveSection] = useState<SectionType>('milestones')
@@ -16,13 +18,15 @@ export default function AdminSectionsPage() {
     {label: 'Team Members', key: 'team_members'},
     { label: 'Projects', key: 'projects' },
     { label: 'Blogs', key: 'blogs' },
+    { label: 'Updates', key: 'updates' },
+
   ]
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-dark-bg">
       {/* Sidebar */}
       <aside className="w-64 bg-white dark:bg-dark-surface border-r border-gray-200 dark:border-gray-700 p-4">
-        <h2 className="text-xl font-bold mb-6">Admin Sections</h2>
+        <h2 className="text-xl font-bold mb-6">Visitors Sections</h2>
         <ul className="space-y-2">
           {sections.map(sec => (
             <li key={sec.key}>
@@ -44,6 +48,7 @@ export default function AdminSectionsPage() {
         {activeSection === 'team_members' && <TeamMembersSection />}
         {activeSection === 'projects' && <ProjectsSection />}
         {activeSection === 'blogs' && <BlogSection />}
+        {activeSection === 'updates' && <UpdatesSection />}
       </main>
     </div>
   )
