@@ -1,11 +1,16 @@
 "use client";
-import AdminHeader from "@/components/AdminHeader";
+
+import Sidebar from "@/components/Sidebar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* <AdminHeader /> */}
-      <main className="p-6">{children}</main>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main content */}
+      <main className="flex-1 overflow-y-auto p-6">{children}</main>
     </div>
   );
 }
+  
