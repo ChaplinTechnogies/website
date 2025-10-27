@@ -8,10 +8,13 @@ import AdminHeader from '../components/AdminHeader';
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  // Define excluded routes where we don't want Header/Footer
   const isAdminRoute = pathname.startsWith('/admin');
+  const isAuthRoute = pathname.startsWith('/signin') || pathname.startsWith('/signup');
 
   useEffect(() => {
-    if (isAdminRoute) return;
+    if (isAdminRoute || isAuthRoute) return;
 
     let visitorId = document.cookie
       .split('; ')
@@ -29,13 +32,14 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
       body: JSON.stringify({ pageUrl: pathname, visitorId }),
     }).catch(console.error);
 
-  }, [pathname, isAdminRoute]);
+  }, [pathname, isAdminRoute, isAuthRoute]);
 
   return (
     <>
-      {isAdminRoute ? <AdminHeader /> : <Header />}
+      {/* Only show headers/footers if not on admin or signin/signup pages */}
+      {isAdminRoute ? <AdminHeader /> : !isAuthRoute && <Header />}
       <main className="min-h-screen">{children}</main>
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && !isAuthRoute && <Footer />}
     </>
   );
 }

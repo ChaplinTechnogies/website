@@ -1,59 +1,41 @@
 "use client";
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTokenRefresh } from "@/lib/userToken";
-import {jwtDecode} from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
+import { LogOut, Settings } from "lucide-react";
 
 export default function AdminHeader() {
   const [adminName, setAdminName] = useState("Admin");
   const [role, setRole] = useState<string | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
-  useTokenRefresh();
-
   useEffect(() => {
-    const fetchAdmin = async () => {
-      try {
-        const token = localStorage.getItem("adminToken");
-        if (!token) {
-          router.push("/signin");
-          return;
-        }
-        const decoded: any = jwtDecode(token);
-        setRole(decoded.role);
-        // redirects
-        if(decoded.role == 'marketing'){
-          router.push('/admin/marketing')
-        } else if (decoded.role == "qa-tester") {
-          router.push("/admin/qa-tester")
-        }
-        const res = await fetch("/api/staff/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) throw new Error("Unauthorized");
-
-        const data = await res.json();
-        setAdminName(data.name || data.names || "Admin");
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchAdmin();
-  }, [router]);
-
-  const handleLogout = async (e: React.MouseEvent) => {
-    e.preventDefault();
+    const token = localStorage.getItem("adminToken");
+    if (!token) {
+      router.push("/signin");
+      return;
+    }
 
     try {
-      await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      const decoded: any = jwtDecode(token);
+      setRole(decoded.role);
+
+      fetch("/api/staff/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => setAdminName(data.name || data.names || "Admin"))
+        .catch(() => {});
+    } catch (err) {
+      console.error("Invalid token:", err);
+    }
+  }, [router]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
@@ -63,147 +45,55 @@ export default function AdminHeader() {
     }
   };
 
-
-  const isExecutive = role === "executive";
-  const isManager = role === "manager";
-  const isAccountant = role === "accountant";
-  const isSales = role === "sales";
-  const isMarketing = role === "marketing";
-  const isQaTester = role === "qa-tester";
-
   return (
-    <header className="bg-dark-blue shadow-sm sticky top-0 z-50 w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between py-4">
-        <Link href="/admin" className="text-white font-bold text-lg">
-          Admin Dashboard
-        </Link>
-
-        {/* Desktop Menu */}
-        <nav className="hidden lg:flex items-center gap-6">
-        { (isExecutive || isMarketing) && (
-          <>
-          <Link href="/admin/contacts" className="text-white hover:text-yellow">
-            Contacts
-          </Link>
-          <Link href="/admin/blogs" className="text-white hover:text-yellow">
-            Blogs
-          </Link>
-          </>
-        )
-      }
-
-          {isExecutive && (
-            <>
-              <Link href="/admin/users" className="text-white hover:text-yellow">
-                Users
-              </Link>
-              <Link href="/admin/staffs" className="text-white hover:text-yellow">
-                Staff
-              </Link>
-              <Link href="/admin/sections" className="text-white hover:text-yellow">
-                Sections
-              </Link>
-            </>
-          )}
-
-          {isManager && (
-            <>
-              <Link href="/admin/staffs" className="text-white hover:text-yellow">
-                Staff
-              </Link>
-            </>
-          )}
-
-          {isAccountant && (
-            <Link href="/admin/accounts" className="text-white hover:text-yellow">
-              Accounts
-            </Link>
-          )}
-
-          {isSales && (
-            <Link href="/admin/sales" className="text-white hover:text-yellow">
-              Sales
-            </Link>
-          )}
-          <span>
-            <Link href="/admin/settings" className="text-white hover:text-yellow">
-              Settings
-            </Link>
-          </span>
-          <span className="text-white font-semibold">Hello, {adminName}</span>
-          <button
-            onClick={handleLogout}
-            className="text-white hover:text-red-500 cursor-pointer"
-          >
-            Logout
-          </button>
-        </nav>
-
-        {/* Mobile view toggle */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden text-white"
-        >
-          {isMobileMenuOpen ? "Close" : "Menu"}
-        </button>
+    <header className="bg-indigo-600 shadow-md px-6 py-3 flex justify-between items-center">
+      {/* Left - Logo & System Name */}
+      <div className="flex items-center gap-3">
+        {/* Replace `/logo.png` with your actual logo path inside public/ */}
+        <img
+          src="/logo.png"
+          alt="Sybella Logo"
+          className="h-8 w-8 rounded-full bg-white p-1"
+        />
+        <h1 className="text-white font-bold text-lg">Sybella System</h1>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden bg-dark-blue px-4 py-2 space-y-2 border-t border-gray-700">
-          <Link href="/admin/blogs" className="block text-white">
-            Blogs
-          </Link>
-          <Link href="/admin/contacts" className="block text-white">
-            Contacts
-          </Link>
+      {/* Right - Profile */}
+      <div className="relative">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-2 focus:outline-none"
+        >
+          <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-indigo-600 font-semibold">
+            {adminName.charAt(0).toUpperCase()}
+          </div>
+        </button>
 
-          {isExecutive && (
-            <>
-              <Link href="/admin/users" className="block text-white">
-                Users
-              </Link>
-              <Link href="/admin/staffs" className="block text-white">
-                Staff
-              </Link>
-              <Link href="/admin/sections" className="block text-white">
-                Sections
-              </Link>
-            </>
-          )}
-
-          {isManager && (
-            <Link href="/admin/staffs" className="block text-white">
-              Staff
-            </Link>
-          )}
-          {isAccountant && (
-            <Link href="/admin/accounts" className="block text-white">
-              Accounts
-            </Link>
-          )}
-          {isSales && (
-            <Link href="/admin/sales" className="block text-white">
-              Sales
-            </Link>
-          )}
-          <span className="block text-white font-semibold">
-            <Link href="/admin/settings" className="block text-white">
+        {/* Dropdown */}
+        {isOpen && (
+          <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border p-4 z-50">
+            <div className="mb-3">
+              <p className="font-semibold text-gray-800">{adminName}</p>
+              <p className="text-sm text-gray-500 capitalize">{role}</p>
+            </div>
+            <hr className="my-2" />
+            <button
+              onClick={() => router.push("/admin/settings")}
+              className="flex items-center gap-2 w-full text-left px-2 py-2 rounded-md hover:bg-gray-100 text-gray-700"
+            >
+              <Settings className="h-4 w-4" />
               Settings
-            </Link>
-          </span>
-          <span className="block text-white font-semibold">
-            Hello, {adminName}
-
-          </span>
-          <button
-            onClick={handleLogout}
-            className="block text-white hover:text-red-500 text-left w-full"
-          >
-            Logout
-          </button>
-        </div>
-      )}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 w-full text-left px-2 py-2 rounded-md hover:bg-gray-100 text-red-600"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
     </header>
   );
 }

@@ -133,7 +133,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'footer.location': 'Kigali, Rwanda',
     'footer.phone': '+234 904 445 6087',
     'footer.phone1': '+254 715 410 009',
-    'footer.email': 'info@sybellasystems.com',
+    'footer.email': 'sybellasystems@gmail.com',
     'footer.copyright': 'All rights reserved.',
     'footer.privacy': 'Privacy Policy',
     'footer.terms': 'Terms of Service',
