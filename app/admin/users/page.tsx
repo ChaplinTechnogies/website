@@ -28,7 +28,7 @@ export default function AdminUsersPage() {
   const fetchSubscribers = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/newsletter", {
+      const res = await fetch("/api/subscribe", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -36,6 +36,7 @@ export default function AdminUsersPage() {
         },
       });
       const data = await res.json();
+      console.log(data);
       if (data.success) setSubscribers(data.subscribers);
       else toast.error(data.message || "Failed to fetch subscribers");
     } catch (err) {
