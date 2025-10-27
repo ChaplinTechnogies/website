@@ -13,18 +13,15 @@ interface Subscriber {
 }
 
 export default function AdminUsersPage() {
-  const [token, setToken] = useState<string | null>(null);
+  // const [token, setToken] = useState<string | null>(null);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [replyModal, setReplyModal] = useState<{ open: boolean; subscriber?: Subscriber }>({ open: false });
   const [replyMessage, setReplyMessage] = useState("");
   const [replySubject, setReplySubject] = useState("");
 
-  useEffect(()=> {
   const token = localStorage.getItem("adminToken");
-  setToken(token);
-})
-  
+
   const fetchSubscribers = async () => {
     setLoading(true);
     try {
@@ -36,9 +33,14 @@ export default function AdminUsersPage() {
         },
       });
       const data = await res.json();
-      console.log(data);
-      if (data.success) setSubscribers(data.subscribers);
-      else toast.error(data.message || "Failed to fetch subscribers");
+      // console.log(data)
+      // // console.log(data.subscribers);
+      if (data.subscribers && Array.isArray(data.subscribers)) {
+        setSubscribers(data.subscribers);
+      } else {
+        toast.error("No subscribers found");
+      }
+
     } catch (err) {
       console.error(err);
       toast.error("Failed to fetch subscribers");

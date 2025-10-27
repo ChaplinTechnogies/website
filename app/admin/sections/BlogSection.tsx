@@ -244,10 +244,10 @@ export default function AdminBlogsPage() {
                 </div>
                 <div className="mt-4 flex justify-between items-center">
                   <button
-                    className="bg-yellow-500 px-3 py-1 rounded hover:bg-yellow-600 text-black text-sm"
+                    className="text-yellow-600 hover:text-yellow-800"
+                    title="Edit"
                     onClick={() => setEditingBlog(blog)}
                   >
-                    Edit
                   </button>
                   <button
                     className="bg-red-500 px-3 py-1 rounded hover:bg-red-600 text-white text-sm"
