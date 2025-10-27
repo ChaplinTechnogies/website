@@ -18,12 +18,14 @@ export default function ViewStaffPage() {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("adminToken") : null;
 
+
   const fetchStaffs = async () => {
     try {
       setLoading(true);
       const res = await axios.get("/api/staff", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("Fetched staffs:", res.data);
       setStaffs(res.data);
     } catch (err: any) {
       console.error(err);

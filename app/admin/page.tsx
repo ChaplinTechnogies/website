@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Users, Folder, Newspaper } from "lucide-react";
+import HeartBeat from './heartBeat'
 import {
   PieChart,
   Pie,
@@ -28,7 +29,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (!token) {
-      router.push("/signup");
+      router.push("/signin");
     }
 
     // 🔹 Replace this with API call to fetch real stats
@@ -50,6 +51,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-6">
+      <HeartBeat />
       {/* Header */}
       <h1 className="text-2xl font-bold">Welcome to Admin Dashboard</h1>
       <p className="mt-2 text-gray-600 dark:text-gray-300">

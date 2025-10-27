@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { LogOut, Settings } from "lucide-react";
+import { useTokenRefresh } from "@/lib/userToken";
 
 export default function AdminHeader() {
   const [adminName, setAdminName] = useState("Admin");
@@ -11,26 +13,41 @@ export default function AdminHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
+  // Token refresher (keep sessions alive)
+  useTokenRefresh();
+
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    if (!token) {
-      router.push("/signin");
-      return;
-    }
+    const fetchAdmin = async () => {
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        router.push("/signin");
+        return;
+      }
 
-    try {
-      const decoded: any = jwtDecode(token);
-      setRole(decoded.role);
+      try {
+        const decoded: any = jwtDecode(token);
+        setRole(decoded.role);
 
-      fetch("/api/staff/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => res.json())
-        .then((data) => setAdminName(data.name || data.names || "Admin"))
-        .catch(() => {});
-    } catch (err) {
-      console.error("Invalid token:", err);
-    }
+        // Redirect role-based
+        if (decoded.role === "marketing") router.push("/admin/marketing");
+        else if (decoded.role === "qa-tester") router.push("/admin/qa-tester");
+
+        const res = await fetch("/api/staff/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) throw new Error("Unauthorized");
+
+        const data = await res.json();
+        setAdminName(data.name || data.names || "Admin");
+      } catch (err) {
+        console.error("Fetch admin error:", err);
+        localStorage.removeItem("adminToken");
+        router.push("/signin");
+      }
+    };
+
+    fetchAdmin();
   }, [router]);
 
   const handleLogout = async () => {
@@ -46,19 +63,20 @@ export default function AdminHeader() {
   };
 
   return (
-    <header className="bg-indigo-600 shadow-md px-6 py-3 flex justify-between items-center">
+    <header className="bg-indigo-600 shadow-md px-6 py-3 flex justify-between items-center sticky top-0 z-50">
       {/* Left - Logo & System Name */}
       <div className="flex items-center gap-3">
-        {/* Replace `/logo.png` with your actual logo path inside public/ */}
         <img
           src="/logo.png"
-          alt="Sybella Logo"
+          alt="Sysbella Logo"
           className="h-8 w-8 rounded-full bg-white p-1"
         />
-        <h1 className="text-white font-bold text-lg">Sybella System</h1>
+        <h1 className="text-white font-bold text-lg">Sysbella Admin</h1>
       </div>
 
-      {/* Right - Profile */}
+
+
+      {/* Right - Profile Dropdown */}
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -69,7 +87,6 @@ export default function AdminHeader() {
           </div>
         </button>
 
-        {/* Dropdown */}
         {isOpen && (
           <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border p-4 z-50">
             <div className="mb-3">
