@@ -19,8 +19,11 @@ export default function AdminUsersPage() {
   const [replyModal, setReplyModal] = useState<{ open: boolean; subscriber?: Subscriber }>({ open: false });
   const [replyMessage, setReplyMessage] = useState("");
   const [replySubject, setReplySubject] = useState("");
+  const [token, setToken] = useState<string | null>(null);
 
-  const token = localStorage.getItem("adminToken");
+  useEffect(() => {
+    setToken(localStorage.getItem("adminToken"));
+  }, []);
 
   const fetchSubscribers = async () => {
     setLoading(true);
@@ -33,8 +36,6 @@ export default function AdminUsersPage() {
         },
       });
       const data = await res.json();
-      // console.log(data)
-      // // console.log(data.subscribers);
       if (data.subscribers && Array.isArray(data.subscribers)) {
         setSubscribers(data.subscribers);
       } else {
