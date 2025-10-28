@@ -51,9 +51,8 @@ export default function AdminDashboard() {
 
         setStats(prev => ({
           ...prev,
-          blogs: res.data.length
+          blogs: res.data.data.length
         }))
-
       } catch (err) {
         console.error("Failed while fetching blogs", err)
       }
