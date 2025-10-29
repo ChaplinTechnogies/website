@@ -18,6 +18,12 @@ export default function AdminContactsPage() {
   const [contacts, setContacts] = useState<Contact[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalItems, setTotalItems] = useState(0)
+  const [limit] = useState(10)
 
   const [replyModal, setReplyModal] = useState<{ open: boolean; contact?: Contact }>({ open: false })
   const [replyMessage, setReplyMessage] = useState("")
@@ -26,16 +32,22 @@ export default function AdminContactsPage() {
   const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
 
 
-  const fetchContacts = async () => {
+  const fetchContacts = async (page = 1) => {
     setLoading(true)
     setError(null)
     try {
       if (!token) throw new Error("No access token found")
-      const res = await axios.get('/api/contact', {
+      const res = await axios.get(`/api/contact?page=${page}&limit=${limit}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      if (res.data.success) setContacts(res.data.contacts)
-      else setError(res.data.error || "Failed to fetch contacts")
+      if (res.data.success) {
+        setContacts(res.data.data)
+        setCurrentPage(res.data.currentPage)
+        setTotalPages(res.data.totalPages)
+        setTotalItems(res.data.totalItems)
+      } else {
+        setError(res.data.error || "Failed to fetch contacts")
+      }
     } catch (err: any) {
       console.error(err)
       setError(err.response?.data?.error || err.message || "Error fetching contacts")
@@ -45,8 +57,8 @@ export default function AdminContactsPage() {
   }
 
   useEffect(() => {
-    fetchContacts()
-  }, [token])
+    fetchContacts(currentPage)
+  }, [token, currentPage])
 
   const handleReply = async () => {
     if (!replyModal.contact) return
@@ -65,7 +77,7 @@ export default function AdminContactsPage() {
         setReplyModal({ open: false })
         setReplyMessage("")
         setReplySubject("")
-        fetchContacts()
+        fetchContacts(currentPage)
       } else {
         toast.error(res.data.error || "Failed to send reply")
       }
@@ -73,6 +85,41 @@ export default function AdminContactsPage() {
       console.error(err)
       toast.error(err.response?.data?.message || "Something went wrong")
     }
+  }
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page)
+    }
+  }
+
+  const renderPageNumbers = () => {
+    const pages = []
+    const maxVisiblePages = 5
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-1 rounded ${
+            i === currentPage
+              ? 'bg-blue-600 text-white'
+              : 'bg-white dark:bg-dark-surface text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-hover'
+          }`}
+        >
+          {i}
+        </button>
+      )
+    }
+
+    return pages
   }
 
   return (
@@ -86,46 +133,83 @@ export default function AdminContactsPage() {
       ) : contacts.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-300">No contact messages found.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white dark:bg-dark-surface rounded-xl shadow-md">
-            <thead className="bg-gray-100 dark:bg-gray-700">
-              <tr>
-                <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Name</th>
-                <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Email</th>
-                <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Company</th>
-                <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Phone</th>
-                <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Message</th>
-                <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Created At</th>
-                <th className="px-4 py-2 text-center text-gray-600 dark:text-gray-300">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {contacts.map((contact) => (
-                <tr key={contact._id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-hover transition-colors">
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.name}</td>
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.email}</td>
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.company || '-'}</td>
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.phone || '-'}</td>
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.message || '-'}</td>
-                  <td className="px-4 py-2 text-gray-700 dark:text-gray-200">
-                    {contact.createdAt && !isNaN(new Date(contact.createdAt).getTime())
-                      ? new Date(contact.createdAt).toLocaleString()
-                      : '-'}
-                  </td>
-
-                  <td className="px-4 py-2 flex justify-center gap-2">
-                    <button
-                      onClick={() => setReplyModal({ open: true, contact })}
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                    >
-                      Reply
-                    </button>
-                  </td>
+        <>
+          <div className="mb-4 text-gray-600 dark:text-gray-300">
+            Showing {contacts.length} of {totalItems} contacts
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white dark:bg-dark-surface rounded-xl shadow-md">
+              <thead className="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                  <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Name</th>
+                  <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Email</th>
+                  <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Company</th>
+                  <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Phone</th>
+                  <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Message</th>
+                  <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Created At</th>
+                  <th className="px-4 py-2 text-center text-gray-600 dark:text-gray-300">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {contacts.map((contact) => (
+                  <tr key={contact._id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-hover transition-colors">
+                    <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.name}</td>
+                    <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.email}</td>
+                    <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.company || '-'}</td>
+                    <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.phone || '-'}</td>
+                    <td className="px-4 py-2 text-gray-700 dark:text-gray-200">{contact.message || '-'}</td>
+                    <td className="px-4 py-2 text-gray-700 dark:text-gray-200">
+                      {contact.createdAt && !isNaN(new Date(contact.createdAt).getTime())
+                        ? new Date(contact.createdAt).toLocaleString()
+                        : '-'}
+                    </td>
+
+                    <td className="px-4 py-2 flex justify-center gap-2">
+                      <button
+                        onClick={() => setReplyModal({ open: true, contact })}
+                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                      >
+                        Reply
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded ${
+                  currentPage === 1
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                    : 'bg-white dark:bg-dark-surface text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-hover'
+                }`}
+              >
+                Previous
+              </button>
+
+              {renderPageNumbers()}
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded ${
+                  currentPage === totalPages
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                    : 'bg-white dark:bg-dark-surface text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-hover'
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Reply Modal */}

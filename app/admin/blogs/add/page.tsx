@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner"; // 👈 use sonner instead of react-hot-toast
 import {
   FileText,
   Type,
@@ -42,6 +42,9 @@ export default function AddBlogPage() {
     e.preventDefault();
     setLoading(true);
 
+    // show loading toast
+    const toastId = toast.loading("Saving blog...");
+
     try {
       await axios.post(
         "/api/blogposts/",
@@ -51,11 +54,17 @@ export default function AddBlogPage() {
         },
         { headers: { Authorization: `Bearer ${adminToken}` } }
       );
-      toast.success("🎉 Blog created successfully!");
-      router.push("/admin/blogs");
+
+      // update toast to success
+      toast.success("🎉 Blog created successfully!", { id: toastId });
+
+      // small delay so user sees toast before redirect
+      setTimeout(() => {
+        router.push("/admin/blogs");
+      }, 500);
     } catch (err: any) {
       console.error(err);
-      toast.error("❌ Failed to create blog.");
+      toast.error("❌ Failed to create blog.", { id: toastId });
     } finally {
       setLoading(false);
     }
@@ -193,7 +202,7 @@ export default function AddBlogPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md"
+            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md disabled:opacity-50"
           >
             {loading ? "Saving..." : "Save Blog"}
           </button>

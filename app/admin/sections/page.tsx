@@ -5,7 +5,8 @@ import { useSearchParams } from "next/navigation";
 import MilestonesSection from "./MilestonesSection";
 import TeamMembersSection from "./TeamMembersSection";
 import ProjectsSection from "./ProjectsSection";
-import BlogSection from "./BlogSection";
+// import BlogSection from "./BlogSection";
+// import BlogSection from "./BlogSection";
 import UpdatesSection from "./UpdatesSections";
 
 type SectionType = "milestones" | "projects" | "blogs" | "team_members" | "updates"

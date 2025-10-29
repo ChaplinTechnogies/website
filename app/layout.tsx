@@ -29,9 +29,6 @@ export const metadata: Metadata = {
         'Kigali Rwanda',
         'African innovation'
     ],
-    icons:{
-        icon: '/images/sybella.png',
-    },
     authors: [{ name: 'Sybella Systems' }],
     creator: 'Sybella Systems',
     publisher: 'Sybella Systems',
@@ -49,7 +46,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: 'https://sybellasystems.com',
+        url: 'https://sybellasystems.co.rw',
         siteName: 'Sybella Systems',
         title: 'Sybella Systems - Transforming Africa Through Innovation',
         description: 'Pioneering AI-driven digital solutions across education, healthcare, retail, and beyond. Building the future of African technology, one innovation at a time.',
@@ -89,39 +86,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <meta name="author" content="Sybella Systems" />
-        <meta name="copyright" content="© 2025 Sybella Systems" />
-        <meta name="language" content="English" />
-        <meta name="distribution" content="global" />
-        <meta name="rating" content="general" />
-        <meta name="revisit-after" content="7 days" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#1e3a8a" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        <Script id="structured-data" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'Sybella Systems',
-            url: 'https://sybellasystems.co.rw',
-            logo: 'https://sybellasystems.co.rw/images/sybella.png',
-            sameAs: [
-              'https://twitter.com/sybellasystems',
-              'https://www.linkedin.com/company/sybellasystems',
-              'https://www.facebook.com/sybellasystems',
-            ],
-            contactPoint: {
-              '@type': 'ContactPoint',
-              telephone: '+250700000000',
-              contactType: 'customer support',
-              areaServed: 'RW',
-              availableLanguage: ['English', 'French', 'Kinyarwanda'],
-            },
-          })}
-        </Script>
       </head>
       <body className="antialiased bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-300">
         <I18nProvider>

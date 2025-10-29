@@ -22,17 +22,7 @@ export default function ProjectsSection() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-
-  const [editingProject, setEditingProject] = useState<Partial<Project> | null>(
-    null
-  );
-  const [techStackInput, setTechStackInput] = useState(
-    editingProject?.techStack?.join(",") || ""
-  );
-
-  const [partnersInput, setPartnersInput] = useState(
-    editingProject?.partners?.join(",") || ""
-  );
+  const [editingProject, setEditingProject] = useState<Partial<Project> | null>(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -51,18 +41,16 @@ export default function ProjectsSection() {
   const handleSave = async () => {
     if (!editingProject) return;
 
-    const projectToSave = {
-      ...editingProject,
-      techStack: editingProject.techStack?.map((s) => s.trim()).filter(Boolean),
-    };
-
     try {
+      const projectToSave = {
+        ...editingProject,
+        techStack: editingProject.techStack?.map((s) => s.trim()).filter(Boolean),
+      };
+
       if (editingProject.id) {
-        const res = await axios.patch(
-          `/api/projects/${editingProject.id}`,
-          projectToSave,
-          { headers: { "Content-Type": "application/json" } }
-        );
+        const res = await axios.patch(`/api/projects/${editingProject.id}`, projectToSave, {
+          headers: { "Content-Type": "application/json" },
+        });
         setProjects((prev) =>
           prev.map((p) => (p.id === editingProject.id ? res.data : p))
         );
@@ -88,124 +76,133 @@ export default function ProjectsSection() {
     }
   };
 
-  if (loading) return <p>Loading projects...</p>;
+  if (loading) return <p className="text-gray-500">Loading projects...</p>;
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Projects Management</h2>
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white">🚀 Projects</h2>
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+          onClick={() => {
+            setEditingProject({
+              title: "",
+              overview: "",
+              image: "",
+              problemSolved: "",
+              techStack: [],
+              partners: [],
+              callToAction: "",
+              isActive: true,
+              demoLink: "",
+            });
+            setShowForm(true);
+          }}
+        >
+          + New Project
+        </button>
+      </div>
 
-      <button
-        className="border px-3 py-1 rounded mb-4"
-        onClick={() => {
-          setEditingProject({
-            title: "",
-            overview: "",
-            image: "",
-            problemSolved: "",
-            techStack: [],
-            partners: [],
-            callToAction: "",
-            isActive: true,
-            demoLink: "",
-          });
-          setShowForm(true);
-        }}
-      >
-        + New Project
-      </button>
-
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b text-left">
-            <th className="p-2">Title</th>
-            <th className="p-2">Overview</th>
-            <th className="p-2">Active</th>
-            <th className="p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      {/* Project Grid */}
+      {projects.length === 0 ? (
+        <p className="text-gray-500">No projects available.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((p) => (
-            <tr key={p.id} className="border-b">
-              <td className="p-2">{p.title}</td>
-              <td className="p-2">{p.overview}</td>
-              <td className="p-2">{p.isActive ? "✅" : "❌"}</td>
-              <td className="p-2 space-x-2">
-                <button
-                  onClick={() => {
-                    setEditingProject(p);
-                    setShowForm(true);
-                  }}
-                  className="border px-2 py-1 rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(p.id)}
-                  className="border px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
+            <div
+              key={p.id}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 overflow-hidden"
+            >
+              {p.image && (
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="w-full h-40 object-cover"
+                />
+              )}
+              <div className="p-4">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{p.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">{p.overview}</p>
+                <p className="mt-2 text-sm">
+                  {p.isActive ? (
+                    <span className="text-green-600 font-medium">✅ Active</span>
+                  ) : (
+                    <span className="text-red-500 font-medium">❌ Inactive</span>
+                  )}
+                </p>
+                {p.techStack && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {p.techStack.map((tech, i) => (
+                      <span
+                        key={i}
+                        className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-xs"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <div className="flex justify-end gap-2 mt-4">
+                  <button
+                    onClick={() => {
+                      setEditingProject(p);
+                      setShowForm(true);
+                    }}
+                    className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(p.id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
 
-      {/* Edit/Create Modal */}
+      {/* Modal */}
       {showForm && editingProject && (
-        <div className="fixed inset-0 bg-black/20 flex justify-center items-center">
-          <div className="bg-white p-6 rounded shadow-md w-[600px] max-h-[90vh] overflow-auto">
-            <h3 className="text-xl font-semibold mb-3">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg w-[600px] max-h-[90vh] overflow-auto animate-fadeIn">
+            <h3 className="text-2xl font-semibold mb-4">
               {editingProject.id ? "Edit Project" : "New Project"}
             </h3>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <input
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Title"
                 value={editingProject.title || ""}
-                onChange={(e) =>
-                  setEditingProject({
-                    ...editingProject,
-                    title: e.target.value,
-                  })
-                }
+                onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
               />
               <textarea
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Overview"
                 value={editingProject.overview || ""}
-                onChange={(e) =>
-                  setEditingProject({
-                    ...editingProject,
-                    overview: e.target.value,
-                  })
-                }
+                onChange={(e) => setEditingProject({ ...editingProject, overview: e.target.value })}
               />
               <input
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Image URL"
                 value={editingProject.image || ""}
-                onChange={(e) =>
-                  setEditingProject({
-                    ...editingProject,
-                    image: e.target.value,
-                  })
-                }
+                onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
               />
               <textarea
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Problem Solved"
                 value={editingProject.problemSolved || ""}
                 onChange={(e) =>
-                  setEditingProject({
-                    ...editingProject,
-                    problemSolved: e.target.value,
-                  })
+                  setEditingProject({ ...editingProject, problemSolved: e.target.value })
                 }
               />
               <input
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Tech Stack (comma separated)"
                 value={editingProject.techStack?.join(", ") || ""}
                 onChange={(e) =>
@@ -216,7 +213,7 @@ export default function ProjectsSection() {
                 }
               />
               <input
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Partners (comma separated)"
                 value={editingProject.partners?.join(", ") || ""}
                 onChange={(e) =>
@@ -226,54 +223,38 @@ export default function ProjectsSection() {
                   })
                 }
               />
-
               <input
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Call to Action"
                 value={editingProject.callToAction || ""}
-                onChange={(e) =>
-                  setEditingProject({
-                    ...editingProject,
-                    callToAction: e.target.value,
-                  })
-                }
+                onChange={(e) => setEditingProject({ ...editingProject, callToAction: e.target.value })}
               />
               <input
-                className="border p-2 rounded"
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500"
                 placeholder="Demo Link"
                 value={editingProject.demoLink || ""}
-                onChange={(e) =>
-                  setEditingProject({
-                    ...editingProject,
-                    demoLink: e.target.value,
-                  })
-                }
+                onChange={(e) => setEditingProject({ ...editingProject, demoLink: e.target.value })}
               />
-              <label className="flex items-center gap-2 mt-2">
+              <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={editingProject.isActive || false}
-                  onChange={(e) =>
-                    setEditingProject({
-                      ...editingProject,
-                      isActive: e.target.checked,
-                    })
-                  }
+                  onChange={(e) => setEditingProject({ ...editingProject, isActive: e.target.checked })}
                 />
                 Active
               </label>
             </div>
 
-            <div className="flex justify-end gap-3 mt-4">
+            <div className="flex justify-end gap-3 mt-5">
               <button
                 onClick={() => setShowForm(false)}
-                className="border px-3 py-1 rounded"
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="border px-3 py-1 rounded bg-gray-100"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
               >
                 Save
               </button>
