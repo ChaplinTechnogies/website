@@ -4,7 +4,7 @@ import { SecurityValidator } from '../../../lib/security'
 import { sendEmail } from '../../../lib/email'
 import { createContact, getAllContacts } from '../../../lib/models/Contact'
 import { authMiddleware } from "@/app/middleware/auth.middleware";
-
+import { getPaginationParams, paginate } from "@/app/utils/pagination";
 
 
 export async function POST(request: NextRequest) {
@@ -87,20 +87,19 @@ export async function POST(request: NextRequest) {
   }
 }
 
+
 export async function GET(req: NextRequest) {
   const user = await authMiddleware(req, { roles: ["superadmin", "executive", "cto", "marketing"] });
   if (user instanceof NextResponse) return user;
-  try {
-    const contacts = await getAllContacts();
-    return NextResponse.json(
-      { success: true, contacts },
-      { status: 200 }
-    )
-  } catch (err) {
-    return NextResponse.json(
-      { error: "Failed to fetch contacts" },
-      { status: 500 }
-    )
-  }
 
+  try {
+    const searchParams = req.nextUrl.searchParams;
+    const { page, limit, skip } = getPaginationParams(searchParams);
+    const { contacts, totalItems } = await getAllContacts(skip, limit);
+    const result = paginate(contacts, totalItems, { page, limit });
+
+    return NextResponse.json({ success: true, ...result }, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ error: "Failed to fetch contacts" }, { status: 500 });
+  }
 }

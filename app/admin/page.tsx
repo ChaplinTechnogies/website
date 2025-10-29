@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Users, Folder, Newspaper } from "lucide-react";
+import HeartBeat from './heartBeat'
+import axios from "axios";
 import {
   PieChart,
   Pie,
@@ -16,19 +18,73 @@ import {
   Legend,
 } from "recharts";
 
+
+
 export default function AdminDashboard() {
   const router = useRouter();
   const [stats, setStats] = useState({
-    users: 1200,
-    projects: 85,
-    blogs: 50,
-    subscribed: 800,
+    users: 20,
+    projects: 0,
+    blogs: 0,
+    subscribed: 0,
   });
+
+  useEffect(() => {
+
+    const fetchProjects = async () => {
+      try {
+        const res = await axios.get('/api/projects/');
+        setStats(prev => ({
+          ...prev,
+          projects: res.data.length
+        }))
+      } catch (err) {
+        console.error("Fetching Projects error", err)
+      }
+    }
+    fetchProjects()
+
+    const fetchBlogs = async () => {
+      try { 
+
+        const res = await axios.get('/api/blogposts')
+
+        setStats(prev => ({
+          ...prev,
+          blogs: res.data.data.length
+        }))
+      } catch (err) {
+        console.error("Failed while fetching blogs", err)
+      }
+    }
+
+    fetchBlogs()
+
+    const fetchSubscribers = async () => {
+      try {
+        const response = await axios.get('/api/subscribe', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        });
+        setStats(prev => ({
+          ...prev,
+          subscribed: response.data.subscribers.length
+        }));
+      } catch (error) {
+        console.error('Error fetching subscribers:', error);
+      }
+    };
+
+    fetchSubscribers();
+  }, []);
+
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (!token) {
-      router.push("/signup");
+      router.push("/signin");
     }
 
     // 🔹 Replace this with API call to fetch real stats
@@ -50,6 +106,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-6">
+      <HeartBeat />
       {/* Header */}
       <h1 className="text-2xl font-bold">Welcome to Admin Dashboard</h1>
       <p className="mt-2 text-gray-600 dark:text-gray-300">

@@ -18,13 +18,15 @@ export async function createContact(data: ContactFormData) {
 }
 
 // method to return all contacts from db
+export async function getAllContacts(skip = 0, limit = 10) {
+  const client = await getClientPromise();
+  const db = client.db();
+  const collection = db.collection<ContactFormData>("contacts");
 
-export async function getAllContacts() {
-    const client = await getClientPromise();
-    const db = client.db()
-    const contacts = db.collection<ContactFormData>("contacts");
+  const contacts = await collection.find({}).skip(skip).limit(limit).toArray();
+  const totalItems = await collection.countDocuments();
 
-    return contacts.find({}).toArray();
+  return { contacts, totalItems };
 }
 
 

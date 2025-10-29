@@ -7,7 +7,7 @@ import TeamMembersSection from "./TeamMembersSection";
 import ProjectsSection from "./ProjectsSection";
 // import BlogSection from "./BlogSection";
 
-type SectionType = "milestones" | "projects" | "blogs" | "team_members";
+type SectionType = "milestones" | "projects" | "blogs" | "team_members" | "updates"
 
 // Inner component that safely uses useSearchParams inside Suspense
 function SectionsContent() {

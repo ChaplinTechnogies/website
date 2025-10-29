@@ -62,7 +62,7 @@ export default function QADashboard() {
 
   // Fetch staff
   const fetchStaff = async () => {
-    if (!token) return; // wait until token is loaded
+    if (!token) return;
     try {
       const res = await axios.get("/api/staff", {
         headers: {
@@ -107,7 +107,7 @@ export default function QADashboard() {
     formData.append("file", file);
     formData.append("uploadBy", uploadBy);
     formData.append("testPhase", testPhase);
-    formData.append("notifiedUsers", JSON.stringify(selectedUsers)); // now _id strings
+    formData.append("notifiedUsers", JSON.stringify(selectedUsers));
 
     try {
       const res = await axios.post("/api/qa-tester/upload", formData);
@@ -122,7 +122,6 @@ export default function QADashboard() {
     }
   };
 
-  // Filter staff based on search
   const filteredStaff = staff.filter(
     (s) =>
       s.names.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -130,7 +129,6 @@ export default function QADashboard() {
       s.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Toggle selection by _id now
   const toggleUserSelection = (id: string) => {
     setSelectedUsers((prev) =>
       prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
@@ -138,81 +136,80 @@ export default function QADashboard() {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white p-4">
-        <h1 className="text-xl font-bold mb-6">QA Dashboard</h1>
-        <ul className="space-y-3">
-          <li
-            className={`cursor-pointer ${activeTab === "upload" ? "font-bold" : ""}`}
-            onClick={() => setActiveTab("upload")}
-          >
-            Upload Report
-          </li>
-          <li
-            className={`cursor-pointer ${activeTab === "reports" ? "font-bold" : ""}`}
-            onClick={() => setActiveTab("reports")}
-          >
-            View Reports
-          </li>
-          <li
-            className={`cursor-pointer ${activeTab === "feedback" ? "font-bold" : ""}`}
-            onClick={() => setActiveTab("feedback")}
-          >
-            User Feedback
-          </li>
-          <li
-            className={`cursor-pointer ${activeTab === "metrics" ? "font-bold" : ""}`}
-            onClick={() => setActiveTab("metrics")}
-          >
-            Metrics
-          </li>
-        </ul>
-      </aside>
+    <div className="flex flex-col h-screen bg-gray-50">
+      {/* Top Navbar */}
+      {/* Sub Navbar (sits below main navbar) */}
+<nav className="bg-indigo-100 text-indigo-700 text-sm px-6 py-1 flex justify-between items-center sticky top-[2px] z-40 shadow-sm border-b border-indigo-200">
+  <h2 className="font-semibold">QA Dashboard</h2>
+  <ul className="flex space-x-4">
+    {["upload", "reports", "feedback", "metrics"].map((tab) => (
+      <li
+        key={tab}
+        className={`cursor-pointer capitalize transition ${
+          activeTab === tab
+            ? "font-semibold text-indigo-900 border-b-2 border-indigo-600"
+            : "hover:text-indigo-500"
+        }`}
+        onClick={() => setActiveTab(tab as any)}
+      >
+        {tab}
+      </li>
+    ))}
+  </ul>
+</nav>
+
 
       {/* Main Content */}
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 p-6 overflow-y-auto">
+        {/* Upload */}
         {activeTab === "upload" && (
           <div>
-            <h2 className="text-2xl mb-4">Upload QA Report</h2>
+            <h2 className="text-2xl mb-4 font-semibold">Upload QA Report</h2>
 
             <input
               type="text"
               placeholder="Uploaded by"
               value={uploadBy}
               onChange={(e) => setUploadBy(e.target.value)}
-              className="border p-2 mb-2 w-full"
+              className="border p-2 mb-2 w-full rounded"
             />
             <input
               type="text"
               placeholder="Test Phase"
               value={testPhase}
               onChange={(e) => setTestPhase(e.target.value)}
-              className="border p-2 mb-2 w-full"
+              className="border p-2 mb-2 w-full rounded"
             />
-            <input type="file" accept=".xlsx" onChange={handleFileChange} className="mb-4" />
+            <input
+              type="file"
+              accept=".xlsx"
+              onChange={handleFileChange}
+              className="mb-4"
+            />
 
-            {/* Staff Selection Section */}
             <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-2">Notify Staff Members</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                Notify Staff Members
+              </h3>
               <input
                 type="text"
                 placeholder="Search staff by name, email, or role..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="border p-2 w-full mb-2"
+                className="border p-2 w-full mb-2 rounded"
               />
-              <div className="border rounded p-2 max-h-60 overflow-y-auto bg-gray-50">
+              <div className="border rounded p-2 max-h-60 overflow-y-auto bg-white">
                 {filteredStaff.map((s) => (
                   <div key={s._id} className="flex items-center mb-1">
                     <input
                       type="checkbox"
                       checked={selectedUsers.includes(s._id)}
-                      onChange={() => toggleUserSelection(s._id)} // use _id now
+                      onChange={() => toggleUserSelection(s._id)}
                       className="mr-2"
                     />
                     <span>
-                      {s.names} ({s.role}) — <span className="text-gray-600">{s.email}</span>
+                      {s.names} ({s.role}) —{" "}
+                      <span className="text-gray-600">{s.email}</span>
                     </span>
                   </div>
                 ))}
@@ -228,74 +225,86 @@ export default function QADashboard() {
           </div>
         )}
 
-        {/* Reports & Feedback */}
+        {/* Reports */}
         {activeTab === "reports" && (
           <div>
-            <h2 className="text-2xl mb-4">QA Reports</h2>
-            <table className="min-w-full border border-gray-300">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="border px-2 py-1">ID</th>
-                  <th className="border px-2 py-1">Uploaded By</th>
-                  <th className="border px-2 py-1">File Name</th>
-                  <th className="border px-2 py-1">Phase</th>
-                  <th className="border px-2 py-1">Total</th>
-                  <th className="border px-2 py-1">Passed</th>
-                  <th className="border px-2 py-1">Failed</th>
-                  <th className="border px-2 py-1">Bugs</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reports.map((r) => (
-                  <tr key={r._id}>
-                    <td className="border px-2 py-1">{r._id}</td>
-                    <td className="border px-2 py-1">{r.uploadBy}</td>
-                    <td className="border px-2 py-1">{r.fileName}</td>
-                    <td className="border px-2 py-1">{r.testPhase}</td>
-                    <td className="border px-2 py-1">{r.totalTests}</td>
-                    <td className="border px-2 py-1">{r.passedTests}</td>
-                    <td className="border px-2 py-1">{r.failedTests}</td>
-                    <td className="border px-2 py-1">{r.bugCount}</td>
+            <h2 className="text-2xl mb-4 font-semibold">QA Reports</h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full border border-gray-300 bg-white">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="border px-2 py-1">ID</th>
+                    <th className="border px-2 py-1">Uploaded By</th>
+                    <th className="border px-2 py-1">File Name</th>
+                    <th className="border px-2 py-1">Phase</th>
+                    <th className="border px-2 py-1">Total</th>
+                    <th className="border px-2 py-1">Passed</th>
+                    <th className="border px-2 py-1">Failed</th>
+                    <th className="border px-2 py-1">Bugs</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {reports.map((r) => (
+                    <tr key={r._id} className="hover:bg-gray-50">
+                      <td className="border px-2 py-1">{r._id}</td>
+                      <td className="border px-2 py-1">{r.uploadBy}</td>
+                      <td className="border px-2 py-1">{r.fileName}</td>
+                      <td className="border px-2 py-1">{r.testPhase}</td>
+                      <td className="border px-2 py-1">{r.totalTests}</td>
+                      <td className="border px-2 py-1">{r.passedTests}</td>
+                      <td className="border px-2 py-1">{r.failedTests}</td>
+                      <td className="border px-2 py-1">{r.bugCount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
+        {/* Feedback */}
         {activeTab === "feedback" && (
           <div>
-            <h2 className="text-2xl mb-4">User Feedback</h2>
-            <table className="min-w-full border border-gray-300">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="border px-2 py-1">ID</th>
-                  <th className="border px-2 py-1">User</th>
-                  <th className="border px-2 py-1">Feedback</th>
-                  <th className="border px-2 py-1">Sentiment</th>
-                  <th className="border px-2 py-1">Source</th>
-                  <th className="border px-2 py-1">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {feedbacks.map((f) => (
-                  <tr key={f._id}>
-                    <td className="border px-2 py-1">{f._id}</td>
-                    <td className="border px-2 py-1">{f.userId || "Anonymous"}</td>
-                    <td className="border px-2 py-1">{f.feedbackText}</td>
-                    <td className="border px-2 py-1">{f.sentiment || "N/A"}</td>
-                    <td className="border px-2 py-1">{f.source}</td>
-                    <td className="border px-2 py-1">{new Date(f.createdAt).toLocaleString()}</td>
+            <h2 className="text-2xl mb-4 font-semibold">User Feedback</h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full border border-gray-300 bg-white">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="border px-2 py-1">ID</th>
+                    <th className="border px-2 py-1">User</th>
+                    <th className="border px-2 py-1">Feedback</th>
+                    <th className="border px-2 py-1">Sentiment</th>
+                    <th className="border px-2 py-1">Source</th>
+                    <th className="border px-2 py-1">Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {feedbacks.map((f) => (
+                    <tr key={f._id} className="hover:bg-gray-50">
+                      <td className="border px-2 py-1">{f._id}</td>
+                      <td className="border px-2 py-1">
+                        {f.userId || "Anonymous"}
+                      </td>
+                      <td className="border px-2 py-1">{f.feedbackText}</td>
+                      <td className="border px-2 py-1">
+                        {f.sentiment || "N/A"}
+                      </td>
+                      <td className="border px-2 py-1">{f.source}</td>
+                      <td className="border px-2 py-1">
+                        {new Date(f.createdAt).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
+        {/* Metrics */}
         {activeTab === "metrics" && (
           <div>
-            <h2 className="text-2xl mb-4">Metrics (Coming Soon)</h2>
+            <h2 className="text-2xl mb-4 font-semibold">Metrics (Coming Soon)</h2>
           </div>
         )}
       </main>

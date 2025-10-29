@@ -21,6 +21,8 @@ const nextConfig = {
       'cdn.discordapp.com',
       'pbs.twimg.com',
       'media.licdn.com',
+      'www.linkedin.com',
+      "www.google.com"
       
     ],
   },

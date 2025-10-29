@@ -13,22 +13,22 @@ interface Subscriber {
 }
 
 export default function AdminUsersPage() {
-  const [token, setToken] = useState<string | null>(null);
+  // const [token, setToken] = useState<string | null>(null);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [replyModal, setReplyModal] = useState<{ open: boolean; subscriber?: Subscriber }>({ open: false });
   const [replyMessage, setReplyMessage] = useState("");
   const [replySubject, setReplySubject] = useState("");
+  const [token, setToken] = useState<string | null>(null);
 
-  useEffect(()=> {
-  const token = localStorage.getItem("adminToken");
-  setToken(token);
-})
-  
+  useEffect(() => {
+    setToken(localStorage.getItem("adminToken"));
+  }, []);
+
   const fetchSubscribers = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/newsletter", {
+      const res = await fetch("/api/subscribe", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -36,8 +36,12 @@ export default function AdminUsersPage() {
         },
       });
       const data = await res.json();
-      if (data.success) setSubscribers(data.subscribers);
-      else toast.error(data.message || "Failed to fetch subscribers");
+      if (data.subscribers && Array.isArray(data.subscribers)) {
+        setSubscribers(data.subscribers);
+      } else {
+        toast.error("No subscribers found");
+      }
+
     } catch (err) {
       console.error(err);
       toast.error("Failed to fetch subscribers");

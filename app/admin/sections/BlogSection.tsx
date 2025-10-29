@@ -229,38 +229,38 @@
 //         </div>
 //       </form>
 
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//         {loading ? (
-//           <p>Loading blogs...</p>
-//         ) : (
-//           blogs.map((blog) => (
-//             <div key={blog.slug} className="bg-white shadow rounded overflow-hidden flex flex-col">
-//               <img src={blog.thumbnailUrl} alt={blog.title} className="h-40 w-full object-cover" />
-//               <div className="p-4 flex-1 flex flex-col justify-between">
-//                 <div>
-//                   <h3 className="font-bold text-lg">Title: {blog.title}</h3>
-//                   <p className="text-sm text-gray-500">Excerpt: {blog.excerpt}</p>
-//                   <p className="text-xs text-gray-400 mt-1">Author: {blog.author}</p>
-//                 </div>
-//                 <div className="mt-4 flex justify-between items-center">
-//                   <button
-//                     className="bg-yellow-500 px-3 py-1 rounded hover:bg-yellow-600 text-black text-sm"
-//                     onClick={() => setEditingBlog(blog)}
-//                   >
-//                     Edit
-//                   </button>
-//                   <button
-//                     className="bg-red-500 px-3 py-1 rounded hover:bg-red-600 text-white text-sm"
-//                     onClick={() => handleDeleteBlog(blog.slug)}
-//                   >
-//                     Delete
-//                   </button>
-//                 </div>
-//               </div>
-//             </div>
-//           ))
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {loading ? (
+          <p>Loading blogs...</p>
+        ) : (
+          blogs.map((blog) => (
+            <div key={blog.slug} className="bg-white shadow rounded overflow-hidden flex flex-col">
+              <img src={blog.thumbnailUrl} alt={blog.title} className="h-40 w-full object-cover" />
+              <div className="p-4 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="font-bold text-lg">Title: {blog.title}</h3>
+                  <p className="text-sm text-gray-500">Excerpt: {blog.excerpt}</p>
+                  <p className="text-xs text-gray-400 mt-1">Author: {blog.author}</p>
+                </div>
+                <div className="mt-4 flex justify-between items-center">
+                  <button
+                    className="bg-yellow-500 px-3 py-1 rounded hover:bg-yellow-600 text-black text-sm"
+                    onClick={() => setEditingBlog(blog)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-500 px-3 py-1 rounded hover:bg-red-600 text-white text-sm"
+                    onClick={() => handleDeleteBlog(blog.slug)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}

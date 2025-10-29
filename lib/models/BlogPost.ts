@@ -22,12 +22,15 @@ export async function createBlogPost(blogData: BlogPost) {
 }
 
 // Get all blog posts
-export async function getAllBlogPosts() {
+export async function getAllBlogPosts(skip = 0, limit = 10) {
   const client = await getClientPromise();
   const db = client.db();
-  const blogs = db.collection<BlogPost>("blogposts");
+  const collection = db.collection<BlogPost>("blogposts");
 
-  return blogs.find({}).toArray();
+  const blogs = await collection.find({}).skip(skip).limit(limit).toArray();
+  const totalItems = await collection.countDocuments();
+
+  return { blogs, totalItems };
 }
 
 //Get one blog post by slug

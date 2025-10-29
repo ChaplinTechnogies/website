@@ -77,15 +77,16 @@ export default function Sidebar() {
     {
       name: "Sections",
       icon: ClipboardList,
-      roles: ["executive"],
+      roles: ["executive", "marketing", "manager"],
       children: [
         { name: "Milestones", href: "/admin/sections?tab=milestones" },
         { name: "Team Members", href: "/admin/sections?tab=team_members" },
         { name: "Projects", href: "/admin/sections?tab=projects" },
         // { name: "Blogs", href: "/admin/sections?tab=blogs" },
+        { name: "Updates", href: "/admin/sections?tab=updates" },
       ],
     },
-    { name: "Updates", href: "/admin/updates", icon: ClipboardList, roles: ["executive"] },
+    // { name: "Updates", href: "/admin/updates", icon: ClipboardList, roles: ["executive"] },
     { name: "Accounts", href: "/admin/accounts", icon: DollarSign, roles: ["accountant"] },
     { name: "Sales", href: "/admin/sales", icon: DollarSign, roles: ["sales"] },
   ];
