@@ -35,7 +35,7 @@
     "acknowledged": true,
     "insertedId": "68da404ed773e221047e5b7a"
   },
-  "message": "New Staff Membwe Created"
+  "message": "New Staff Member Created"
 }
 ```
 

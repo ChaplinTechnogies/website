@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner"; // ✅ use sonner
 import { User, Mail, Lock, Phone, Briefcase } from "lucide-react";
 
 export default function AddStaffPage() {
@@ -31,15 +31,25 @@ export default function AddStaffPage() {
     e.preventDefault();
     setLoading(true);
 
+    const toastId = toast.loading("Creating staff...");
+
     try {
       const res = await axios.post("/api/staff/create", form, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success(res.data.message || "🎉 Staff created successfully!");
-      router.push("/admin/staffs"); // redirect to view staff
+
+      toast.success(res.data.message || "🎉 Staff created successfully!", {
+        id: toastId,
+      });
+
+      setTimeout(() => {
+        router.push("/admin/staffs"); // redirect after short delay
+      }, 500);
     } catch (err: any) {
       console.error(err);
-      toast.error(err.response?.data?.message || "❌ Failed to create staff");
+      toast.error(err.response?.data?.message || "❌ Failed to create staff", {
+        id: toastId,
+      });
     } finally {
       setLoading(false);
     }
@@ -140,7 +150,7 @@ export default function AddStaffPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md"
+            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md disabled:opacity-50"
           >
             {loading ? "Saving..." : "Save Staff"}
           </button>

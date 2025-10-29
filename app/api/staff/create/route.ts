@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const staff = await createStaffMember(body);
-    return NextResponse.json({staff, message: "New Staff Membwe Created"}, { status: 201 });
+    return NextResponse.json({staff, message: "New Staff Member Created"}, { status: 201 });
   } catch (err: any) {
 
     if (err instanceof ZodError) {

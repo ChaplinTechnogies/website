@@ -38,11 +38,11 @@ export async function POST(req: NextRequest) {
 
 
     response.cookies.set("adminToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 5 * 60, 
-      sameSite: "strict",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    sameSite: "strict",
     });
 
 
