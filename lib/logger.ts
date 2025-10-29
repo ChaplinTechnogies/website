@@ -48,7 +48,7 @@ class Logger {
     
     // Console logging for development
     if (this.isDevelopment) {
-      console.log(formattedMessage);
+      return;
     }
     
     // In production, you would send to external logging service

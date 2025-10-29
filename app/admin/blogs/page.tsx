@@ -24,19 +24,20 @@ export default function ViewBlogsPage() {
     fetchBlogs();
   }, []);
 
-  const fetchBlogs = async () => {
-    try {
-      const res = await axios.get("/api/blogposts/", {
-        headers: { Authorization: `Bearer ${adminToken}` },
-      });
-      setBlogs(res.data);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to fetch blogs");
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchBlogs = async () => {
+  try {
+    const res = await axios.get("/api/blogposts/", {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    console.log("API response:", res.data);
+    setBlogs(Array.isArray(res.data.data) ? res.data.data : []);
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to fetch blogs");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleDeleteBlog = async (slug: string) => {
     if (!confirm("Are you sure you want to delete this blog?")) return;

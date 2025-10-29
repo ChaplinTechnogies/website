@@ -28,21 +28,23 @@ export default function BlogPage() {
   const [error, setError] = useState<string | null>(null)
 
   // Fetch all blogs
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const res = await axios.get('/api/blogposts/')
-        setBlogPosts(res.data)
-        logger.info('Blog page loaded', { page: 'blog', postsCount: res.data.length })
-      } catch (err: any) {
-        console.error(err)
-        setError('Failed to fetch blogs')
-      } finally {
-        setLoading(false)
-      }
+useEffect(() => {
+  const fetchBlogs = async () => {
+    try {
+      const res = await axios.get('/api/blogposts/');
+      const blogs = Array.isArray(res.data.data) ? res.data.data : [];
+      setBlogPosts(blogs);
+      logger.info('Blog page loaded', { page: 'blog', postsCount: blogs.length });
+    } catch (err: any) {
+      console.error(err);
+      setError('Failed to fetch blogs');
+    } finally {
+      setLoading(false);
     }
-    fetchBlogs()
-  }, [])
+  };
+  fetchBlogs();
+}, []);
+
 
   // Fetch single blog for modal
   const openModal = async (slug: string) => {

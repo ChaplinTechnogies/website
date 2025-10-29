@@ -39,18 +39,20 @@ export default function AdminBlogsPage() {
     fetchBlogs();
   }, []);
 
-  const fetchBlogs = async () => {
-    try {
-      const res = await axios.get("/api/blogposts/", {
-        headers: { Authorization: `Bearer ${adminToken}` },
-      });
-      setBlogs(res.data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-    }
-  };
+const fetchBlogs = async () => {
+  try {
+    const res = await axios.get("/api/blogposts/", {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    console.log("API response:", res.data);
+    setBlogs(Array.isArray(res.data.data) ? res.data.data : []);
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to fetch blogs");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

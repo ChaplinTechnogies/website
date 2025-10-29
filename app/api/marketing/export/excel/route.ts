@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import getClientPromise from "@/lib/mongodb";
 
-// make this route server-only
+
 export const runtime = "nodejs";
 
 export async function GET(req: Request) {

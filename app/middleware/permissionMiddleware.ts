@@ -1,4 +1,3 @@
-// lib/middleware/permissionMiddleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { authMiddleware } from "./auth.middleware";
 

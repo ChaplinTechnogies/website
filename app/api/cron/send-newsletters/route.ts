@@ -30,7 +30,6 @@ export async function GET() {
         subject: "Your Weekly Newsletter 📰",
         text: "Hello! Here’s this week’s newsletter from our website 🎉",
       });
-      console.log(`✅ Newsletter sent to: ${user.email}`);
     }
 
     return NextResponse.json({ message: "Newsletter sent successfully" });

@@ -15,13 +15,10 @@ export async function POST(req: NextRequest) {
   try {
     const authResult = await authMiddleware(req, { roles: ["executive"] });
 
-    // 🔒 If middleware returned a NextResponse, it means auth failed
+    //If middleware returned a NextResponse, it means auth failed
     if (authResult instanceof NextResponse) return authResult;
 
-    // ✅ Otherwise, authResult contains user info
     const { id: userId, role: userRole } = authResult;
-    console.log("Authenticated as:", userId, userRole);
-
     const body = await req.json();
     const { name, role, image, linkedin, twitter, github } = body;
 
