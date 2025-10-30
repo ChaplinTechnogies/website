@@ -60,9 +60,7 @@ export const useTokenRefresh = () => {
       
       if (data.accessToken) {
         localStorage.setItem('adminToken', data.accessToken);
-        // Set cookie using document.cookie for client-side
-        document.cookie = `adminToken=${data.accessToken}; path=/; max-age=3600; secure; samesite=strict`;
-        console.log('Access token refreshed successfully');
+        cookieStore.set('adminToken', data.accessToken);
         return true;
       }
       
@@ -84,7 +82,6 @@ export const useTokenRefresh = () => {
     }
 
     if (isTokenExpiringSoon(token)) {
-      console.log('Token expiring soon, refreshing...');
       await refreshAccessToken();
     }
   };
