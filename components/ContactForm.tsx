@@ -53,6 +53,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
       if (onSubmit) {
         await onSubmit(formData);
       } else {
+        console.log("Form Data Submitted:", formData);
         const res = await fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

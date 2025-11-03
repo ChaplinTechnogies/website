@@ -27,12 +27,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (phoneStr && !SecurityValidator.validatePhone(phoneStr)) {
-      return NextResponse.json(
-        { error: 'Valid phone number is required' },
-        { status: 400 }
-      )
-    }
+    // if (phoneStr && !SecurityValidator.validatePhone(phoneStr)) {
+    //   return NextResponse.json(
+    //     { error: 'Valid phone number is required' },
+    //     { status: 400 }
+    //   )
+    // }
 
     const sanitizedData = {
       name: SecurityValidator.sanitizeInput(name),
