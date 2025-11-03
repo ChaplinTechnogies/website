@@ -222,3 +222,20 @@ export async function loginStaff(input: unknown) {
     return { accessToken, refreshToken }
 
 }
+
+
+
+export async function findStaffByEmail(email: string) {
+  const client = await getClientPromise();
+  const db = client.db();
+  return await db.collection("staff_members").findOne({ email });
+}
+
+
+export async function updateStaffPassword2fa(email: string, hashedPassword: string) {
+  const client = await getClientPromise();
+  const db = client.db();
+  return await db
+    .collection("staff_members")
+    .updateOne({ email }, { $set: { password: hashedPassword } });
+}
