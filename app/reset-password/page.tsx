@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -82,7 +82,7 @@ export default function ResetPasswordPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50 p-6">
         <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
-          <p className="text-red-600 font-medium">❌ Invalid or expired reset link.</p>
+          <p className="text-red-600 font-medium">Invalid or expired reset link.</p>
           <a href="/admin/forgot-password" className="text-blue-600 mt-4 block">
             Request a new one
           </a>
@@ -126,5 +126,17 @@ export default function ResetPasswordPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
