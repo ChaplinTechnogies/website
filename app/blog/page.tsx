@@ -232,42 +232,56 @@ export default function BlogPage() {
       </div>
 
       {/* Modal */}
-      {modalOpen && activePost && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-dark-surface rounded-xl w-11/12 max-w-3xl p-6 relative shadow-xl">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-600 dark:text-gray-300 text-lg font-bold hover:text-red-500"
-            >
-              &times;
-            </button>
-            <img
-              src={activePost.thumbnailUrl || '/images/blog/default.jpg'}
-              alt={activePost.title}
-              className="w-full h-64 object-cover rounded-lg mb-4"
-            />
-            <h2 className="text-2xl font-bold text-dark-blue dark:text-white mb-2">{activePost.title}</h2>
-            <div className="flex items-center space-x-3 text-sm text-gray-400 dark:text-gray-400 mb-4">
-              <span>{new Date(activePost.publishedAt).toLocaleDateString()}</span>
-              <span>•</span>
-              <span>{activePost.readTime} min read</span>
-              <span>•</span>
-              <span>By {activePost.author}</span>
-            </div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {activePost.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{activePost.content}</p>
+{modalOpen && activePost && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white dark:bg-dark-surface rounded-xl w-11/12 max-w-3xl max-h-[50vh] flex flex-col relative shadow-xl">
+      <button
+        onClick={closeModal}
+        className="absolute top-4 right-4 z-10 text-gray-600 dark:text-gray-300 text-lg font-bold hover:text-red-500 bg-white dark:bg-dark-surface rounded-full w-8 h-8 flex items-center justify-center shadow-md"
+      >
+        &times;
+      </button>
+
+      {/* Scrollable Content */}
+      <div className="overflow-y-auto flex-1">
+        <div className="p-6">
+          <img
+            src={activePost.thumbnailUrl || '/images/blog/default.jpg'}
+            alt={activePost.title}
+            className="w-full h-64 object-cover rounded-lg mb-4"
+          />
+          
+          <h2 className="text-2xl font-bold text-dark-blue dark:text-white mb-2">
+            {activePost.title}
+          </h2>
+          
+          <div className="flex items-center space-x-3 text-sm text-gray-400 dark:text-gray-400 mb-4">
+            <span>{new Date(activePost.publishedAt).toLocaleDateString()}</span>
+            <span>•</span>
+            <span>{activePost.readTime} min read</span>
+            <span>•</span>
+            <span>By {activePost.author}</span>
           </div>
+          
+          <div className="flex flex-wrap gap-2 mb-4">
+            {activePost.tags.map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+          
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+            {activePost.content}
+          </p>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
     </div>
   )
 }

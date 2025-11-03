@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { deleteBlogPost, updateBlogPost } from "@/lib/models/BlogPost";
+import { deleteBlogPost, updateBlogPost, getBlogPostBySlug } from "@/lib/models/BlogPost";
 import { authMiddleware } from "@/app/middleware/auth.middleware";
 import { error } from 'console';
 
@@ -19,6 +19,16 @@ export async function DELETE(req: NextRequest, {params}:{params: {slug: string}}
 
 }
 
+
+export async function GET(req: NextRequest, {params}:{params: {slug: string}}) {
+    try {
+        const blogpost = await getBlogPostBySlug(params.slug);
+        if(!blogpost) return NextResponse.json({error: "Not Found"}, {status: 404})
+        return NextResponse.json(blogpost)
+    } catch(err: any) {
+        return NextResponse.json({error: err.message}, {status: 500})
+    }
+}
 
 
 export async function PATCH(req: NextRequest, {params}:{params: {slug: string}}) {
