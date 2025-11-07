@@ -19,7 +19,7 @@ export async function permissionMiddleware(req: NextRequest, requiredPermissions
   const hasPermission = requiredPermissions.some((p) => userPermissions.includes(p));
 
   if (!hasPermission) {
-    return NextResponse.json({ error: "Forbidden: Insufficient permissions" }, { status: 403 });
+    return NextResponse.json({ error: `Forbidden: this action require this permission, ${requiredPermissions} to be accomplished` }, { status: 403 });
   }
 
   return { user };

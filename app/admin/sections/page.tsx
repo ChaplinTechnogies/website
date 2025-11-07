@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import MilestonesSection from "./MilestonesSection";
 import TeamMembersSection from "./TeamMembersSection";
 import ProjectsSection from "./ProjectsSection";
+import UpdatesSection from "./UpdatesSections";
 // import BlogSection from "./BlogSection";
 
 type SectionType = "milestones" | "projects" | "blogs" | "team_members" | "updates"
@@ -25,6 +26,7 @@ function SectionsContent() {
       {activeSection === "milestones" && <MilestonesSection />}
       {activeSection === "team_members" && <TeamMembersSection />}
       {activeSection === "projects" && <ProjectsSection />}
+      {activeSection === "updates" && <UpdatesSection />}
       {/* {activeSection === "blogs" && <BlogSection />} */}
     </main>
   );

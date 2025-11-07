@@ -22,49 +22,58 @@ export default function AdminUsersPage() {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    setToken(localStorage.getItem("adminToken"));
+    const storedToken = localStorage.getItem("adminToken");
+    console.log("Value retrieved from localStorage:", storedToken);
+    setToken(storedToken);
   }, []);
 
-  const fetchSubscribers = async () => {
+  const fetchSubscribers = async (accessToken: string) => {
     setLoading(true);
     try {
       const res = await fetch("/api/subscribe", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // Use the token passed as an argument!
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       const data = await res.json();
-      if (data.subscribers && Array.isArray(data.subscribers)) {
-        setSubscribers(data.subscribers);
-      } else {
-        toast.error("No subscribers found");
-      }
 
+      if (data.subscribers && Array.isArray(data.subscribers)) {
+
+        setSubscribers(data.subscribers);
+
+      } else {
+
+        toast.error("No subscribers found");
+
+      }
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to fetch subscribers");
+      console.error("Erro occured", err)
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSubscribers();
-  }, []);
+    if (token) {
+      fetchSubscribers(token);
+    }
+  }, [token]);
 
 
   const handleReply = async () => {
     if (!replyModal.subscriber) return;
     try {
-      const res = await fetch("/api/admin/users", {
+      const res = await fetch("/api/reply", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          type: 'subscribers',
           id: replyModal.subscriber._id,
           subject: replySubject,
           message: replyMessage,
@@ -76,7 +85,9 @@ export default function AdminUsersPage() {
         setReplyModal({ open: false });
         setReplyMessage("");
         setReplySubject("");
+        alert(data.message)
       } else {
+        alert(data.error)
         toast.error(data.message || "Failed to send reply");
       }
     } catch (err) {
@@ -98,7 +109,11 @@ export default function AdminUsersPage() {
       const data = await res.json();
       if (data.success) {
         toast.success("Subscriber deleted");
-        await fetchSubscribers(); // <-- refetch automatically
+        useEffect(() => {
+          if (token) {
+            fetchSubscribers(token);
+          }
+        }, [token]);
       } else toast.error(data.message || "Failed to delete subscriber");
     } catch (err) {
       console.error(err);

@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 
 export async function addSubscriber(subscriber: NewsletterSubscribe) {
     const client = await getClientPromise();
-    const db = client.db()
+    const db = client.db('newsletterDB')
     const collecion = db.collection<NewsletterSubscribe>("subscribers");
 
     // to check if email is already subscribed
@@ -23,7 +23,7 @@ export async function addSubscriber(subscriber: NewsletterSubscribe) {
 export async function getAllSubscribers() {
   try {
     const client = await getClientPromise();
-    const db = client.db();
+    const db = client.db('newsletterDB');
     const subscribers = await db
       .collection<NewsletterSubscribe>("subscribers")
       .find({})
@@ -44,7 +44,7 @@ export async function getAllSubscribers() {
 export async function deleteSubscriber(id: string) {
   try {
     const client = await getClientPromise();
-    const db = client.db();
+    const db = client.db('newsletterDB');
     const subscriber = await db.collection("subscribers").findOne({ _id: new ObjectId(id) });
     if (!subscriber) {
       throw new Error ("User Not Found");

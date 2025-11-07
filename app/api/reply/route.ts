@@ -6,7 +6,7 @@ import { sendEmail } from "@/lib/email";
 
 const COLLECTIONS = {
   contacts: "contacts",
-  subscriber: "subscribers",
+  subscribers: "subscribers",
   staff: "staff",
 };
 
@@ -32,8 +32,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: "Invalid type" }, { status: 400 });
 
     const client = await getClientPromise();
-    const db = client.db();
-
+    let db;
+    if(collectionName == 'subscribers') {
+      db = client.db('newsletterDB')
+    } else {
+    db = client.db();
+    }
     const record = await db.collection(collectionName).findOne({ _id: new ObjectId(id) });
     if (!record)
       return NextResponse.json({ success: false, message: `${type} not found` }, { status: 404 });
